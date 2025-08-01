@@ -7,6 +7,10 @@ extends CharacterBody3D
 @export var attack_angle: float = 45.0 # degrees
 
 var _attack_timer: float = 0.0
+var inventory := Inventory.new()
+
+func _ready() -> void:
+	add_child(inventory)
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
@@ -67,5 +71,9 @@ func perform_attack() -> void:
 	timer.connect("timeout", Callable(attack_area, "queue_free"))
 	attack_area.add_child(timer)
 
-	var bodies = attack_area.get_overlapping_bodies()
-	# TODO: handle damage to overlapping enemies
+        var bodies = attack_area.get_overlapping_bodies()
+        # TODO: handle damage to overlapping enemies
+
+func add_item(item: Item, amount: int = 1) -> void:
+	inventory.add_item(item, amount)
+
