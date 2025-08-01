@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://bmmrsmwx0wtwj"]
+
+[ext_resource type="Script" path="res://scripts/item.gd" id="1_psov8"]
+
+[sub_resource type="Gradient" id="Gradient_psov8"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bppqf"]
+gradient = SubResource("Gradient_psov8")
+
+[resource]
+script = ExtResource("1_psov8")
+item_name = "Test Item"
+description = "Test Item"
+icon = SubResource("GradientTexture1D_bppqf")
+max_stack = 1

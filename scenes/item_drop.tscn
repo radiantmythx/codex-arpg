@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://d1asl22n2g1g2"]
+
+[ext_resource type="Script" uid="uid://b2w03t6cybdu1" path="res://scripts/item_pickup.gd" id="1_gvv6n"]
+[ext_resource type="Resource" uid="uid://bmmrsmwx0wtwj" path="res://resources/items/test_item.tres" id="2_xsgl2"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_06m3a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e8wxw"]
+albedo_color = Color(0.352941, 1, 1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ai4ee"]
+radius = 1.88656
+
+[node name="ItemDrop" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="."]
+script = ExtResource("1_gvv6n")
+item = ExtResource("2_xsgl2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
