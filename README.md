@@ -22,3 +22,20 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 2. Press **Play** to run. The player can move and attack.
 3. Use the provided scripts as a starting point for building a larger ARPG.
 
+## Item & Inventory System
+This project now includes a very small inventory framework built entirely with
+scripts. `player.gd` instantiates an `Inventory` node at runtime, so the player
+already has a container for items.
+
+### Using Items
+1. Create a new resource using **Item** (`scripts/item.gd`) for each item type.
+2. To make something collectible, add an `Area3D` node to your scene and attach
+   `scripts/item_pickup.gd`. Assign the `item` property to the Item resource and
+   set an optional amount.
+3. When the player enters the pickup area, the item is added to the player's
+   inventory automatically.
+
+You can inspect or modify the contents of the player's inventory through the
+`inventory` property on `player.gd` or by attaching the `Inventory` script to
+other nodes if needed.
+
