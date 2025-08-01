@@ -1,6 +1,6 @@
 # Codex ARPG Setup
 
-This repository contains a simple Godot 4 project configured for a modular action RPG. It demonstrates basic WASD movement and a right-click melee attack with area feedback.
+This repository contains a simple Godot 4 project configured for a modular action RPG. It demonstrates basic WASD movement and a right-click melee attack that rotates toward the cursor with area feedback.
 
 ## Scenes
 - `scenes/Player.tscn` – CharacterBody3D with a camera and `player.gd` script.
@@ -15,7 +15,7 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 
 ## Controls
 - **WASD** – Move the player.
-- **Right Mouse Button** – Perform a melee attack. The attack area is displayed briefly as a red cylinder.
+- **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
 
 ## Setup Instructions
 1. Launch the Godot editor and open the project folder.
