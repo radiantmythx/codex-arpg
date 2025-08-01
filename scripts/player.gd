@@ -68,13 +68,13 @@ func perform_attack() -> void:
 	attack_area.add_child(collider)
 	
 	attack_area.transform.origin = global_transform.origin + direction * attack_range
-	add_child(attack_area)
+	get_parent().add_child(attack_area)
 	
 	var mesh = MeshInstance3D.new()
 	mesh.mesh = CylinderMesh.new()
 	mesh.mesh.top_radius = attack_range
 	mesh.mesh.bottom_radius = attack_range
-	mesh.mesh.height = 0.1
+	mesh.mesh.height = 1.0
 	mesh.material_override = StandardMaterial3D.new()
 	mesh.material_override.albedo_color = Color(1, 0, 0, 0.5)
 	mesh.visible = true
@@ -86,15 +86,10 @@ func perform_attack() -> void:
 	timer.autostart = true
 	timer.connect("timeout", Callable(attack_area, "queue_free"))
 	attack_area.add_child(timer)
-  var bodies = attack_area.get_overlapping_bodies()
-# TODO: handle damage to overlapping enemies
-
-
-  var bodies = attack_area.get_overlapping_bodies()
-  for body in bodies:
-    if body.has_method("take_damage"):
-      body.take_damage(1)
+	var bodies = attack_area.get_overlapping_bodies()
+	for body in bodies:
+		if body.has_method("take_damage"):
+			body.take_damage(1)
 
 func add_item(item: Item, amount: int = 1) -> void:
 	inventory.add_item(item, amount)
-
