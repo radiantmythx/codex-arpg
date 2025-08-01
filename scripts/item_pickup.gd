@@ -17,14 +17,15 @@ func _ready() -> void:
 
 	_name_label = Label3D.new()
 	_name_label.text = item.item_name
-	_name_label.billboard = true
+	_name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_name_label.position.y += 2
 	add_child(_name_label)
 
 	_tooltip = Label3D.new()
 	_tooltip.text = "%s\n%s" % [item.item_name, item.description]
-	_tooltip.billboard = true
+	_tooltip.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_tooltip.visible = false
-	_tooltip.position.y += 0.5
+	_tooltip.position.y += 2.5
 	add_child(_tooltip)
 
 func _on_body_entered(body: Node) -> void:
