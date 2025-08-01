@@ -89,5 +89,12 @@ func perform_attack() -> void:
   var bodies = attack_area.get_overlapping_bodies()
 # TODO: handle damage to overlapping enemies
 
+
+  var bodies = attack_area.get_overlapping_bodies()
+  for body in bodies:
+    if body.has_method("take_damage"):
+      body.take_damage(1)
+
 func add_item(item: Item, amount: int = 1) -> void:
 	inventory.add_item(item, amount)
+

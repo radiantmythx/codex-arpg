@@ -22,6 +22,21 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 2. Press **Play** to run. The player can move and attack.
 3. Use the provided scripts as a starting point for building a larger ARPG.
 
+
+## Creating Enemy Scenes
+This repository includes an `enemy.gd` script that handles health and death logic.
+Follow these steps in the Godot editor to create your own enemy scene:
+
+1. **Create a new scene** with a `CharacterBody3D` as the root node.
+2. **Attach** `scripts/enemy.gd` to the root node.
+3. Add a `CollisionShape3D` and `MeshInstance3D` as children for collision and visuals.
+4. Optionally add the node to an **"enemies"** group for organization.
+5. Save the scene, e.g. `scenes/Enemy.tscn`, and instance it into `Main.tscn`.
+
+When the player attacks, any node with a `take_damage` method will lose health
+and be removed when it reaches zero.
+
+
 ## Item & Inventory System
 This project now includes a very small inventory framework built entirely with
 scripts. `player.gd` instantiates an `Inventory` node at runtime, so the player
