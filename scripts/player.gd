@@ -67,5 +67,7 @@ func perform_attack() -> void:
 	timer.connect("timeout", Callable(attack_area, "queue_free"))
 	attack_area.add_child(timer)
 
-	var bodies = attack_area.get_overlapping_bodies()
-	# TODO: handle damage to overlapping enemies
+        var bodies = attack_area.get_overlapping_bodies()
+        for body in bodies:
+                if body.has_method("take_damage"):
+                        body.take_damage(1)
