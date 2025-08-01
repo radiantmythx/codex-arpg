@@ -1,6 +1,20 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dduutvhpgaapk"]
 
-[node name="Main" type="Node3D"]
+[ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 
-[node name="Player" parent="." instance=ExtResource("res://scenes/Player.tscn")]
+[sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
+size = Vector2(35, 35)
 
+[node name="WorldRoot" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_0wfyh")
+
+[node name="Player" parent="." instance=ExtResource("1_o5qli")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.947919, 0.318513, 0, -0.318513, 0.947919, 0, 3.38817, 5.1011)
