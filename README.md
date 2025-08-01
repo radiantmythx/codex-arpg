@@ -44,11 +44,12 @@ already has a container for items.
 
 ### Using Items
 1. Create a new resource using **Item** (`scripts/item.gd`) for each item type.
-2. To make something collectible, add an `Area3D` node to your scene and attach
-   `scripts/item_pickup.gd`. Assign the `item` property to the Item resource and
-   set an optional amount.
-3. When the player enters the pickup area, the item is added to the player's
-   inventory automatically.
+2. To make something collectible, add an `Area3D` (or a child of a 3D node) and
+   attach `scripts/item_pickup.gd`. Assign the `item` property and set an
+   optional amount. The script will spawn a floating name label automatically.
+3. When the player approaches the drop, hover the mouse over the label to view
+   the description. Click the item with the **left mouse button** to add it to
+   the player's inventory.
 
 You can inspect or modify the contents of the player's inventory through the
 `inventory` property on `player.gd` or by attaching the `Inventory` script to
