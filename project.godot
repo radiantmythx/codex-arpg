@@ -13,3 +13,14 @@ config_version=5
 config/name="CodexARPG"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[input]
+move_forward={"deadzone":0.5,"events":[{"type":"key","scancode":87}]}
+move_back={"deadzone":0.5,"events":[{"type":"key","scancode":83}]}
+move_left={"deadzone":0.5,"events":[{"type":"key","scancode":65}]}
+move_right={"deadzone":0.5,"events":[{"type":"key","scancode":68}]}
+attack={"deadzone":0.5,"events":[{"type":"mouse_button","button_index":2}]}
+
+
+[run]
+main_scene="res://scenes/Main.tscn"
