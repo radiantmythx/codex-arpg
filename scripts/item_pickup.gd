@@ -8,6 +8,7 @@ var _player: Node
 var _tag: ItemTag
 
 func _ready() -> void:
+
         connect("body_entered", _on_body_entered)
         connect("body_exited", _on_body_exited)
         connect("mouse_entered", _on_mouse_entered)
@@ -26,6 +27,7 @@ func _ready() -> void:
         _tag.target = self
         layer.add_child(_tag)
         _tag.connect("pressed", Callable(self, "_collect"))
+
 
 func _on_body_entered(body: Node) -> void:
 	if body.has_method("add_item"):
