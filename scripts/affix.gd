@@ -1,13 +1,17 @@
-extends Resource
 class_name Affix
+extends Resource
 
-# Describes a single modifier that can be attached to an item.  Affixes are
-# applied to the player's Stats when the containing item is equipped.
-#
-# `stat_modifiers` uses keys from `Stats.MainStat` to modify the core stats
-# BODY, MIND, SOUL and FORTUNE.
+# Runtime affix attached to an item. Affix instances are generated from
+# `AffixDefinition` resources and store the rolled tier and numeric value. The
+# dictionaries hold the actual stat bonuses applied by `Stats`.
 
-@export var stat_modifiers: Dictionary = {}
-@export var damage_bonus: float = 0.0
-@export var move_speed_bonus: float = 0.0
-@export var defense_bonus: float = 0.0
+@export var name: String = ""
+@export var tier: int = 1
+@export var description: String = ""
+@export var main_stat_bonuses: Dictionary = {}  # key: Stats.MainStat, value: float
+@export var stat_bonuses: Dictionary = {}  # key: String, value: float
+@export var flags: Array[String] = []
+
+
+func get_description() -> String:
+	return "T%s %s" % [tier, description]
