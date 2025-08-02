@@ -12,4 +12,4 @@ cooldown = 0.5
 duration = 0.3
 move_multiplier = 0.2
 damage_type = 0
-tags = Array[String]([])
+tags = Array[String](["Melee"])

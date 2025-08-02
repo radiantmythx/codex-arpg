@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-name = "Ice Damage %"
-description = "{value}% increased ice damage"
-stat_key = "ice_damage_inc"
-tiers = [Vector2(10,20), Vector2(20,30), Vector2(30,40)]
+name = "Physical Damage (Spell)"
+description = "{value} to physical damage with spell skills"
+stat_key = "physical_damage_spell"
+tiers = [Vector2(1,2), Vector2(2,3), Vector2(3,4)]

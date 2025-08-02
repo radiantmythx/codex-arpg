@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-name = "Solar Damage"
-description = "{value} to solar damage"
-stat_key = "solar_damage"
+name = "Ice Damage (Spell)"
+description = "{value} to ice damage with spell skills"
+stat_key = "ice_damage_spell"
 tiers = [Vector2(1,2), Vector2(2,3), Vector2(3,4)]

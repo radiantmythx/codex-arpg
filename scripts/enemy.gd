@@ -8,8 +8,7 @@ const Stats = preload("res://scripts/stats.gd")
 @export var wander_change_interval: float = 2.0
 @export var detection_range: float = 8.0
 @export var attack_range: float = 1.5
-@export var attack_windup: float = 0.5
-@export var attack_cooldown: float = 1.0
+@export var main_skill: Skill = preload("res://resources/skills/basic_melee_attack.tres")
 @export var healthbar_node_path: NodePath
 @export var base_armor: float = 0.0
 @export var base_evasion: float = 0.0
@@ -33,7 +32,6 @@ var _player: Node3D
 var _wander_timer: float = 0.0
 var _current_dir: Vector3 = Vector3.ZERO
 var _attack_timer: float = 0.0
-var _windup_timer: float = 0.0
 var _mesh: MeshInstance3D
 var _original_material: Material
 var _healthbar: Healthbar
@@ -64,25 +62,20 @@ func _ready() -> void:
 				_healthbar.set_health(current_health, max_health)
 
 func _physics_process(delta: float) -> void:
-		_process_regen(delta)
-		_process_timers(delta)
-		if _windup_timer > 0.0:
-			return
-		var player_pos := _get_player_position()
-		if player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0:
-			_start_windup()
-		elif player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
-			_chase(player_pos, delta)
-		else:
-			_wander(delta)
+                _process_regen(delta)
+                _process_timers(delta)
+                var player_pos := _get_player_position()
+                if player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
+                        _attack_timer = main_skill.cooldown
+                        main_skill.perform(self)
+                elif player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
+                        _chase(player_pos, delta)
+                else:
+                        _wander(delta)
 
 func _process_timers(delta: float) -> void:
-		if _attack_timer > 0.0:
-				_attack_timer -= delta
-		if _windup_timer > 0.0:
-				_windup_timer -= delta
-				if _windup_timer <= 0.0:
-						_perform_attack()
+                if _attack_timer > 0.0:
+                                _attack_timer -= delta
 
 func _process_regen(delta: float) -> void:
 		max_energy_shield = stats.get_max_energy_shield()
@@ -110,46 +103,6 @@ func _chase(player_pos: Vector3, delta: float) -> void:
 	velocity = dir * move_speed
 	move_and_slide()
 
-func _start_windup() -> void:
-	#print("Winding up!")
-	_windup_timer = attack_windup
-	if _mesh:
-		_mesh.material_override = StandardMaterial3D.new()
-		_mesh.material_override.albedo_color = Color(1, 0, 0, 1)
-
-func _perform_attack() -> void:
-	if _mesh:
-		_mesh.material_override = _original_material
-		_attack_timer = attack_cooldown
-		var shape := CapsuleShape3D.new()
-		shape.radius = attack_range
-		shape.height = 1.0
-		var area := Area3D.new()
-		var collider := CollisionShape3D.new()
-		var mesh = MeshInstance3D.new()
-		mesh.mesh = CylinderMesh.new()
-		mesh.mesh.top_radius = attack_range
-		mesh.mesh.bottom_radius = attack_range
-		mesh.mesh.height = 1.0
-		mesh.material_override = StandardMaterial3D.new()
-		mesh.material_override.albedo_color = Color(1, 0, 0, 0.5)
-		mesh.visible = true
-		collider.shape = shape
-		area.add_child(collider)
-		area.add_child(mesh)
-		area.transform.origin = global_transform.origin + -global_transform.basis.z * attack_range
-		get_parent().add_child(area)
-		var params := PhysicsShapeQueryParameters3D.new()
-		params.shape = shape
-		params.transform = area.global_transform
-		params.collide_with_bodies = true
-		var bodies := get_world_3d().direct_space_state.intersect_shape(params)
-		for result in bodies:
-			var body = result.get("collider")
-			if body != null and body.has_method("take_damage") and body.is_in_group("players"):
-					body.take_damage(stats.get_damage(Stats.DamageType.PHYSICAL), Stats.DamageType.PHYSICAL)
-		await get_tree().create_timer(0.2).timeout
-		area.queue_free()
 
 func _get_player_position() -> Vector3:
 	if _player and _player.is_inside_tree():

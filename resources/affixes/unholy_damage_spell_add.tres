@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/affix_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Unholy Damage (Spell)"
+description = "{value} to unholy damage with spell skills"
+stat_key = "unholy_damage_spell"
+tiers = [Vector2(1,2), Vector2(2,3), Vector2(3,4)]

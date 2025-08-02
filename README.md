@@ -16,11 +16,24 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 ## Controls
 - **WASD** – Move the player.
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
+- **Q** – Toggle the Transcendent Fire aura.
 
 ## Mana System
 The player now uses mana to power abilities. Basic attacks consume mana and the
 player regenerates 1 mana per second up to a base maximum of 50. Affixes and
 items can modify maximum mana and regeneration rates.
+
+## Skills and Tags
+Skills are `Resource` files that carry tags describing how they behave. Supported tags include `Melee`, `Spell`, `Projectile`, `AoE`, `Aura`, `Channel`, `Summon` and `Movement`. Affixes can grant flat or increased damage to specific tags such as `physical_damage_melee` or `holy_damage_spell`. Damage from equipped items is applied when a skill with matching tags is used, allowing weapons and armor to contribute to spell or melee damage independently.
+
+Affixes may also modify `aoe_inc` to increase the size of any skill tagged with `AoE`.
+
+The player now has a secondary ability bound to **Q** – **Transcendent Fire** – an aura spell that drains mana and health while dealing fire damage over time around the caster. Pressing **Q** again toggles the aura off. Enemies use the same skill system and now perform their attacks using the basic melee skill.
+
+### Adding New Skills
+1. Create a script extending `Skill` (see `scripts/skills/` for examples) and export any parameters you need.
+2. Create a new `.tres` resource in `resources/skills/` that points to the script and assign appropriate tags.
+3. Assign the resource to a player's or enemy's exported skill slot in the editor or via a script.
 
 ## Setup Instructions
 1. Launch the Godot editor and open the project folder.

@@ -5,10 +5,14 @@ class_name MeleeAttackSkill
 @export var angle: float = 45.0
 
 func perform(user):
-		if user == null:
-				return
-		var direction = user._get_click_direction()
-		user.look_at(user.global_transform.origin + direction, Vector3.UP)
+                if user == null:
+                                return
+                var direction: Vector3
+                if user.has_method("_get_click_direction"):
+                                direction = user._get_click_direction()
+                else:
+                                direction = -user.global_transform.basis.z
+                user.look_at(user.global_transform.origin + direction, Vector3.UP)
 		var attack_area = Area3D.new()
 		var shape = CylinderShape3D.new()
 		shape.height = 1.0
@@ -38,7 +42,11 @@ func perform(user):
 		params.transform = attack_area.global_transform
 		params.collide_with_bodies = true
 		var bodies = user.get_world_3d().direct_space_state.intersect_shape(params)
-		for result in bodies:
-				var body = result.get("collider")
-				if body and body.has_method("take_damage") and body.is_in_group("enemy"):
-						body.take_damage(user.stats.get_damage(damage_type), damage_type)
+                for result in bodies:
+                                var body = result.get("collider")
+                                if body and body.has_method("take_damage") and body.is_in_group("enemy"):
+                                                var dmg_map = user.stats.get_all_damage(tags)
+                                                for dt in dmg_map.keys():
+                                                                var dmg = dmg_map[dt]
+                                                                if dmg > 0:
+                                                                                body.take_damage(dmg, dt)

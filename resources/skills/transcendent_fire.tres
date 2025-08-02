@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TranscendentFireSkill" load_steps=2 format=3 uid="uid://718c2faa77054087ad6560eb2a6042de"]
+
+[ext_resource type="Script" path="res://scripts/skills/transcendent_fire_skill.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Transcendent Fire"
+mana_cost = 0.0
+cooldown = 0.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 1
+tags = Array[String](["Spell","AoE","Aura"])
+radius = 3.0
+damage_per_second = 1.0
+mana_drain = 1.0
+health_drain = 0.5
