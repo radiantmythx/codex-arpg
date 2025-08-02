@@ -7,6 +7,7 @@ extends CharacterBody3D
 @export var attack_angle: float = 45.0 # degrees
 @export var attack_duration: float = 0.2
 @export var attack_move_multiplier: float = 0.2
+@export var attack_mana_cost: float = 5.0
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
@@ -19,7 +20,11 @@ extends CharacterBody3D
 @export var base_body: int = 0
 @export var base_mind: int = 0
 @export var base_soul: int = 0
-@export var base_fortune: int = 0
+@export var base_luck: int = 0
+@export var base_max_health: float = 3.0
+@export var base_max_mana: float = 50.0
+@export var base_health_regen: float = 0.0
+@export var base_mana_regen: float = 1.0
 
 var _attack_timer: float = 0.0
 var _attacking_timer: float = 0.0
@@ -32,6 +37,7 @@ var _healthbar: Healthbar
 
 var health: int = 3
 var max_health: int = 3
+var mana: float = 0.0
 
 var stats: Stats
 var equipment: EquipmentManager
@@ -43,10 +49,14 @@ func _ready() -> void:
 	stats.base_defense = base_defense
 	stats.base_main[Stats.MainStat.BODY] = base_body
 	stats.base_main[Stats.MainStat.MIND] = base_mind
-	stats.base_main[Stats.MainStat.SOUL] = base_soul
-	stats.base_main[Stats.MainStat.FORTUNE] = base_fortune
+        stats.base_main[Stats.MainStat.SOUL] = base_soul
+        stats.base_main[Stats.MainStat.LUCK] = base_luck
+        stats.base_max_health = base_max_health
+        stats.base_max_mana = base_max_mana
+        stats.base_health_regen = base_health_regen
+        stats.base_mana_regen = base_mana_regen
 
-	equipment = EquipmentManager.new()
+        equipment = EquipmentManager.new()
 	equipment.stats = stats
 	equipment.set_slots(["weapon", "armor"])
 	add_child(equipment)
@@ -61,10 +71,14 @@ func _ready() -> void:
 		_camera = get_node(inventory_camera_path)
 		if _camera:
 			_camera_default_pos = _camera.position
-	if healthbar_node_path != NodePath():
-		_healthbar = get_node(healthbar_node_path)
-		if _healthbar:
-			_healthbar.set_health(health, max_health)
+        if healthbar_node_path != NodePath():
+                _healthbar = get_node(healthbar_node_path)
+
+        max_health = int(stats.get_max_health())
+        health = max_health
+        mana = stats.get_max_mana()
+        if _healthbar:
+                _healthbar.set_health(health, max_health)
 
 	add_to_group("players")
 
@@ -83,9 +97,10 @@ func _get_click_direction() -> Vector3:
 	return (target - global_transform.origin).normalized()
 
 func _physics_process(delta: float) -> void:
-	_process_inventory_input()
-	_process_attack(delta)
-	_process_movement(delta)
+        _process_inventory_input()
+        _process_attack(delta)
+        _process_movement(delta)
+        _process_regen(delta)
 
 func _process_movement(delta: float) -> void:
 	var input_dir = Vector3.ZERO
@@ -114,10 +129,12 @@ func _process_attack(delta: float) -> void:
 	if _attacking_timer > 0.0:
 		_attacking_timer -= delta
 
-	if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0:
-		_attack_timer = attack_cooldown
-		_attacking_timer = attack_duration
-		perform_attack()
+        if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0:
+                if mana >= attack_mana_cost:
+                        _attack_timer = attack_cooldown
+                        _attacking_timer = attack_duration
+                        mana -= attack_mana_cost
+                        perform_attack()
 
 func perform_attack() -> void:
 	var direction := _get_click_direction()
@@ -196,12 +213,20 @@ func add_item(item: Item, amount: int = 1) -> void:
 		inventory.add_item(item, amount)
 
 func take_damage(amount) -> void:
-	var actual = max(0, amount - stats.get_defense())
-	health -= actual
-	if _healthbar:
-		_healthbar.set_health(health, max_health)
-	if health <= 0:
-		die()
+        var actual = max(0, amount - stats.get_defense())
+        health -= actual
+        if _healthbar:
+                _healthbar.set_health(health, max_health)
+        if health <= 0:
+                die()
+
+func _process_regen(delta: float) -> void:
+        max_health = int(stats.get_max_health())
+        health = min(max_health, health + stats.get_health_regen() * delta)
+        var max_mana := stats.get_max_mana()
+        mana = min(max_mana, mana + stats.get_mana_regen() * delta)
+        if _healthbar:
+                _healthbar.set_health(health, max_health)
 
 func die():
 	queue_free()
