@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FireballSkill" load_steps=2 format=3 uid="uid://fireballskill"]
+
+[ext_resource type="Script" uid="uid://fireballscript" path="res://scripts/skills/fireball_skill.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+speed = 10.0
+range = 15.0
+explosion_radius = 2.0
+name = "Fireball"
+mana_cost = 5.0
+cooldown = 1.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = null
+tags = Array[String](["Spell", "Projectile", "AoE"])
