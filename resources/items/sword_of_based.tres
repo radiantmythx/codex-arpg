@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/affix.gd" id="1_1ay02"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_c58uo"]
-[ext_resource type="Resource" path="res://resources/affixes/holy_damage_add.tres" id="2_66ulg"]
+[ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="2_66ulg"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/sword_of_based.png" id="2_bken0"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/item.gd" id="2_j70qe"]
 [ext_resource type="Resource" path="res://resources/affixes/soul_inc.tres" id="3_ur1a0"]
-[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_add.tres" id="4_wq8vy"]
-[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_inc.tres" id="5_e7ole"]
-[ext_resource type="Resource" path="res://resources/affixes/ice_damage_add.tres" id="6_37riy"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="4_wq8vy"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="5_e7ole"]
+[ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="6_37riy"]
 
 [resource]
 script = ExtResource("2_j70qe")

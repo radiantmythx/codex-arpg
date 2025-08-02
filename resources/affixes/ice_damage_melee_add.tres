@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-name = "Holy Damage"
-description = "{value} to holy damage"
-stat_key = "holy_damage"
+name = "Ice Damage (Melee)"
+description = "{value} to ice damage with melee skills"
+stat_key = "ice_damage_melee"
 tiers = [Vector2(1,2), Vector2(2,3), Vector2(3,4)]

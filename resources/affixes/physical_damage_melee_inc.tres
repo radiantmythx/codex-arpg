@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-name = "Electric Damage %"
-description = "{value}% increased electric damage"
-stat_key = "electric_damage_inc"
+name = "Physical Damage % (Melee)"
+description = "{value}% increased physical damage with melee skills"
+stat_key = "physical_damage_melee_inc"
 tiers = [Vector2(10,20), Vector2(20,30), Vector2(30,40)]

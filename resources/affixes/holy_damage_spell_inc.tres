@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-name = "Solar Damage %"
-description = "{value}% increased solar damage"
-stat_key = "solar_damage_inc"
+name = "Holy Damage % (Spell)"
+description = "{value}% increased holy damage with spell skills"
+stat_key = "holy_damage_spell_inc"
 tiers = [Vector2(10,20), Vector2(20,30), Vector2(30,40)]

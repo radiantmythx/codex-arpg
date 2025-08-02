@@ -3,6 +3,7 @@ extends CharacterBody3D
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 5.0
 @export var main_skill: Skill = preload("res://resources/skills/basic_melee_attack.tres")
+@export var secondary_skill: Skill = preload("res://resources/skills/transcendent_fire.tres")
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
@@ -28,6 +29,7 @@ extends CharacterBody3D
 
 var _attack_timer: float = 0.0
 var _attacking_timer: float = 0.0
+var _secondary_cooldown: float = 0.0
 var inventory := Inventory.new()
 var _inventory_ui: InventoryUI
 var _camera: Camera3D
@@ -141,17 +143,24 @@ func _process_movement(delta: float) -> void:
 	move_and_slide()
 
 func _process_attack(delta: float) -> void:
-		if _attack_timer > 0.0:
-				_attack_timer -= delta
-		if _attacking_timer > 0.0:
-				_attacking_timer -= delta
-		if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
-						if mana >= main_skill.mana_cost:
-										_attack_timer = main_skill.cooldown
-										_attacking_timer = main_skill.duration
-										_current_move_multiplier = main_skill.move_multiplier
-										mana -= main_skill.mana_cost
-										main_skill.perform(self)
+                if _attack_timer > 0.0:
+                                _attack_timer -= delta
+                if _attacking_timer > 0.0:
+                                _attacking_timer -= delta
+                if _secondary_cooldown > 0.0:
+                                _secondary_cooldown -= delta
+                if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
+                                                if mana >= main_skill.mana_cost:
+                                                                                _attack_timer = main_skill.cooldown
+                                                                                _attacking_timer = main_skill.duration
+                                                                                _current_move_multiplier = main_skill.move_multiplier
+                                                                                mana -= main_skill.mana_cost
+                                                                                main_skill.perform(self)
+                if secondary_skill and Input.is_action_just_pressed("skill_1") and _secondary_cooldown <= 0.0:
+                                if mana >= secondary_skill.mana_cost:
+                                                _secondary_cooldown = secondary_skill.cooldown
+                                                mana -= secondary_skill.mana_cost
+                                                secondary_skill.perform(self)
 
 func _process_inventory_input() -> void:
 	if Input.is_action_just_pressed("toggle_inventory"):
