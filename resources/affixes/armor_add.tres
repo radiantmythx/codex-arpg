@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/affix_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Armor"
+description = "{value} to armor"
+stat_key = "armor"
+tiers = [Vector2(5,10), Vector2(10,15), Vector2(15,20)]

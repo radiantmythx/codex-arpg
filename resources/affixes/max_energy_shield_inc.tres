@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/affix_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Maximum Energy Shield %"
+description = "{value}% increased maximum energy shield"
+stat_key = "max_energy_shield_inc"
+tiers = [Vector2(10,20), Vector2(20,30), Vector2(30,40)]
