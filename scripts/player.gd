@@ -7,16 +7,31 @@ extends CharacterBody3D
 @export var attack_angle: float = 45.0 # degrees
 @export var attack_duration: float = 0.2
 @export var attack_move_multiplier: float = 0.2
+@export var inventory_ui_path: NodePath
+@export var inventory_camera_path: NodePath
+@export var inventory_camera_shift: float = 3.0
 
 var _attack_timer: float = 0.0
 var _attacking_timer: float = 0.0
 var inventory := Inventory.new()
+var _inventory_ui: InventoryUI
+var _camera: Camera3D
+var _camera_default_pos: Vector3
+var _inventory_open := false
 
 var health: int = 3
 var max_health: int = 3
 
 func _ready() -> void:
-	add_child(inventory)
+        add_child(inventory)
+        if inventory_ui_path != NodePath():
+                _inventory_ui = get_node(inventory_ui_path)
+                if _inventory_ui:
+                        _inventory_ui.bind_inventory(inventory)
+        if inventory_camera_path != NodePath():
+                _camera = get_node(inventory_camera_path)
+                if _camera:
+                        _camera_default_pos = _camera.position
 	add_to_group("players")
 
 func _get_click_direction() -> Vector3:
@@ -34,8 +49,9 @@ func _get_click_direction() -> Vector3:
 	return (target - global_transform.origin).normalized()
 
 func _physics_process(delta: float) -> void:
-	_process_attack(delta)
-	_process_movement(delta)
+        _process_inventory_input()
+        _process_attack(delta)
+        _process_movement(delta)
 
 func _process_movement(delta: float) -> void:
 	var input_dir = Vector3.ZERO
@@ -106,10 +122,38 @@ func perform_attack() -> void:
 		params.collide_with_bodies = true
 
 		var bodies := get_world_3d().direct_space_state.intersect_shape(params)
-		for result in bodies:
-			var body = result.get("collider")
-			if body != null and body.has_method("take_damage") and body.is_in_group("enemy"):
-				body.take_damage(1)
+                for result in bodies:
+                        var body = result.get("collider")
+                        if body != null and body.has_method("take_damage"):
+                                body.take_damage(1)
+
+func _process_inventory_input() -> void:
+        if Input.is_action_just_pressed("toggle_inventory"):
+                if _inventory_open:
+                        close_inventory()
+                else:
+                        open_inventory()
+
+func open_inventory() -> void:
+        _inventory_open = true
+        if _inventory_ui:
+                _inventory_ui.open()
+        _shift_camera(true)
+
+func close_inventory() -> void:
+        _inventory_open = false
+        if _inventory_ui:
+                _inventory_ui.close()
+        _shift_camera(false)
+
+func _shift_camera(open: bool) -> void:
+        if not _camera:
+                return
+        var target := _camera_default_pos
+        if open:
+                target.x += inventory_camera_shift
+        var tween := create_tween()
+        tween.tween_property(_camera, "position", target, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func add_item(item: Item, amount: int = 1) -> void:
 	inventory.add_item(item, amount)

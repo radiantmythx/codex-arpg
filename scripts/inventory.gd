@@ -26,3 +26,6 @@ func get_quantity(item: Item) -> int:
 
 func has_item(item: Item, amount: int = 1) -> bool:
     return get_quantity(item) >= amount
+
+func get_items() -> Dictionary:
+    return _items.duplicate()
