@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="MeleeAttackSkill" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MeleeAttackSkill" load_steps=2 format=3 uid="uid://cn8jgafdb88ow"]
 
-[ext_resource type="Script" path="res://scripts/skills/melee_attack_skill.gd" id="1"]
+[ext_resource type="Script" uid="uid://d21hkvn75cyre" path="res://scripts/skills/melee_attack_skill.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-name = "Basic Melee Attack"
-mana_cost = 5.0
-cooldown = 0.5
-duration = 0.2
-move_multiplier = 0.2
-damage_type = 0
 range = 2.0
 angle = 45.0
-tags = Array[String](["melee", "attack"])
+name = ""
+mana_cost = 5.0
+cooldown = 0.5
+duration = 0.3
+move_multiplier = 0.2
+damage_type = 0
+tags = Array[String]([])

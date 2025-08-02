@@ -17,12 +17,12 @@ enum DamageType { PHYSICAL, SOLAR, ICE, ELECTRIC, HOLY, UNHOLY }
 
 # Mapping from `DamageType` to string tokens used by the affix/stat system.
 const DAMAGE_TYPE_KEYS = {
-                DamageType.PHYSICAL: "physical",
-                DamageType.SOLAR: "solar",
-                DamageType.ICE: "ice",
-                DamageType.ELECTRIC: "electric",
-                DamageType.HOLY: "holy",
-                DamageType.UNHOLY: "unholy",
+				DamageType.PHYSICAL: "physical",
+				DamageType.SOLAR: "solar",
+				DamageType.ICE: "ice",
+				DamageType.ELECTRIC: "electric",
+				DamageType.HOLY: "holy",
+				DamageType.UNHOLY: "unholy",
 }
 
 # Base values before equipment or other bonuses are applied.
@@ -36,12 +36,12 @@ var base_main := {
 # Base numeric values before affixes are applied.  These can be modified by
 # both additive and percentage based affixes.
 var base_damage: Dictionary = {
-                DamageType.PHYSICAL: 1.0,
-                DamageType.SOLAR: 0.0,
-                DamageType.ICE: 0.0,
-                DamageType.ELECTRIC: 0.0,
-                DamageType.HOLY: 0.0,
-                DamageType.UNHOLY: 0.0,
+				DamageType.PHYSICAL: 1.0,
+				DamageType.SOLAR: 0.0,
+				DamageType.ICE: 0.0,
+				DamageType.ELECTRIC: 0.0,
+				DamageType.HOLY: 0.0,
+				DamageType.UNHOLY: 0.0,
 }
 var base_move_speed: float = 5.0
 var base_defense: float = 0.0
@@ -52,12 +52,12 @@ var base_mana_regen: float = 0.0
 var base_armor: float = 0.0
 var base_evasion: float = 0.0
 var base_resistance: Dictionary = {
-                DamageType.PHYSICAL: 0.0,
-                DamageType.SOLAR: 0.0,
-                DamageType.ICE: 0.0,
-                DamageType.ELECTRIC: 0.0,
-                DamageType.HOLY: 0.0,
-                DamageType.UNHOLY: 0.0,
+				DamageType.PHYSICAL: 0.0,
+				DamageType.SOLAR: 0.0,
+				DamageType.ICE: 0.0,
+				DamageType.ELECTRIC: 0.0,
+				DamageType.HOLY: 0.0,
+				DamageType.UNHOLY: 0.0,
 }
 var base_max_energy_shield: float = 0.0
 var base_energy_shield_regen: float = 0.0
@@ -165,26 +165,26 @@ func get_main(stat: MainStat) -> int:
 
 
 func get_damage(damage_type: DamageType = DamageType.PHYSICAL) -> float:
-                var key = "%s_damage" % DAMAGE_TYPE_KEYS[damage_type]
-                return _compute_stat(base_damage.get(damage_type, 0.0), key)
+				var key = "%s_damage" % DAMAGE_TYPE_KEYS[damage_type]
+				return _compute_stat(base_damage.get(damage_type, 0.0), key)
 
 
 func get_move_speed() -> float:
-                return _compute_stat(base_move_speed, "move_speed")
+				return _compute_stat(base_move_speed, "move_speed")
 
 
 func get_defense() -> float:
-                return _compute_stat(base_defense, "defense")
+				return _compute_stat(base_defense, "defense")
 
 func get_resistance(damage_type: DamageType) -> float:
-                var key = "%s_resistance" % DAMAGE_TYPE_KEYS[damage_type]
-                return _compute_stat(base_resistance.get(damage_type, 0.0), key)
+				var key = "%s_resistance" % DAMAGE_TYPE_KEYS[damage_type]
+				return _compute_stat(base_resistance.get(damage_type, 0.0), key)
 
 func get_armor() -> float:
-                return _compute_stat(base_armor, "armor")
+				return _compute_stat(base_armor, "armor")
 
 func get_evasion() -> float:
-                return _compute_stat(base_evasion, "evasion")
+				return _compute_stat(base_evasion, "evasion")
 
 
 func get_max_health() -> float:
@@ -192,20 +192,20 @@ func get_max_health() -> float:
 
 
 func get_max_mana() -> float:
-                return _compute_stat(base_max_mana, "max_mana")
+				return _compute_stat(base_max_mana, "max_mana")
 
 func get_max_energy_shield() -> float:
-                return _compute_stat(base_max_energy_shield, "max_energy_shield")
+				return _compute_stat(base_max_energy_shield, "max_energy_shield")
 
 
 func get_health_regen() -> float:
-                return _compute_stat(base_health_regen, "health_regen")
+				return _compute_stat(base_health_regen, "health_regen")
 
 func get_energy_shield_regen() -> float:
-                return _compute_stat(base_energy_shield_regen, "energy_shield_regen")
+				return _compute_stat(base_energy_shield_regen, "energy_shield_regen")
 
 func get_energy_shield_recharge_delay() -> float:
-                return _compute_stat(base_energy_shield_recharge_delay, "energy_shield_recharge_delay")
+				return _compute_stat(base_energy_shield_recharge_delay, "energy_shield_recharge_delay")
 
 
 func get_mana_regen() -> float:

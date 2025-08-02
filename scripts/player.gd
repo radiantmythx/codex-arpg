@@ -51,13 +51,13 @@ var equipment: EquipmentManager
 func _ready() -> void:
 	stats = Stats.new()
 	stats.base_move_speed = move_speed
-        stats.base_damage[Stats.DamageType.PHYSICAL] = base_damage
-        stats.base_defense = base_defense
-        stats.base_armor = base_armor
-        stats.base_evasion = base_evasion
-        stats.base_max_energy_shield = base_max_energy_shield
-        stats.base_energy_shield_regen = base_energy_shield_regen
-        stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
+	stats.base_damage[Stats.DamageType.PHYSICAL] = base_damage
+	stats.base_defense = base_defense
+	stats.base_armor = base_armor
+	stats.base_evasion = base_evasion
+	stats.base_max_energy_shield = base_max_energy_shield
+	stats.base_energy_shield_regen = base_energy_shield_regen
+	stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
 	stats.base_main[Stats.MainStat.BODY] = base_body
 	stats.base_main[Stats.MainStat.MIND] = base_mind
 	stats.base_main[Stats.MainStat.SOUL] = base_soul
@@ -85,15 +85,15 @@ func _ready() -> void:
 		if healthbar_node_path != NodePath():
 				_healthbar = get_node(healthbar_node_path)
 
-                max_health = int(stats.get_max_health())
-                health = max_health
-                max_mana = stats.get_max_mana()
-                mana = max_mana
-                max_energy_shield = stats.get_max_energy_shield()
-                energy_shield = max_energy_shield
-                if _healthbar:
-                                _healthbar.set_health(health, max_health)
-                                _healthbar.set_mana(mana, max_mana)
+				max_health = int(stats.get_max_health())
+				health = max_health
+				max_mana = stats.get_max_mana()
+				mana = max_mana
+				max_energy_shield = stats.get_max_energy_shield()
+				energy_shield = max_energy_shield
+				if _healthbar:
+								_healthbar.set_health(health, max_health)
+								_healthbar.set_mana(mana, max_mana)
 
 	add_to_group("players")
 
@@ -132,24 +132,26 @@ func _process_movement(delta: float) -> void:
 	if input_dir != Vector3.ZERO:
 		var target_rot = Transform3D().looking_at(input_dir, Vector3.UP).basis.get_euler().y
 		rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
-        var speed = stats.get_move_speed()
-        if _attacking_timer > 0.0:
-                speed *= _current_move_multiplier
-        velocity = input_dir * speed
+		var speed = stats.get_move_speed()
+		if _attacking_timer > 0.0:
+				speed *= _current_move_multiplier
+		velocity = input_dir * speed
+	else:
+		velocity = Vector3()
 	move_and_slide()
 
 func _process_attack(delta: float) -> void:
-        if _attack_timer > 0.0:
-                _attack_timer -= delta
-        if _attacking_timer > 0.0:
-                _attacking_timer -= delta
-        if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
-                        if mana >= main_skill.mana_cost:
-                                        _attack_timer = main_skill.cooldown
-                                        _attacking_timer = main_skill.duration
-                                        _current_move_multiplier = main_skill.move_multiplier
-                                        mana -= main_skill.mana_cost
-                                        main_skill.perform(self)
+		if _attack_timer > 0.0:
+				_attack_timer -= delta
+		if _attacking_timer > 0.0:
+				_attacking_timer -= delta
+		if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
+						if mana >= main_skill.mana_cost:
+										_attack_timer = main_skill.cooldown
+										_attacking_timer = main_skill.duration
+										_current_move_multiplier = main_skill.move_multiplier
+										mana -= main_skill.mana_cost
+										main_skill.perform(self)
 
 func _process_inventory_input() -> void:
 	if Input.is_action_just_pressed("toggle_inventory"):
@@ -186,38 +188,38 @@ func add_item(item: Item, amount: int = 1) -> void:
 		inventory.add_item(item, amount)
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-                if damage_type == Stats.DamageType.PHYSICAL:
-                                if randf() < stats.get_evasion() / 100.0:
-                                                return
-                                amount = max(0.0, amount - stats.get_armor())
-                var resist = stats.get_resistance(damage_type)
-                amount = amount * (1.0 - resist / 100.0)
-                amount = max(0.0, amount - stats.get_defense())
-                if damage_type != Stats.DamageType.HOLY and damage_type != Stats.DamageType.UNHOLY and energy_shield > 0.0:
-                                var absorbed = min(energy_shield, amount)
-                                energy_shield -= absorbed
-                                amount -= absorbed
-                _es_recharge_timer = stats.get_energy_shield_recharge_delay()
-                health -= amount
-                if _healthbar:
-                                _healthbar.set_health(health, max_health)
-                if health <= 0:
-                                die()
+				if damage_type == Stats.DamageType.PHYSICAL:
+								if randf() < stats.get_evasion() / 100.0:
+												return
+								amount = max(0.0, amount - stats.get_armor())
+				var resist = stats.get_resistance(damage_type)
+				amount = amount * (1.0 - resist / 100.0)
+				amount = max(0.0, amount - stats.get_defense())
+				if damage_type != Stats.DamageType.HOLY and damage_type != Stats.DamageType.UNHOLY and energy_shield > 0.0:
+								var absorbed = min(energy_shield, amount)
+								energy_shield -= absorbed
+								amount -= absorbed
+				_es_recharge_timer = stats.get_energy_shield_recharge_delay()
+				health -= amount
+				if _healthbar:
+								_healthbar.set_health(health, max_health)
+				if health <= 0:
+								die()
 
 func _process_regen(delta: float) -> void:
-                max_health = int(stats.get_max_health())
-                health = min(max_health, health + stats.get_health_regen() * delta)
-                max_mana = stats.get_max_mana()
-                mana = min(max_mana, mana + stats.get_mana_regen() * delta)
-                max_energy_shield = stats.get_max_energy_shield()
-                if energy_shield < max_energy_shield:
-                                if _es_recharge_timer > 0.0:
-                                                _es_recharge_timer -= delta
-                                else:
-                                                energy_shield = min(max_energy_shield, energy_shield + stats.get_energy_shield_regen() * delta)
-                if _healthbar:
-                                _healthbar.set_health(health, max_health)
-                                _healthbar.set_mana(mana, max_mana)
+				max_health = int(stats.get_max_health())
+				health = min(max_health, health + stats.get_health_regen() * delta)
+				max_mana = stats.get_max_mana()
+				mana = min(max_mana, mana + stats.get_mana_regen() * delta)
+				max_energy_shield = stats.get_max_energy_shield()
+				if energy_shield < max_energy_shield:
+								if _es_recharge_timer > 0.0:
+												_es_recharge_timer -= delta
+								else:
+												energy_shield = min(max_energy_shield, energy_shield + stats.get_energy_shield_regen() * delta)
+				if _healthbar:
+								_healthbar.set_health(health, max_health)
+								_healthbar.set_mana(mana, max_mana)
 
 func die():
 	queue_free()
