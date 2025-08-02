@@ -1,25 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=5 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
-[ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="2_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
-[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/chaos_orb.tres" id="4_tipki"]
-[ext_resource type="PackedScene" uid="uid://c0vgaf5vs6gcq" path="res://scenes/ui/healthbar.tscn" id="5_85g3d"]
-[ext_resource type="Resource" uid="uid://jpdhdcxly3x4" path="res://resources/items/sword_of_based.tres" id="5_o6xl0"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
 size = Vector2(35, 35)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_md0e3"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ra3w"]
-albedo_color = Color(0.938408, 0.261115, 0.284454, 1)
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5uy6h"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_choun"]
-viewport_path = NodePath("Enemy/SubViewport")
 
 [node name="WorldRoot" type="Node3D"]
 
@@ -37,44 +23,9 @@ inventory_camera_path = NodePath("../Camera3D")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 0, 8.93768, 8.75395)
 
-[node name="Enemy" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0627937, 0, 4.21481)
-script = ExtResource("2_o6xl0")
-max_health = 1
-move_speed = 3.0
-healthbar_node_path = NodePath("SubViewport/Healthbar")
-drop_table = [{
-"amount": 1,
-"chance": 1.0,
-"item": ExtResource("5_o6xl0")
-}, {
-"amount": 20,
-"chance": 1.0,
-"item": ExtResource("4_tipki")
-}]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_md0e3")
-surface_material_override/0 = SubResource("StandardMaterial3D_4ra3w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_5uy6h")
-
-[node name="SubViewport" type="SubViewport" parent="Enemy"]
-transparent_bg = true
-size = Vector2i(160, 27)
-
-[node name="Healthbar" parent="Enemy/SubViewport" instance=ExtResource("5_85g3d")]
-
-[node name="Sprite3D" type="Sprite3D" parent="Enemy"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 2.417, 0)
-billboard = 1
-texture = SubResource("ViewportTexture_choun")
-
 [node name="Enemy2" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6038, 0, 2.31777)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0735598, 0, -4.58097)
+max_health = 300.0
 
 [node name="Enemy3" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2586, 0, 4.5585)

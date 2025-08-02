@@ -97,7 +97,7 @@ func _ready() -> void:
 								_healthbar.set_health(health, max_health)
 								_healthbar.set_mana(mana, max_mana)
 
-	add_to_group("players")
+	add_to_group("player")
 
 func _get_click_direction() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
@@ -143,24 +143,24 @@ func _process_movement(delta: float) -> void:
 	move_and_slide()
 
 func _process_attack(delta: float) -> void:
-                if _attack_timer > 0.0:
-                                _attack_timer -= delta
-                if _attacking_timer > 0.0:
-                                _attacking_timer -= delta
-                if _secondary_cooldown > 0.0:
-                                _secondary_cooldown -= delta
-                if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
-                                                if mana >= main_skill.mana_cost:
-                                                                                _attack_timer = main_skill.cooldown
-                                                                                _attacking_timer = main_skill.duration
-                                                                                _current_move_multiplier = main_skill.move_multiplier
-                                                                                mana -= main_skill.mana_cost
-                                                                                main_skill.perform(self)
-                if secondary_skill and Input.is_action_just_pressed("skill_1") and _secondary_cooldown <= 0.0:
-                                if mana >= secondary_skill.mana_cost:
-                                                _secondary_cooldown = secondary_skill.cooldown
-                                                mana -= secondary_skill.mana_cost
-                                                secondary_skill.perform(self)
+				if _attack_timer > 0.0:
+								_attack_timer -= delta
+				if _attacking_timer > 0.0:
+								_attacking_timer -= delta
+				if _secondary_cooldown > 0.0:
+								_secondary_cooldown -= delta
+				if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
+												if mana >= main_skill.mana_cost:
+																				_attack_timer = main_skill.cooldown
+																				_attacking_timer = main_skill.duration
+																				_current_move_multiplier = main_skill.move_multiplier
+																				mana -= main_skill.mana_cost
+																				main_skill.perform(self)
+				if secondary_skill and Input.is_action_just_pressed("skill_1") and _secondary_cooldown <= 0.0:
+								if mana >= secondary_skill.mana_cost:
+												_secondary_cooldown = secondary_skill.cooldown
+												mana -= secondary_skill.mana_cost
+												secondary_skill.perform(self)
 
 func _process_inventory_input() -> void:
 	if Input.is_action_just_pressed("toggle_inventory"):

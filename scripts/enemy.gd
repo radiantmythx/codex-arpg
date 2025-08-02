@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 const Stats = preload("res://scripts/stats.gd")
 
-@export var max_health: int = 3
+@export var max_health: float = 3.0
 @export var move_speed: float = 2.0
 @export var wander_speed: float = 1.0
 @export var wander_change_interval: float = 2.0
@@ -21,7 +21,7 @@ const Stats = preload("res://scripts/stats.gd")
 ## {"item": Item, "chance": 0.5, "amount": 1}
 @export var drop_table: Array = []
 
-var current_health: int
+var current_health: float
 var energy_shield: float = 0.0
 var max_energy_shield: float = 0.0
 var _es_recharge_timer: float = 0.0
@@ -48,7 +48,7 @@ func _ready() -> void:
 		stats.base_max_energy_shield = base_max_energy_shield
 		stats.base_energy_shield_regen = base_energy_shield_regen
 		stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
-		max_health = int(stats.get_max_health())
+		max_health = float(stats.get_max_health())
 		current_health = max_health
 		max_energy_shield = stats.get_max_energy_shield()
 		energy_shield = max_energy_shield
@@ -62,20 +62,20 @@ func _ready() -> void:
 				_healthbar.set_health(current_health, max_health)
 
 func _physics_process(delta: float) -> void:
-                _process_regen(delta)
-                _process_timers(delta)
-                var player_pos := _get_player_position()
-                if player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
-                        _attack_timer = main_skill.cooldown
-                        main_skill.perform(self)
-                elif player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
-                        _chase(player_pos, delta)
-                else:
-                        _wander(delta)
+				_process_regen(delta)
+				_process_timers(delta)
+				var player_pos := _get_player_position()
+				if player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
+						_attack_timer = main_skill.cooldown
+						main_skill.perform(self)
+				elif player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
+						_chase(player_pos, delta)
+				else:
+						_wander(delta)
 
 func _process_timers(delta: float) -> void:
-                if _attack_timer > 0.0:
-                                _attack_timer -= delta
+				if _attack_timer > 0.0:
+								_attack_timer -= delta
 
 func _process_regen(delta: float) -> void:
 		max_energy_shield = stats.get_max_energy_shield()
@@ -110,6 +110,7 @@ func _get_player_position() -> Vector3:
 	return Vector3()
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
+		print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")
 		if damage_type == Stats.DamageType.PHYSICAL:
 				if randf() < stats.get_evasion() / 100.0:
 						return
@@ -122,7 +123,7 @@ func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType
 				energy_shield -= absorbed
 				amount -= absorbed
 		_es_recharge_timer = stats.get_energy_shield_recharge_delay()
-		current_health -= int(amount)
+		current_health -= amount
 		if _healthbar:
 				_healthbar.set_health(current_health, max_health)
 		if current_health <= 0:

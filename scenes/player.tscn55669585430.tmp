@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://dkh8qe5m4su07"]
+
+[ext_resource type="Script" uid="uid://bohpfecpa3r7n" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="PackedScene" uid="uid://c0vgaf5vs6gcq" path="res://scenes/ui/healthbar.tscn" id="2_g2els"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_g2els"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qhqgy"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_3vyb7"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qhqgy"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_3vyb7")
+move_speed = null
+rotation_speed = null
+main_skill = null
+inventory_ui_path = null
+inventory_camera_path = null
+inventory_camera_shift = null
+healthbar_node_path = NodePath("SubViewport/Healthbar")
+base_damage = null
+base_defense = null
+base_armor = null
+base_evasion = null
+base_max_energy_shield = null
+base_energy_shield_regen = null
+base_energy_shield_recharge_delay = null
+base_body = null
+base_mind = null
+base_soul = null
+base_luck = null
+base_max_health = null
+base_max_mana = null
+base_health_regen = null
+base_mana_regen = null
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_g2els")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_qhqgy")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 1.10018, -0.484245)
+mesh = SubResource("PrismMesh_3vyb7")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 2.417, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_qhqgy")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(160, 40)
+
+[node name="Healthbar" parent="SubViewport" instance=ExtResource("2_g2els")]

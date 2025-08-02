@@ -4,12 +4,12 @@
 
 [resource]
 script = ExtResource("1")
-range = 2.0
-angle = 45.0
-name = ""
+range = null
+angle = null
+name = null
 mana_cost = 5.0
 cooldown = 0.5
 duration = 0.3
 move_multiplier = 0.2
-damage_type = 0
+damage_type = null
 tags = Array[String](["Melee"])

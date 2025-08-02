@@ -1,8 +1,8 @@
 extends Control
 class_name Healthbar
 
-var max_health: float = 100
-var current_health: float = 100
+var max_health: float = 100.0
+var current_health: float = 100.0
 var mana: float = 0
 var max_mana: float = 0
 
@@ -17,7 +17,7 @@ func update_healthbar():
 		$ManaBar.max_value = max_mana
 		$ManaBar.value = mana
 
-func set_health(value: int, valueMax: int):
+func set_health(value: float, valueMax: float):
 	current_health = clamp(value, 0, valueMax)
 	max_health = valueMax
 	update_healthbar()

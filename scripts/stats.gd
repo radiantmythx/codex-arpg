@@ -17,12 +17,12 @@ enum DamageType { PHYSICAL, SOLAR, ICE, ELECTRIC, HOLY, UNHOLY }
 
 # Mapping from `DamageType` to string tokens used by the affix/stat system.
 const DAMAGE_TYPE_KEYS = {
-                                DamageType.PHYSICAL: "physical",
-                                DamageType.SOLAR: "solar",
-                                DamageType.ICE: "ice",
-                                DamageType.ELECTRIC: "electric",
-                                DamageType.HOLY: "holy",
-                                DamageType.UNHOLY: "unholy",
+								DamageType.PHYSICAL: "physical",
+								DamageType.SOLAR: "solar",
+								DamageType.ICE: "ice",
+								DamageType.ELECTRIC: "electric",
+								DamageType.HOLY: "holy",
+								DamageType.UNHOLY: "unholy",
 }
 const DAMAGE_TYPES = [DamageType.PHYSICAL, DamageType.SOLAR, DamageType.ICE, DamageType.ELECTRIC, DamageType.HOLY, DamageType.UNHOLY]
 
@@ -54,10 +54,10 @@ var base_armor: float = 0.0
 var base_evasion: float = 0.0
 var base_aoe: float = 1.0
 var base_resistance: Dictionary = {
-                                DamageType.PHYSICAL: 0.0,
-                                DamageType.SOLAR: 0.0,
-                                DamageType.ICE: 0.0,
-                                DamageType.ELECTRIC: 0.0,
+								DamageType.PHYSICAL: 0.0,
+								DamageType.SOLAR: 0.0,
+								DamageType.ICE: 0.0,
+								DamageType.ELECTRIC: 0.0,
 				DamageType.HOLY: 0.0,
 				DamageType.UNHOLY: 0.0,
 }
@@ -157,18 +157,18 @@ func _compute_main(base: float, stat: MainStat) -> float:
 
 
 func _compute_stat(base: float, key: String) -> float:
-                var flat = _stat_flat.get(key, 0.0)
-                var inc = _stat_inc.get(key, 0.0)
-                return (base + flat) * (1.0 + inc / 100.0)
+				var flat = _stat_flat.get(key, 0.0)
+				var inc = _stat_inc.get(key, 0.0)
+				return (base + flat) * (1.0 + inc / 100.0)
 
 func _compute_stat_tagged(base: float, key: String, tags: Array[String]) -> float:
-                var flat = _stat_flat.get(key, 0.0)
-                var inc = _stat_inc.get(key, 0.0)
-                for t in tags:
-                                var tag_key = "%s_%s" % [key, t.to_lower()]
-                                flat += _stat_flat.get(tag_key, 0.0)
-                                inc += _stat_inc.get(tag_key, 0.0)
-                return (base + flat) * (1.0 + inc / 100.0)
+				var flat = _stat_flat.get(key, 0.0)
+				var inc = _stat_inc.get(key, 0.0)
+				for t in tags:
+								var tag_key = "%s_%s" % [key, t.to_lower()]
+								flat += _stat_flat.get(tag_key, 0.0)
+								inc += _stat_inc.get(tag_key, 0.0)
+				return (base + flat) * (1.0 + inc / 100.0)
 
 
 func get_main(stat: MainStat) -> int:
@@ -176,18 +176,18 @@ func get_main(stat: MainStat) -> int:
 
 
 func get_damage(damage_type: DamageType = DamageType.PHYSICAL, tags: Array[String] = []) -> float:
-                                var key = "%s_damage" % DAMAGE_TYPE_KEYS[damage_type]
-                                return _compute_stat_tagged(base_damage.get(damage_type, 0.0), key, tags)
+								var key = "%s_damage" % DAMAGE_TYPE_KEYS[damage_type]
+								return _compute_stat_tagged(base_damage.get(damage_type, 0.0), key, tags)
 
 func get_all_damage(tags: Array[String] = []) -> Dictionary:
-                var result: Dictionary = {}
-                for dt in DAMAGE_TYPES:
-                                result[dt] = get_damage(dt, tags)
-                return result
+				var result: Dictionary = {}
+				for dt in DAMAGE_TYPES:
+								result[dt] = get_damage(dt, tags)
+				return result
 
 
 func get_move_speed() -> float:
-                                return _compute_stat(base_move_speed, "move_speed")
+								return _compute_stat(base_move_speed, "move_speed")
 
 
 func get_defense() -> float:
@@ -201,10 +201,10 @@ func get_armor() -> float:
 				return _compute_stat(base_armor, "armor")
 
 func get_evasion() -> float:
-                                return _compute_stat(base_evasion, "evasion")
+								return _compute_stat(base_evasion, "evasion")
 
 func get_aoe_multiplier() -> float:
-                                return _compute_stat(base_aoe, "aoe")
+								return _compute_stat(base_aoe, "aoe")
 
 
 func get_max_health() -> float:
