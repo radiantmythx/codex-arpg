@@ -6,6 +6,7 @@
 [node name="InventoryUI" type="CanvasLayer"]
 script = ExtResource("1_4ycse")
 slots_parent_path = NodePath("SlotContainer")
+equip_slots_parent_path = NodePath("EquipSlotContainer")
 
 [node name="SlotContainer" type="FlowContainer" parent="."]
 anchors_preset = 3
@@ -93,3 +94,20 @@ size_flags_vertical = 0
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_vertical = 0
+
+[node name="EquipSlotContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WeaponSlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+offset_left = 996.0
+offset_top = 359.0
+offset_right = 1044.0
+offset_bottom = 407.0
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "weapon"
