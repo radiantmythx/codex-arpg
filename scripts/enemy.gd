@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+const Stats = preload("res://scripts/stats.gd")
+
 @export var max_health: int = 3
 @export var move_speed: float = 2.0
 @export var wander_speed: float = 1.0
@@ -9,12 +11,21 @@ extends CharacterBody3D
 @export var attack_windup: float = 0.5
 @export var attack_cooldown: float = 1.0
 @export var healthbar_node_path: NodePath
+@export var base_armor: float = 0.0
+@export var base_evasion: float = 0.0
+@export var base_max_energy_shield: float = 0.0
+@export var base_energy_shield_regen: float = 0.0
+@export var base_energy_shield_recharge_delay: float = 2.0
+@export var base_damage: float = 1.0
 
 ## Drop table is an array of dictionaries like:
 ## {"item": Item, "chance": 0.5, "amount": 1}
 @export var drop_table: Array = []
 
 var current_health: int
+var energy_shield: float = 0.0
+var max_energy_shield: float = 0.0
+var _es_recharge_timer: float = 0.0
 
 signal died
 
@@ -26,24 +37,37 @@ var _windup_timer: float = 0.0
 var _mesh: MeshInstance3D
 var _original_material: Material
 var _healthbar: Healthbar
+var stats: Stats
 
 func _ready() -> void:
-	randomize()
-	add_to_group("enemy")
-	current_health = max_health
-	_player = get_tree().get_root().find_child("Player", true, false)
-	_mesh = get_node_or_null("MeshInstance3D")
-	if _mesh:
-		_original_material = _mesh.material_override
+        randomize()
+        add_to_group("enemy")
+        stats = Stats.new()
+        stats.base_max_health = max_health
+        stats.base_damage[Stats.DamageType.PHYSICAL] = base_damage
+        stats.base_armor = base_armor
+        stats.base_evasion = base_evasion
+        stats.base_max_energy_shield = base_max_energy_shield
+        stats.base_energy_shield_regen = base_energy_shield_regen
+        stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
+        max_health = int(stats.get_max_health())
+        current_health = max_health
+        max_energy_shield = stats.get_max_energy_shield()
+        energy_shield = max_energy_shield
+        _player = get_tree().get_root().find_child("Player", true, false)
+        _mesh = get_node_or_null("MeshInstance3D")
+        if _mesh:
+                _original_material = _mesh.material_override
 	if healthbar_node_path != NodePath():
 			_healthbar = get_node(healthbar_node_path)
 			if(_healthbar):
 				_healthbar.set_health(current_health, max_health)
 
 func _physics_process(delta: float) -> void:
-	_process_timers(delta)
-	if _windup_timer > 0.0:
-		return
+        _process_regen(delta)
+        _process_timers(delta)
+        if _windup_timer > 0.0:
+                return
 	var player_pos := _get_player_position()
 	if player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0:
 		_start_windup()
@@ -53,12 +77,20 @@ func _physics_process(delta: float) -> void:
 		_wander(delta)
 
 func _process_timers(delta: float) -> void:
-	if _attack_timer > 0.0:
-		_attack_timer -= delta
-	if _windup_timer > 0.0:
-		_windup_timer -= delta
-		if _windup_timer <= 0.0:
-			_perform_attack()
+        if _attack_timer > 0.0:
+                _attack_timer -= delta
+        if _windup_timer > 0.0:
+                _windup_timer -= delta
+                if _windup_timer <= 0.0:
+                        _perform_attack()
+
+func _process_regen(delta: float) -> void:
+        max_energy_shield = stats.get_max_energy_shield()
+        if energy_shield < max_energy_shield:
+                if _es_recharge_timer > 0.0:
+                        _es_recharge_timer -= delta
+                else:
+                        energy_shield = min(max_energy_shield, energy_shield + stats.get_energy_shield_regen() * delta)
 
 func _wander(delta: float) -> void:
 	_wander_timer -= delta
@@ -114,8 +146,8 @@ func _perform_attack() -> void:
 		var bodies := get_world_3d().direct_space_state.intersect_shape(params)
 		for result in bodies:
 			var body = result.get("collider")
-			if body != null and body.has_method("take_damage") and body.is_in_group("players"):
-				body.take_damage(1)
+                        if body != null and body.has_method("take_damage") and body.is_in_group("players"):
+                                body.take_damage(stats.get_damage(Stats.DamageType.PHYSICAL), Stats.DamageType.PHYSICAL)
 		await get_tree().create_timer(0.2).timeout
 		area.queue_free()
 
@@ -124,13 +156,24 @@ func _get_player_position() -> Vector3:
 		return _player.global_transform.origin
 	return Vector3()
 
-func take_damage(amount: int) -> void:
-	#print("Ow! Took ", amount)
-	current_health -= amount
-	if(_healthbar):
-		_healthbar.set_health(current_health, max_health)
-	if current_health <= 0:
-		die()
+func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
+        if damage_type == Stats.DamageType.PHYSICAL:
+                if randf() < stats.get_evasion() / 100.0:
+                        return
+                amount = max(0.0, amount - stats.get_armor())
+        var resist = stats.get_resistance(damage_type)
+        amount = amount * (1.0 - resist / 100.0)
+        amount = max(0.0, amount - stats.get_defense())
+        if damage_type != Stats.DamageType.HOLY and damage_type != Stats.DamageType.UNHOLY and energy_shield > 0.0:
+                var absorbed = min(energy_shield, amount)
+                energy_shield -= absorbed
+                amount -= absorbed
+        _es_recharge_timer = stats.get_energy_shield_recharge_delay()
+        current_health -= int(amount)
+        if _healthbar:
+                _healthbar.set_health(current_health, max_health)
+        if current_health <= 0:
+                die()
 
 func die() -> void:
 	_drop_loot()
