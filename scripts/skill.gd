@@ -4,6 +4,7 @@ extends Resource
 const Stats = preload("res://scripts/stats.gd")
 
 @export var name: String = ""
+@export var icon: Texture2D
 @export var mana_cost: float = 0.0
 @export var cooldown: float = 0.0
 @export var duration: float = 0.0
