@@ -46,12 +46,35 @@ already has a container for items.
 1. Create a new resource using **Item** (`scripts/item.gd`) for each item type.
 2. To make something collectible, add an `Area3D` (or a child of a 3D node) and
    attach `scripts/item_pickup.gd`. Assign the `item` property and set an
-   optional amount. The script will spawn a floating name label automatically.
-3. When the player approaches the drop, hover the mouse over the label to view
-   the description. Click the item with the **left mouse button** to add it to
-   the player's inventory.
+   optional amount. The script spawns a 2D tag in a canvas layer so the label is
+   always the same size on screen.
+3. Hover over the tag to view the tooltip and click the label with the **left
+   mouse button** to add the item to the player's inventory.
+4. A `CanvasLayer` named `ItemTagLayer` will be created automatically at
+   runtime. If you prefer to manage it manually, add a `CanvasLayer` with that
+   name to your main scene and optionally customize its draw order.
 
 You can inspect or modify the contents of the player's inventory through the
 `inventory` property on `player.gd` or by attaching the `Inventory` script to
 other nodes if needed.
+
+## Enemy Behavior
+Enemies now wander around randomly until the player gets close. When the player
+enters the `detection_range` exported on `enemy.gd`, the enemy will chase the
+player. If the player reaches `attack_range`, the enemy performs a short
+wind‑up before dealing damage. During the wind‑up the enemy's material turns
+red to telegraph the attack and then reverts back afterwards.
+
+Enemies can drop loot using the `drop_table` export on `enemy.gd`. Each entry in
+the array is a dictionary like `{"item": Item, "chance": 0.5, "amount": 1}`.
+When the enemy dies every entry is rolled and a matching `item_drop.tscn`
+instance is spawned for successful rolls.
+
+### Updating Existing Scenes
+1. Open your enemy scene in Godot and ensure `enemy.gd` is attached to the root
+   `CharacterBody3D`.
+2. Set the exported properties such as movement speeds, detection and attack
+   ranges, and configure the `drop_table` with your item resources.
+3. The player scene automatically belongs to the **"players"** group so enemies
+   will find it without additional setup.
 

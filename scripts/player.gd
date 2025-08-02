@@ -19,6 +19,9 @@ var _camera: Camera3D
 var _camera_default_pos: Vector3
 var _inventory_open := false
 
+var health: int = 3
+var max_health: int = 3
+
 func _ready() -> void:
         add_child(inventory)
         if inventory_ui_path != NodePath():
@@ -29,6 +32,7 @@ func _ready() -> void:
                 _camera = get_node(inventory_camera_path)
                 if _camera:
                         _camera_default_pos = _camera.position
+	add_to_group("players")
 
 func _get_click_direction() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
@@ -153,3 +157,12 @@ func _shift_camera(open: bool) -> void:
 
 func add_item(item: Item, amount: int = 1) -> void:
 	inventory.add_item(item, amount)
+
+func take_damage(amount) -> void:
+	print("Ow! I took ", amount)
+	health -= amount
+	if (health <= 0):
+		die()
+		
+func die():
+	queue_free()

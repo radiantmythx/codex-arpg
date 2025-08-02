@@ -35,3 +35,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.7164, 0, 1.63188)
 
 [node name="ItemDrop" parent="." instance=ExtResource("3_sugp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1698, 0, -11.4411)
+
+[node name="ItemDrop2" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0249, 0, -11.4411)
+
+[node name="ItemDrop3" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0249, 0, 7.70495)
+
+[node name="ItemDrop4" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.83229, 0, 7.70495)
+
+[node name="ItemDrop5" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.43744, 0, -1.11307)
+
+[node name="ItemTagLayer" type="CanvasLayer" parent="."]

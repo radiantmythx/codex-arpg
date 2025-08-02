@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://d3epfdpy5wkx5"]
+[gd_scene load_steps=6 format=3 uid="uid://d3epfdpy5wkx5"]
 
 [ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="1_7p1mj"]
+[ext_resource type="Resource" uid="uid://bmmrsmwx0wtwj" path="res://resources/items/test_item.tres" id="2_md0e3"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_md0e3"]
 
@@ -11,6 +12,11 @@ albedo_color = Color(0.938408, 0.261115, 0.284454, 1)
 
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_7p1mj")
+drop_table = [{
+"amount": 1,
+"chance": 0.5,
+"item": ExtResource("2_md0e3")
+}]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
