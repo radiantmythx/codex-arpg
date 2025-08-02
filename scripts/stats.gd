@@ -64,7 +64,7 @@ func _recalculate_bonuses() -> void:
 			_flags[f] = true
 	for aff in _affixes:
 		for k in aff.main_stat_bonuses:
-			var target := k
+			var target = k
 			if _flags.has("body_to_mind") and k == MainStat.BODY:
 				target = MainStat.MIND
 			_main_bonus[target] = _main_bonus.get(target, 0) + aff.main_stat_bonuses[k]

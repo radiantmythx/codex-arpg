@@ -60,4 +60,5 @@ func _format_value(v: float) -> String:
 	# Helper to trim trailing zeros for nicer tooltip text.
 	if abs(v - int(v)) < 0.01:
 		return str(int(v))
-	return str(round(v, 2))
+	var num = round(v)
+	return str(num)

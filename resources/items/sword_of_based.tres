@@ -1,15 +1,10 @@
-[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://jpdhdcxly3x4"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://jpdhdcxly3x4"]
 
-[ext_resource type="Script" path="res://scripts/affix.gd" id="1_1ay02"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/affix.gd" id="1_1ay02"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_c58uo"]
+[ext_resource type="Resource" path="res://resources/affixes/move_speed.tres" id="2_3sno5"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/sword_of_based.png" id="2_bken0"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/item.gd" id="2_j70qe"]
-
-[sub_resource type="Resource" id="Resource_j70qe"]
-script = ExtResource("1_1ay02")
-stat_modifiers = {}
-damage_bonus = 0.0
-move_speed_bonus = 1.0
-defense_bonus = 1.0
 
 [resource]
 script = ExtResource("2_j70qe")
@@ -18,5 +13,6 @@ description = "Sword of the Based God"
 icon = ExtResource("2_bken0")
 max_stack = 1
 equip_slot = "weapon"
-affixes = Array[ExtResource("1_1ay02")]([SubResource("Resource_j70qe")])
+affix_pool = Array[ExtResource("1_c58uo")]([ExtResource("2_3sno5")])
+affixes = Array[ExtResource("1_1ay02")]([])
 metadata/_custom_type_script = "uid://cy34tikq4w1km"
