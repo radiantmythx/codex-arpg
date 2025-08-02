@@ -58,6 +58,21 @@ You can inspect or modify the contents of the player's inventory through the
 `inventory` property on `player.gd` or by attaching the `Inventory` script to
 other nodes if needed.
 
+### Inventory Cursor Interaction
+The inventory UI allows items to be picked up and carried on the cursor similar
+to games like Diablo II or Path of Exile.
+
+1. Attach `scripts/inventory_ui.gd` to a `CanvasLayer` in your UI and assign its
+   `slots_parent_path` export to a node containing a number of child
+   `InventorySlot` controls. Each slot should use `scripts/inventory_slot.gd`.
+2. Set the player's `inventory_ui_path` export to this `InventoryUI` node so it
+   can open and close the interface.
+3. When the inventory is open, clicking a slot picks up its item onto the
+   cursor. Click another slot to place it. Closing the inventory hides the icon
+   but the item remains on the cursor until the UI is reopened.
+4. Picking up a world item while the inventory is open will put that item on the
+   cursor instead of adding it directly to the inventory.
+
 ## Enemy Behavior
 Enemies now wander around randomly until the player gets close. When the player
 enters the `detection_range` exported on `enemy.gd`, the enemy will chase the
