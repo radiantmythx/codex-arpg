@@ -17,6 +17,11 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 - **WASD** – Move the player.
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
 
+## Mana System
+The player now uses mana to power abilities. Basic attacks consume mana and the
+player regenerates 1 mana per second up to a base maximum of 50. Affixes and
+items can modify maximum mana and regeneration rates.
+
 ## Setup Instructions
 1. Launch the Godot editor and open the project folder.
 2. Press **Play** to run. The player can move and attack.
@@ -74,8 +79,10 @@ to games like Diablo II or Path of Exile.
    cursor instead of adding it directly to the inventory.
 
 ## Affix System
-Items may roll up to six affixes. Affixes are defined as separate resources so
-new ones can be added without modifying code.
+Items may roll between three and six affixes. The first three affixes are
+guaranteed while each of the remaining slots has a 50% chance to appear. Affixes
+are defined as separate resources so new ones can be added without modifying
+code.
 
 ### Creating an AffixDefinition
 1. Create a new resource using **AffixDefinition** (`scripts/affix_definition.gd`).
@@ -83,21 +90,31 @@ new ones can be added without modifying code.
    - **name** – display name of the affix.
    - **description** – template string shown to players. Use `{value}` where the
      rolled number should appear.
-   - **stat_key** or **main_stat** – which stat the affix modifies.
-   - **tiers** – an array of `Vector2(min, max)` values for each tier.
+   - **stat_key** or **main_stat** – which stat the affix modifies. Suffix
+     `_inc` denotes an "increased" (percentage) bonus while the base key is
+     additive.
+   - **tiers** – an array of `Vector2(min, max)` values for each tier. `T1`
+     rolls are the most powerful and hardest to obtain while higher numbers are
+     weaker rolls.
    - **flags** – optional keywords that enable unique behaviour. For example,
      the `body_to_mind` flag converts all Body bonuses to Mind.
 3. Save the resource inside `resources/affixes/` and assign it to an item's
    `affix_pool` array. Call `reroll_affixes()` to roll new affixes.
 
-Three sample definitions are included:
-- `move_speed.tres` – numeric tiers for movement speed.
-- `life_steal.tres` – unique effect that grants 1% life steal.
-- `body_to_mind.tres` – unique flag causing Body increases to apply to Mind.
+Several sample definitions are included covering additive and increased bonuses
+for Body, Mind, Soul, Luck, movement speed, maximum health/mana and their
+regeneration.  Unique examples like `life_steal.tres` and `body_to_mind.tres`
+demonstrate the flag system.
+
+Three sample items – `mystic_ring.tres`, `mystic_amulet.tres` and
+`mystic_boots.tres` – showcase how to create items that can roll any of these
+affixes.
 
 ### Crafting with Chaos Orbs
 When a **Chaos Orb** is on the cursor, right‑clicking an item consumes one orb
-and rerolls all of that item's affixes.
+and rerolls all of that item's affixes. Affix tiers are rolled with weighted
+probabilities; lower tier numbers (better rolls) are rarer than higher tier
+numbers.
 
 ### Displaying Affixes
 Hovering over an item tag in the world or over an inventory slot now shows the

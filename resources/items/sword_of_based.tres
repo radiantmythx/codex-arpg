@@ -1,10 +1,19 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://jpdhdcxly3x4"]
+[gd_resource type="Resource" script_class="Item" load_steps=15 format=3 uid="uid://jpdhdcxly3x4"]
 
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/affix.gd" id="1_1ay02"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_c58uo"]
-[ext_resource type="Resource" path="res://resources/affixes/move_speed.tres" id="2_3sno5"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/sword_of_based.png" id="2_bken0"]
+[ext_resource type="Resource" uid="uid://ctwnw2iffe7wm" path="res://resources/affixes/move_speed_add.tres" id="2_c58uo"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/item.gd" id="2_j70qe"]
+[ext_resource type="Resource" path="res://resources/affixes/body_add.tres" id="3_3yhav"]
+[ext_resource type="Resource" path="res://resources/affixes/health_regen_add.tres" id="4_3ax3t"]
+[ext_resource type="Resource" path="res://resources/affixes/luck_add.tres" id="5_cgs4j"]
+[ext_resource type="Resource" path="res://resources/affixes/mana_regen_add.tres" id="6_h0gn5"]
+[ext_resource type="Resource" path="res://resources/affixes/mana_regen_inc.tres" id="7_k8i0v"]
+[ext_resource type="Resource" path="res://resources/affixes/max_health_add.tres" id="8_ho4tk"]
+[ext_resource type="Resource" path="res://resources/affixes/max_health_inc.tres" id="9_k2o2x"]
+[ext_resource type="Resource" path="res://resources/affixes/soul_add.tres" id="10_jwuj3"]
+[ext_resource type="Resource" path="res://resources/affixes/move_speed_inc.tres" id="11_73oiu"]
 
 [resource]
 script = ExtResource("2_j70qe")
@@ -13,6 +22,6 @@ description = "Sword of the Based God"
 icon = ExtResource("2_bken0")
 max_stack = 1
 equip_slot = "weapon"
-affix_pool = Array[ExtResource("1_c58uo")]([ExtResource("2_3sno5")])
+affix_pool = Array[ExtResource("1_c58uo")]([ExtResource("2_c58uo"), ExtResource("3_3yhav"), ExtResource("4_3ax3t"), ExtResource("5_cgs4j"), ExtResource("6_h0gn5"), ExtResource("7_k8i0v"), ExtResource("8_ho4tk"), ExtResource("9_k2o2x"), ExtResource("10_jwuj3"), ExtResource("2_c58uo"), ExtResource("11_73oiu")])
 affixes = Array[ExtResource("1_1ay02")]([])
 metadata/_custom_type_script = "uid://cy34tikq4w1km"

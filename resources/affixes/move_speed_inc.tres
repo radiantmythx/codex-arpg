@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3 uid="uid://ciy7b284rjx4"]
+
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Move Speed (Increased)"
+description = "{value}% increased move speed"
+main_stat = -1
+flags = Array[String]([])
+stat_key = "move_speed_inc"
+tiers = [Vector2(30,40), Vector2(20,30), Vector2(10,20)]

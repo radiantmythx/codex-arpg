@@ -143,9 +143,9 @@ func _drop_loot() -> void:
 		if randf() <= float(entry.get("chance", 1.0)):
 			var drop := drop_scene.instantiate()
 			var area := drop.get_node_or_null("Area3D")
-			
+			print(entry)
 			if area and entry.has("item"):
-				print("that being said, entry item is ", entry["item"].item_name)
+				#print("that being said, entry item is ", entry["item"].item_name)
 				area.item = entry["item"]
 			if entry.has("amount"):
 				area.amount = entry["amount"]

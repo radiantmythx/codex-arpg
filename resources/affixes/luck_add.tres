@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/affix_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Luck"
+description = "{value} to Luck"
+main_stat = 3
+tiers = [Vector2(5,6), Vector2(3,4), Vector2(1,2)]

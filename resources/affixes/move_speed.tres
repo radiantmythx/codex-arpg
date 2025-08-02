@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3 uid="uid://ciy7b284rjx4"]
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3 uid="uid://bucad52f3tf5q"]
 
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1"]
 

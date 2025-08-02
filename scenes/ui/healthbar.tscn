@@ -1,24 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://c0vgaf5vs6gcq"]
+[gd_scene load_steps=5 format=3 uid="uid://c0vgaf5vs6gcq"]
 
 [ext_resource type="Script" uid="uid://b8wt33xi4jv8a" path="res://scenes/ui/healthbar.gd" id="1_0k5hr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sgot"]
 bg_color = Color(0, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.470076, 0.470076, 0.470076, 1)
-corner_detail = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0k5hr"]
-bg_color = Color(0.801179, 0.174153, 0.0830354, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
+border_color = Color(0.470076, 0.470076, 0.470076, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0k5hr"]
+bg_color = Color(0.790753, 0.186325, 0.186339, 1)
 border_color = Color(0.54099, 0.540991, 0.54099, 1)
 corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kl70x"]
+bg_color = Color(0.264256, 0.605355, 1, 1)
 
 [node name="Healthbar" type="Control"]
 layout_mode = 3
@@ -31,5 +30,15 @@ offset_right = 161.0
 offset_bottom = 27.0
 theme_override_styles/background = SubResource("StyleBoxFlat_0sgot")
 theme_override_styles/fill = SubResource("StyleBoxFlat_0k5hr")
+value = 50.0
+show_percentage = false
+
+[node name="ManaBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_top = 27.0
+offset_right = 161.0
+offset_bottom = 41.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0sgot")
+theme_override_styles/fill = SubResource("StyleBoxFlat_kl70x")
 value = 50.0
 show_percentage = false

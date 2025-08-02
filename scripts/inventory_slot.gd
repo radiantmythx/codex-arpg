@@ -45,7 +45,7 @@ func update_display() -> void:
 	if icon:
 		icon.texture = item.icon if item else null
 	if quantity_label:
-		quantity_label.text = str(amount) if amount >= 1 else ""
+		quantity_label.text = str(amount) if amount > 1 else ""
 	if item:
 		var tip := "%s\n%s" % [item.item_name, item.description]
 		var aff_text := item.get_affix_text()
