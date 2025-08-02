@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://bmmrsmwx0wtwj"]
 
-[ext_resource type="Script" path="res://scripts/item.gd" id="1_psov8"]
+[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/item.gd" id="1_psov8"]
 
 [sub_resource type="Gradient" id="Gradient_psov8"]
 

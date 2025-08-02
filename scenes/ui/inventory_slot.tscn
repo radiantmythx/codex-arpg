@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkwfqusg1xv8n"]
+
+[ext_resource type="Script" uid="uid://dx8qksbg8q15r" path="res://scripts/inventory_slot.gd" id="1_kscix"]
+
+[sub_resource type="Gradient" id="Gradient_f04ki"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kscix"]
+gradient = SubResource("Gradient_f04ki")
+
+[node name="InventorySlot" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_kscix")
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(20, 20)
+texture = SubResource("GradientTexture1D_kscix")
+
+[node name="Amount" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 8
+horizontal_alignment = 2
+vertical_alignment = 2

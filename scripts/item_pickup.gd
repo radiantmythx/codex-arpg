@@ -50,6 +50,6 @@ func _on_input_event(camera: Node, event: InputEvent, position: Vector3, normal:
 func _collect() -> void:
 		if _player and item:
 				_player.add_item(item, amount)
-		if _tag:
-				_tag.queue_free()
-		queue_free()
+				if _tag:
+						_tag.queue_free()
+				get_parent().queue_free()

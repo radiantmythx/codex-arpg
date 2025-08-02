@@ -8,6 +8,7 @@ extends CharacterBody3D
 @export var attack_range: float = 1.5
 @export var attack_windup: float = 0.5
 @export var attack_cooldown: float = 1.0
+@export var healthbar_node_path: NodePath
 
 ## Drop table is an array of dictionaries like:
 ## {"item": Item, "chance": 0.5, "amount": 1}
@@ -24,6 +25,7 @@ var _attack_timer: float = 0.0
 var _windup_timer: float = 0.0
 var _mesh: MeshInstance3D
 var _original_material: Material
+var _healthbar: Healthbar
 
 func _ready() -> void:
 	randomize()
@@ -33,6 +35,10 @@ func _ready() -> void:
 	_mesh = get_node_or_null("MeshInstance3D")
 	if _mesh:
 		_original_material = _mesh.material_override
+	if healthbar_node_path != NodePath():
+			_healthbar = get_node(healthbar_node_path)
+			if(_healthbar):
+				_healthbar.set_health(current_health, max_health)
 
 func _physics_process(delta: float) -> void:
 	_process_timers(delta)
@@ -121,6 +127,8 @@ func _get_player_position() -> Vector3:
 func take_damage(amount: int) -> void:
 	print("Ow! Took ", amount)
 	current_health -= amount
+	if(_healthbar):
+		_healthbar.set_health(current_health, max_health)
 	if current_health <= 0:
 		die()
 
@@ -139,5 +147,5 @@ func _drop_loot() -> void:
 				area.item = entry["item"]
 			if entry.has("amount"):
 				area.amount = entry["amount"]
-			drop.global_transform.origin = global_transform.origin
 			get_parent().add_child(drop)
+			drop.global_transform.origin = global_transform.origin
