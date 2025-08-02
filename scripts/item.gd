@@ -26,17 +26,35 @@ const MAX_AFFIXES := 6
 
 
 func reroll_affixes() -> void:
-	# Clears existing affixes and rolls new ones from `affix_pool`.
-	affixes.clear()
-	if affix_pool.is_empty():
-		return
-	var pool := affix_pool.duplicate()
-	var count := randi_range(1, min(MAX_AFFIXES, pool.size()))
-	for i in range(count):
-		var def: AffixDefinition = pool.pick_random()
-		pool.erase(def)
-		var tier := randi_range(1, def.get_tier_count())
-		affixes.append(def.roll(tier))
+        # Clears existing affixes and rolls new ones from `affix_pool`.
+        affixes.clear()
+        if affix_pool.is_empty():
+                return
+        var pool := affix_pool.duplicate()
+        for i in range(MAX_AFFIXES):
+                if pool.is_empty():
+                        break
+                if i < 3 or randf() < 0.5:
+                        var def: AffixDefinition = pool.pick_random()
+                        pool.erase(def)
+                        var tier := _roll_weighted_tier(def.get_tier_count())
+                        affixes.append(def.roll(tier))
+
+
+func _roll_weighted_tier(count: int) -> int:
+        # Returns a tier index using linear weights where T1 is the best (and
+        # rarest) roll. Higher tier numbers have larger weights making them more
+        # common.
+        var total := 0.0
+        for i in range(1, count + 1):
+                total += i
+        var r := randf() * total
+        var cumulative := 0.0
+        for i in range(1, count + 1):
+                cumulative += i
+                if r < cumulative:
+                        return i
+        return count
 
 
 func get_affix_text() -> String:

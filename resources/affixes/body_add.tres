@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-name = "Move Speed"
-description = "{value}% increased move speed"
-stat_key = "move_speed"
-tiers = [Vector2(5,10), Vector2(10,20), Vector2(20,30)]
+name = "Body"
+description = "{value} to Body"
+main_stat = 0
+tiers = [Vector2(5,6), Vector2(3,4), Vector2(1,2)]
