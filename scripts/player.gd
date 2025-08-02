@@ -12,9 +12,12 @@ var _attack_timer: float = 0.0
 var _attacking_timer: float = 0.0
 var inventory := Inventory.new()
 
+var health: int = 3
+var max_health: int = 3
+
 func _ready() -> void:
-add_child(inventory)
-add_to_group("players")
+	add_child(inventory)
+	add_to_group("players")
 
 func _get_click_direction() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
@@ -105,8 +108,17 @@ func perform_attack() -> void:
 		var bodies := get_world_3d().direct_space_state.intersect_shape(params)
 		for result in bodies:
 			var body = result.get("collider")
-			if body != null and body.has_method("take_damage"):
+			if body != null and body.has_method("take_damage") and body.is_in_group("enemy"):
 				body.take_damage(1)
 
 func add_item(item: Item, amount: int = 1) -> void:
 	inventory.add_item(item, amount)
+
+func take_damage(amount) -> void:
+	print("Ow! I took ", amount)
+	health -= amount
+	if (health <= 0):
+		die()
+		
+func die():
+	queue_free()
