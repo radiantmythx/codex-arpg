@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://dduutvhpgaapk"]
+
+[ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://d1asl22n2g1g2" path="res://scenes/item_drop.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
+size = Vector2(35, 35)
+
+[node name="WorldRoot" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_0wfyh")
+
+[node name="Player" parent="." instance=ExtResource("1_o5qli")]
+inventory_ui_path = NodePath("../InventoryUI")
+inventory_camera_path = NodePath("../Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 0, 8.93768, 8.75395)
+
+[node name="Enemy" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0627937, 0, 4.21481)
+
+[node name="Enemy2" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6038, 0, 2.31777)
+
+[node name="Enemy3" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2586, 0, 4.5585)
+
+[node name="Enemy4" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.7164, 0, 1.63188)
+
+[node name="ItemDrop" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1698, 0, -11.4411)
+
+[node name="ItemDrop2" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0249, 0, -11.4411)
+
+[node name="ItemDrop3" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0249, 0, 7.70495)
+
+[node name="ItemDrop4" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.83229, 0, 7.70495)
+
+[node name="ItemDrop5" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.43744, 0, -1.11307)
+
+[node name="ItemTagLayer" type="CanvasLayer" parent="."]
+
+[node name="InventoryUI" parent="." instance=ExtResource("4_jyhfs")]
+camera_path = NodePath("../Camera3D")

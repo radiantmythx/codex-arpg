@@ -79,7 +79,7 @@ func _chase(player_pos: Vector3, delta: float) -> void:
 	move_and_slide()
 
 func _start_windup() -> void:
-	print("Winding up!")
+	#print("Winding up!")
 	_windup_timer = attack_windup
 	if _mesh:
 		_mesh.material_override = StandardMaterial3D.new()
@@ -125,7 +125,7 @@ func _get_player_position() -> Vector3:
 	return Vector3()
 
 func take_damage(amount: int) -> void:
-	print("Ow! Took ", amount)
+	#print("Ow! Took ", amount)
 	current_health -= amount
 	if(_healthbar):
 		_healthbar.set_health(current_health, max_health)
@@ -143,9 +143,13 @@ func _drop_loot() -> void:
 		if randf() <= float(entry.get("chance", 1.0)):
 			var drop := drop_scene.instantiate()
 			var area := drop.get_node_or_null("Area3D")
+			
 			if area and entry.has("item"):
+				print("that being said, entry item is ", entry["item"].item_name)
 				area.item = entry["item"]
 			if entry.has("amount"):
 				area.amount = entry["amount"]
+			print("dropping item ", area.item)
+			
 			get_parent().add_child(drop)
 			drop.global_transform.origin = global_transform.origin

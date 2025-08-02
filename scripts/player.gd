@@ -30,7 +30,7 @@ func _ready() -> void:
 		if inventory_ui_path != NodePath():
 				_inventory_ui = get_node(inventory_ui_path)
 				if _inventory_ui:
-						print("binding inventory")
+						#print("binding inventory")
 						_inventory_ui.bind_inventory(inventory)
 		if inventory_camera_path != NodePath():
 				_camera = get_node(inventory_camera_path)
@@ -166,14 +166,14 @@ func _shift_camera(open: bool) -> void:
 		tween.tween_property(_camera, "position", target, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func add_item(item: Item, amount: int = 1) -> void:
-    print("Adding ", item, " to inventory")
-    if _inventory_open and _inventory_ui:
-        _inventory_ui.pickup_to_cursor(item, amount)
-    else:
-        inventory.add_item(item, amount)
+	#print("Adding ", item, " to inventory")
+	if _inventory_open and _inventory_ui:
+		_inventory_ui.pickup_to_cursor(item, amount)
+	else:
+		inventory.add_item(item, amount)
 
 func take_damage(amount) -> void:
-	print("Ow! I took ", amount)
+	#print("Ow! I took ", amount)
 	health -= amount
 	if(_healthbar):
 		_healthbar.set_health(health, max_health)

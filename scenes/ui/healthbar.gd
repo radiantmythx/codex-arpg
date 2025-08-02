@@ -10,7 +10,7 @@ func _ready():
 func update_healthbar():
 	$ProgressBar.max_value = max_health
 	$ProgressBar.value = current_health
-	print("Updated healthbar: ", current_health, " / ", max_health)
+	#print("Updated healthbar: ", current_health, " / ", max_health)
 
 func set_health(value: int, valueMax: int):
 	current_health = clamp(value, 0, valueMax)
