@@ -13,7 +13,8 @@ var _attacking_timer: float = 0.0
 var inventory := Inventory.new()
 
 func _ready() -> void:
-	add_child(inventory)
+add_child(inventory)
+add_to_group("players")
 
 func _get_click_direction() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
