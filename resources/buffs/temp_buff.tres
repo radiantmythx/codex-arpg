@@ -1,0 +1,6 @@
+[ext_resource type="Script" path="res://scripts/buff.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+duration = 5.0
+stat_bonuses = {"move_speed_inc": 10.0}

@@ -1,0 +1,11 @@
+[ext_resource type="Script" path="res://scripts/skills/aura_skill.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/buffs/temp_buff.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+name = "Temporal Aura"
+mana_cost = 20.0
+cooldown = 1.0
+mana_reserve_percent = 0.1
+buff = ExtResource("2")
+tags = Array[String](["buff", "time", "aura"])
