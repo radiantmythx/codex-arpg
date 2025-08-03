@@ -1,0 +1,2 @@
+extends BlastSkill
+class_name HolySmiteSkill

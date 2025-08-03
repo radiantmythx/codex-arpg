@@ -1,0 +1,2 @@
+extends MeleeSkill
+class_name BasicMeleeAttackSkill

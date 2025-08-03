@@ -1,9 +1,12 @@
 extends CharacterBody3D
 
+const BuffManager = preload("res://scripts/buff_manager.gd")
+const Buff = preload("res://scripts/buff.gd")
+
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 5.0
-@export var main_skill: Skill = preload("res://resources/skills/fireball.tres")
-@export var secondary_skill: Skill = preload("res://resources/skills/transcendent_fire.tres")
+@export var main_skill: Skill = preload("res://resources/skills/icicle_blast.tres")
+@export var secondary_skill: Skill = preload("res://resources/skills/haste.tres")
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
@@ -37,6 +40,8 @@ var _camera_default_pos: Vector3
 var _inventory_open := false
 var _healthbar: Healthbar
 var _current_move_multiplier: float = 1.0
+var buff_manager: BuffManager
+var reserved_mana: float = 0.0
 
 var energy_shield: float = 0.0
 var max_energy_shield: float = 0.0
@@ -75,6 +80,9 @@ func _ready() -> void:
 	add_child(equipment)
 
 	add_child(inventory)
+        buff_manager = BuffManager.new()
+        buff_manager.stats = stats
+        add_child(buff_manager)
 	if inventory_ui_path != NodePath():
 		_inventory_ui = get_node(inventory_ui_path)
 		if _inventory_ui:
@@ -95,7 +103,7 @@ func _ready() -> void:
 				energy_shield = max_energy_shield
 				if _healthbar:
 								_healthbar.set_health(health, max_health)
-								_healthbar.set_mana(mana, max_mana)
+				_healthbar.set_mana(mana, max_available)
 
 	add_to_group("player")
 
@@ -190,6 +198,14 @@ func _shift_camera(open: bool) -> void:
 	var tween := create_tween()
 	tween.tween_property(_camera, "position", target, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
+func add_buff(buff: Buff) -> void:
+        if buff_manager:
+                buff_manager.apply_buff(buff)
+
+func remove_buff(buff: Buff) -> void:
+        if buff_manager:
+                buff_manager.remove_buff(buff)
+
 func add_item(item: Item, amount: int = 1) -> void:
 	if _inventory_open and _inventory_ui:
 		_inventory_ui.pickup_to_cursor(item, amount)
@@ -219,7 +235,8 @@ func _process_regen(delta: float) -> void:
 				max_health = int(stats.get_max_health())
 				health = min(max_health, health + stats.get_health_regen() * delta)
 				max_mana = stats.get_max_mana()
-				mana = min(max_mana, mana + stats.get_mana_regen() * delta)
+	var max_available = max_mana - reserved_mana
+	mana = min(max_available, mana + stats.get_mana_regen() * delta)
 				max_energy_shield = stats.get_max_energy_shield()
 				if energy_shield < max_energy_shield:
 								if _es_recharge_timer > 0.0:
@@ -228,7 +245,7 @@ func _process_regen(delta: float) -> void:
 												energy_shield = min(max_energy_shield, energy_shield + stats.get_energy_shield_regen() * delta)
 				if _healthbar:
 								_healthbar.set_health(health, max_health)
-								_healthbar.set_mana(mana, max_mana)
+				_healthbar.set_mana(mana, max_available)
 
 func die():
 	queue_free()
