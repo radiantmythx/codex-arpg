@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=5 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
 size = Vector2(35, 35)
@@ -20,7 +19,6 @@ mesh = SubResource("PlaneMesh_0wfyh")
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
 inventory_ui_path = NodePath("../InventoryUI")
 inventory_camera_path = NodePath("../Camera3D")
-skills_ui_path = NodePath("../SkillsUI")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 0, 8.93768, 8.75395)
@@ -28,16 +26,52 @@ transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 
 [node name="Enemy2" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0735598, 0, -4.58097)
 max_health = 300.0
+move_speed = null
+wander_speed = null
+wander_change_interval = null
+detection_range = null
+attack_range = null
+main_skill = null
+base_armor = null
+base_evasion = null
+base_max_energy_shield = null
+base_energy_shield_regen = null
+base_energy_shield_recharge_delay = null
+base_damage = null
 
 [node name="Enemy3" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.66489, 0, -5.79471)
+max_health = null
+move_speed = null
+wander_speed = null
+wander_change_interval = null
+detection_range = null
+attack_range = null
+main_skill = null
+base_armor = null
+base_evasion = null
+base_max_energy_shield = null
+base_energy_shield_regen = null
+base_energy_shield_recharge_delay = null
+base_damage = null
 
 [node name="Enemy4" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.79421, 0, -5.30339)
+max_health = null
+move_speed = null
+wander_speed = null
+wander_change_interval = null
+detection_range = null
+attack_range = null
+main_skill = null
+base_armor = null
+base_evasion = null
+base_max_energy_shield = null
+base_energy_shield_regen = null
+base_energy_shield_recharge_delay = null
+base_damage = null
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
 
 [node name="InventoryUI" parent="." instance=ExtResource("4_jyhfs")]
 camera_path = NodePath("../Camera3D")
-
-[node name="SkillsUI" parent="." instance=ExtResource("4_tbgi4")]

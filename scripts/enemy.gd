@@ -56,9 +56,9 @@ func _ready() -> void:
 		current_health = max_health
 		max_energy_shield = stats.get_max_energy_shield()
 		energy_shield = max_energy_shield
-                buff_manager = BuffManager.new()
-                buff_manager.stats = stats
-                add_child(buff_manager)
+		buff_manager = BuffManager.new()
+		buff_manager.stats = stats
+		add_child(buff_manager)
 		_player = get_tree().get_root().find_child("Player", true, false)
 		_mesh = get_node_or_null("MeshInstance3D")
 		if _mesh:
@@ -117,12 +117,12 @@ func _get_player_position() -> Vector3:
 	return Vector3()
 
 func add_buff(buff: Buff) -> void:
-                if buff_manager:
-                                buff_manager.apply_buff(buff)
+				if buff_manager:
+								buff_manager.apply_buff(buff)
 
 func remove_buff(buff: Buff) -> void:
-                if buff_manager:
-                                buff_manager.remove_buff(buff)
+				if buff_manager:
+								buff_manager.remove_buff(buff)
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
 		print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")

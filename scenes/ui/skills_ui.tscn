@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://rww2n56jhwcr"]
+
+[ext_resource type="Script" path="res://scripts/skills_ui.gd" id="1_knjno"]
+[ext_resource type="PackedScene" uid="uid://v7qu6xwns0fv" path="res://scenes/ui/skills_slot.tscn" id="2_4kyty"]
+
+[node name="SkillsUI" type="CanvasLayer"]
+script = ExtResource("1_knjno")
+slots_parent_path = NodePath("SlotContainer")
+
+[node name="SlotContainer" type="FlowContainer" parent="."]
+offset_right = 257.0
+offset_bottom = 100.0
+
+[node name="SkillsSlot" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot2" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot3" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot4" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot5" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot6" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot7" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot8" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot9" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2
+
+[node name="SkillsSlot10" parent="SlotContainer" instance=ExtResource("2_4kyty")]
+layout_mode = 2

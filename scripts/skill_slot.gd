@@ -1,7 +1,6 @@
 class_name SkillSlot
 extends TextureButton
 
-signal pressed(index: int)
 signal right_clicked(index: int)
 
 @export var index: int = -1
