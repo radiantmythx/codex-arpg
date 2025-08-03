@@ -1,8 +1,6 @@
 extends Skill
 class_name FireballSkill
 
-const Stats = preload("res://scripts/stats.gd")
-
 @export var speed: float = 10.0
 @export var range: float = 15.0
 @export var explosion_radius: float = 2.0
@@ -21,10 +19,13 @@ func perform(user):
 	shape.radius = 0.2
 	var collider = CollisionShape3D.new()
 	collider.shape = shape
+	var mesh = MeshInstance3D.new()
+	mesh.mesh = SphereMesh.new()
 	projectile.add_child(collider)
-	projectile.global_transform.origin = user.global_transform.origin + direction
+	projectile.add_child(mesh)
 	projectile.body_entered.connect(_on_projectile_body_entered.bind(projectile, user))
 	user.get_parent().add_child(projectile)
+	projectile.global_transform.origin = user.global_transform.origin + direction
 	var travel_time = range / speed
 	var tween = projectile.create_tween()
 	tween.tween_property(projectile, "global_transform:origin", user.global_transform.origin + direction * range, travel_time)
@@ -44,7 +45,7 @@ func _on_projectile_body_entered(body, projectile, user):
 	projectile.queue_free()
 
 func _on_projectile_finished(projectile, user):
-	_explode(projectile.global_transform.origin, user)
+	#_explode(projectile.global_transform.origin, user)
 	projectile.queue_free()
 
 func _explode(origin: Vector3, user):

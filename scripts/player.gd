@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 5.0
-@export var main_skill: Skill = preload("res://resources/skills/basic_melee_attack.tres")
+@export var main_skill: Skill = preload("res://resources/skills/fireball.tres")
 @export var secondary_skill: Skill = preload("res://resources/skills/transcendent_fire.tres")
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
