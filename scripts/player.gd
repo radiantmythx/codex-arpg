@@ -1,8 +1,5 @@
 extends CharacterBody3D
 
-const BuffManager = preload("res://scripts/buff_manager.gd")
-const Buff = preload("res://scripts/buff.gd")
-
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 5.0
 @export var main_skill: Skill = preload("res://resources/skills/holy_smite.tres")

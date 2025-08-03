@@ -1,8 +1,6 @@
 extends Skill
 class_name BlastSkill
 
-const Buff = preload("res://scripts/buff.gd")
-
 @export var radius: float = 3.0 # Base explosion radius
 @export var on_hit_effect: PackedScene # Effect spawned on struck bodies
 @export var explosion_effect: PackedScene # Effect placed at blast center

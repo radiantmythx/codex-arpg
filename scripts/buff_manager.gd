@@ -1,10 +1,6 @@
 class_name BuffManager
 extends Node
 
-const Buff = preload("res://scripts/buff.gd")
-const Affix = preload("res://scripts/affix.gd")
-const Stats = preload("res://scripts/stats.gd")
-
 var stats: Stats
 var _active: Array = []
 

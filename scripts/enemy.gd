@@ -1,10 +1,5 @@
 extends CharacterBody3D
 
-const BuffManager = preload("res://scripts/buff_manager.gd")
-const Buff = preload("res://scripts/buff.gd")
-
-const Stats = preload("res://scripts/stats.gd")
-
 @export var max_health: float = 3.0
 @export var move_speed: float = 2.0
 @export var wander_speed: float = 1.0

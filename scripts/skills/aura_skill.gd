@@ -1,8 +1,6 @@
 extends Skill
 class_name AuraSkill
 
-const Buff = preload("res://scripts/buff.gd")
-
 @export var mana_reserve_percent: float = 0.0 # Percentage of max mana reserved while active
 @export var buff: Buff # Buff applied while aura is active
 @export var aura_effect: PackedScene # Optional visual effect attached to user
