@@ -1,0 +1,10 @@
+[ext_resource type="Script" path="res://scripts/rune.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/affixes/physical_damage_melee_add.tres" id="2"]
+[ext_resource type="Resource" path="res://resources/affixes/physical_damage_melee_inc.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Strike Rune"
+max_stack = 1
+rune_type = 0
+affix_pool = [ExtResource("2"), ExtResource("3")]

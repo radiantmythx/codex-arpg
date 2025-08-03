@@ -1,0 +1,8 @@
+[ext_resource type="Script" path="res://scripts/skills/melee_skill.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Melee Strike"
+mana_cost = 5.0
+cooldown = 0.5
+tags = Array[String](["melee", "strike"])
