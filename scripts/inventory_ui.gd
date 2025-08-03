@@ -5,9 +5,11 @@ extends CanvasLayer
 @export var equip_slots_parent_path: NodePath
 @export var camera_path: NodePath
 @export var camera_shift: float = 3.0
+@export var rune_slots_parent_path: NodePath
 
 var _slots: Array = []
 var _equip_slots: Array = []
+var _rune_slots: Array = []
 var _inventory: Inventory
 var _equipment: EquipmentManager
 var _camera: Camera3D
@@ -18,6 +20,7 @@ var _cursor_item: Item = null
 var _cursor_amount: int = 0
 var _cursor_icon: TextureRect
 var _cursor_label: Label
+var _rune_manager: RuneManager
 
 
 func _ready() -> void:
@@ -32,16 +35,24 @@ func _ready() -> void:
 					slot.connect("pressed", Callable(self, "_on_slot_pressed"))
 				if slot.has_signal("right_clicked"):
 					slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
-	if equip_slots_parent_path != NodePath():
-		var eparent = get_node(equip_slots_parent_path)
-		_equip_slots = eparent.get_children()
-		for slot in _equip_slots:
-			if slot.has_signal("pressed"):
-				slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
-			if slot.has_signal("right_clicked"):
-				slot.connect(
-					"right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot)
-				)
+        if equip_slots_parent_path != NodePath():
+                var eparent = get_node(equip_slots_parent_path)
+                _equip_slots = eparent.get_children()
+                for slot in _equip_slots:
+                        if slot.has_signal("pressed"):
+                                slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
+                        if slot.has_signal("right_clicked"):
+                                slot.connect(
+                                        "right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot)
+                                )
+        if rune_slots_parent_path != NodePath():
+                var rparent = get_node(rune_slots_parent_path)
+                _rune_slots = rparent.get_children()
+                for rslot in _rune_slots:
+                        if rslot.has_signal("pressed"):
+                                rslot.connect("pressed", Callable(self, "_on_rune_slot_pressed").bind(rslot))
+                        if rslot.has_signal("right_clicked"):
+                                rslot.connect("right_clicked", Callable(self, "_on_rune_slot_right_clicked").bind(rslot))
 	if camera_path != NodePath():
 		_camera = get_node(camera_path)
 		if _camera:
@@ -55,10 +66,12 @@ func _ready() -> void:
 	_cursor_icon.add_child(_cursor_label)
 	set_process(true)
 	visible = false
-	if _inventory:
-		bind_inventory(_inventory)
-	if _equipment:
-		bind_equipment(_equipment)
+        if _inventory:
+                bind_inventory(_inventory)
+        if _equipment:
+                bind_equipment(_equipment)
+        if _rune_manager:
+                bind_rune_manager(_rune_manager)
 
 
 func _process(_delta: float) -> void:
@@ -75,10 +88,16 @@ func bind_inventory(inv: Inventory) -> void:
 
 
 func bind_equipment(eq: EquipmentManager) -> void:
-	_equipment = eq
-	if _equipment:
-		_equipment.connect("slot_changed", Callable(self, "_on_equip_slot_changed"))
-		_update_equip_slots()
+        _equipment = eq
+        if _equipment:
+                _equipment.connect("slot_changed", Callable(self, "_on_equip_slot_changed"))
+                _update_equip_slots()
+
+func bind_rune_manager(rm: RuneManager) -> void:
+        _rune_manager = rm
+        if _rune_manager:
+                _rune_manager.connect("slot_changed", Callable(self, "_on_rune_slot_changed"))
+                _update_rune_slots()
 
 
 func toggle() -> void:
@@ -89,12 +108,13 @@ func toggle() -> void:
 
 
 func open() -> void:
-	_open = true
-	visible = true
-	_shift_camera(true)
-	_update_slots()
-	_update_equip_slots()
-	_update_cursor_visibility()
+        _open = true
+        visible = true
+        _shift_camera(true)
+        _update_slots()
+        _update_equip_slots()
+        _update_rune_slots()
+        _update_cursor_visibility()
 
 
 func close() -> void:
@@ -127,7 +147,10 @@ func _on_slot_changed(index: int, item: Item, amount: int) -> void:
 
 
 func _on_equip_slot_changed(_slot: String, _item: Item) -> void:
-	_update_equip_slots()
+        _update_equip_slots()
+
+func _on_rune_slot_changed(_slot_index: int, _rune_index: int, _rune: Rune) -> void:
+        _update_rune_slots()
 
 
 func _on_slot_pressed(index: int) -> void:
@@ -151,8 +174,8 @@ func _on_slot_pressed(index: int) -> void:
 
 
 func _on_slot_right_clicked(index: int) -> void:
-	if not _inventory:
-		return
+        if not _inventory:
+                return
 
 		# Consume one Chaos Orb and reroll the item's affixes.
 	var data = _inventory.get_slot(index)
@@ -178,8 +201,9 @@ func _on_slot_right_clicked(index: int) -> void:
 			var leftover = _inventory.place_item(index, swapped, 1)
 			if leftover:
 				_inventory.add_item(leftover["item"], leftover["amount"])
-		_update_slots()
-		_update_equip_slots()
+                _update_slots()
+                _update_equip_slots()
+                _update_rune_slots()
 
 
 func _on_equip_slot_pressed(_index: int, slot: InventorySlot) -> void:
@@ -193,8 +217,9 @@ func _on_equip_slot_pressed(_index: int, slot: InventorySlot) -> void:
 			if swapped:
 				_cursor_item = swapped
 				_cursor_amount = 1
-			_update_cursor()
-			_update_equip_slots()
+                _update_cursor()
+                _update_equip_slots()
+                _update_rune_slots()
 	else:
 		var item = _equipment.unequip(slot.slot_type)
 		if item:
@@ -205,13 +230,43 @@ func _on_equip_slot_pressed(_index: int, slot: InventorySlot) -> void:
 
 
 func _on_equip_slot_right_clicked(_index: int, slot: InventorySlot) -> void:
-	if not _equipment or not _inventory:
-		return
-	var item = _equipment.unequip(slot.slot_type)
-	if item:
-		_inventory.add_item(item)
-		_update_slots()
-		_update_equip_slots()
+        if not _equipment or not _inventory:
+                return
+        var item = _equipment.unequip(slot.slot_type)
+        if item:
+                _inventory.add_item(item)
+                _update_slots()
+                _update_equip_slots()
+                _update_rune_slots()
+
+func _on_rune_slot_pressed(slot: RuneSlot) -> void:
+        if not _rune_manager:
+                return
+        if _cursor_item and _cursor_item is Rune:
+                var swapped = _rune_manager.equip_rune(slot.skill_slot_index, slot.rune_index, _cursor_item)
+                _cursor_item = swapped
+                _cursor_amount = 1 if swapped else 0
+                if not swapped:
+                        _cursor_item = null
+                        _cursor_amount = 0
+                _update_cursor()
+                _update_rune_slots()
+        elif not _cursor_item:
+                var r = _rune_manager.unequip_rune(slot.skill_slot_index, slot.rune_index)
+                if r:
+                        _cursor_item = r
+                        _cursor_amount = 1
+                        _update_cursor()
+                        _update_rune_slots()
+
+func _on_rune_slot_right_clicked(slot: RuneSlot) -> void:
+        if not _rune_manager or not _inventory:
+                return
+        var r = _rune_manager.unequip_rune(slot.skill_slot_index, slot.rune_index)
+        if r:
+                _inventory.add_item(r)
+                _update_slots()
+                _update_rune_slots()
 
 
 func _update_slots() -> void:
@@ -233,9 +288,17 @@ func _update_equip_slots() -> void:
 	for slot in _equip_slots:
 		var item = _equipment.get_item(slot.slot_type)
 		if slot.has_method("set_item"):
-			slot.set_item(item)
-		if slot.has_method("set_amount"):
-			slot.set_amount(1 if item else 0)
+                        slot.set_item(item)
+                if slot.has_method("set_amount"):
+                        slot.set_amount(1 if item else 0)
+
+func _update_rune_slots() -> void:
+        if not _rune_manager:
+                return
+        for rslot in _rune_slots:
+                var rune = _rune_manager.get_rune(rslot.skill_slot_index, rslot.rune_index)
+                if rslot.has_method("set_rune"):
+                        rslot.set_rune(rune)
 
 
 func pickup_to_cursor(item: Item, amount: int) -> void:
@@ -243,14 +306,14 @@ func pickup_to_cursor(item: Item, amount: int) -> void:
 		_inventory.add_item(_cursor_item, _cursor_amount)
 	_cursor_item = item
 	_cursor_amount = amount
-	_update_cursor()
+        _update_cursor()
 
 
 func _update_cursor() -> void:
 	if _cursor_item:
 		_cursor_icon.texture = _cursor_item.icon
 		_cursor_label.text = str(_cursor_amount) if _cursor_amount > 1 else ""
-	_update_cursor_visibility()
+        _update_cursor_visibility()
 
 
 func _update_cursor_visibility() -> void:

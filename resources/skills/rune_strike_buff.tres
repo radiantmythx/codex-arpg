@@ -1,0 +1,10 @@
+[ext_resource type="Script" path="res://scripts/skills/melee_skill.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/buffs/temp_buff.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+name = "Enchanted Strike"
+mana_cost = 8.0
+cooldown = 1.0
+on_hit_buff = ExtResource("2")
+tags = Array[String](["melee", "strike", "buff"])

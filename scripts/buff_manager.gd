@@ -3,15 +3,20 @@ extends Node
 
 var stats: Stats
 var _active: Array = []
+var _entity
 
 func _ready():
         set_physics_process(true)
+        _entity = get_parent()
 
 func _physics_process(delta):
         for i in range(_active.size() - 1, -1, -1):
                 var data = _active[i]
                 if data.time > 0.0:
                         data.time -= delta
+                        if data.buff is DamageOverTimeBuff and _entity and _entity.has_method("take_damage"):
+                                var dot: DamageOverTimeBuff = data.buff
+                                _entity.take_damage(dot.damage_per_second * delta, dot.damage_type)
                         if data.time <= 0.0:
                                 stats.remove_affix(data.affix)
                                 _active.remove_at(i)

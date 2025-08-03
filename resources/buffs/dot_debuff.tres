@@ -1,0 +1,7 @@
+[ext_resource type="Script" path="res://scripts/damage_over_time_buff.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+duration = 4.0
+damage_per_second = 3.0
+damage_type = 0

@@ -30,6 +30,17 @@ Affixes may also modify `aoe_inc` to increase the size of any skill tagged with 
 
 The project now includes generic projectile, melee, blast and aura skill bases. Skills may spawn optional on-hit or explosion effects that scale with the caster's area bonuses. A buff system allows temporary modifiers on players and enemies. Sample abilities include **Haste** (a mana-reserving aura that boosts move speed), **Holy Smite** (a holy blast at the cursor) and **Icicle Blast** (a slowing projectile). Enemies use the same framework and attack with the basic melee skill.
 
+## Rune System
+Runes act as itemized mini-skills. Two rune slots combine to create a single ability.
+
+### Setting Up Rune Slots
+1. In the inventory UI scene add a container node with four `RuneSlot` children.
+2. Assign `scripts/rune_slot.gd` to each child and set `skill_slot_index` (0 for main, 1 for secondary) and `rune_index` (0 or 1).
+3. On the `InventoryUI` node, set **rune_slots_parent_path** to the container from step 1.
+4. Player `player.gd` automatically creates a `RuneManager`. When runes are equipped the manager builds the resulting skill and assigns it to the corresponding skill slot.
+
+Single runes provide basic skills such as **Melee Strike**, **Blessing**, **Area Blast** and **Time Bolt**. Mixing two runes yields combination skills like **Explosive Strike** (Strike+Area), **Enchanted Strike** (Strike+Buff) or **Temporal Aura** (Buff+Time). Runes roll up to three affixes which are combined when the resulting skill is cast.
+
 ### Adding New Skills
 1. Create a script extending `Skill` (see `scripts/skills/` for examples) and export any parameters you need.
 2. Create a new `.tres` resource in `resources/skills/` that points to the script and assign appropriate tags.
