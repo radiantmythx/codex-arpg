@@ -16,7 +16,7 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 ## Controls
 - **WASD** – Move the player.
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
-- **Q** – Toggle the Transcendent Fire aura.
+- **Q** – Activate the secondary skill (e.g., the Haste aura).
 
 ## Mana System
 The player now uses mana to power abilities. Basic attacks consume mana and the
@@ -28,12 +28,14 @@ Skills are `Resource` files that carry tags describing how they behave. Supporte
 
 Affixes may also modify `aoe_inc` to increase the size of any skill tagged with `AoE`.
 
-The player now has a secondary ability bound to **Q** – **Transcendent Fire** – an aura spell that drains mana and health while dealing fire damage over time around the caster. Pressing **Q** again toggles the aura off. Enemies use the same skill system and now perform their attacks using the basic melee skill.
+The project now includes generic projectile, melee, blast and aura skill bases. Skills may spawn optional on-hit or explosion effects that scale with the caster's area bonuses. A buff system allows temporary modifiers on players and enemies. Sample abilities include **Haste** (a mana-reserving aura that boosts move speed), **Holy Smite** (a holy blast at the cursor) and **Icicle Blast** (a slowing projectile). Enemies use the same framework and attack with the basic melee skill.
 
 ### Adding New Skills
 1. Create a script extending `Skill` (see `scripts/skills/` for examples) and export any parameters you need.
 2. Create a new `.tres` resource in `resources/skills/` that points to the script and assign appropriate tags.
 3. Assign the resource to a player's or enemy's exported skill slot in the editor or via a script.
+
+Generic projectile and blast skills let you assign optional `projectile_scene`, `on_hit_effect` and `explosion_effect` scenes. If left empty a simple placeholder mesh is used.
 
 ## Setup Instructions
 1. Launch the Godot editor and open the project folder.
