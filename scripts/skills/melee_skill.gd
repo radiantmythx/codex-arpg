@@ -1,8 +1,6 @@
 extends Skill
 class_name MeleeSkill
 
-const Buff = preload("res://scripts/buff.gd")
-
 @export var range: float = 2.0 # Radius of the swing
 @export var angle: float = 45.0
 @export var on_hit_effect: PackedScene # Effect spawned on struck bodies

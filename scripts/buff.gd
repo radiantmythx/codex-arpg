@@ -1,8 +1,6 @@
 class_name Buff
 extends Resource
 
-const Affix = preload('res://scripts/affix.gd')
-
 @export var duration: float = 0.0
 @export var main_stat_bonuses: Dictionary = {}
 @export var stat_bonuses: Dictionary = {}

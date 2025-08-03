@@ -1,8 +1,6 @@
 class_name Skill
 extends Resource
 
-const Stats = preload("res://scripts/stats.gd")
-
 @export var name: String = ""
 @export var icon: Texture2D
 @export var mana_cost: float = 0.0

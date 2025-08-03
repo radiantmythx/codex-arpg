@@ -1,8 +1,6 @@
 extends Skill
 class_name ProjectileSkill
 
-const Buff = preload("res://scripts/buff.gd")
-
 @export var speed: float = 10.0
 @export var range: float = 15.0
 @export var explosion_radius: float = 0.0
