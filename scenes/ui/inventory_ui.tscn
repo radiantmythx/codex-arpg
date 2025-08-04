@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://dccbytm6erevq"]
+[gd_scene load_steps=4 format=3 uid="uid://dccbytm6erevq"]
 
 [ext_resource type="Script" uid="uid://dg08l7weib1fu" path="res://scripts/inventory_ui.gd" id="1_4ycse"]
 [ext_resource type="PackedScene" uid="uid://dkwfqusg1xv8n" path="res://scenes/ui/inventory_slot.tscn" id="2_drsq2"]
+[ext_resource type="PackedScene" uid="uid://b5dwqrndlimvv" path="res://scenes/ui/rune_slot.tscn" id="3_drsq2"]
 
 [node name="InventoryUI" type="CanvasLayer"]
 script = ExtResource("1_4ycse")
 slots_parent_path = NodePath("SlotContainer")
 equip_slots_parent_path = NodePath("EquipSlotContainer")
+rune_slots_parent_path = NodePath("RuneSlotContainer")
 
 [node name="SlotContainer" type="FlowContainer" parent="."]
 anchors_preset = 3
@@ -111,3 +113,23 @@ offset_bottom = 407.0
 size_flags_vertical = 0
 is_equipment = true
 slot_type = "weapon"
+
+[node name="RuneSlotContainer" type="FlowContainer" parent="."]
+offset_right = 223.71
+offset_bottom = 100.0
+
+[node name="RuneSlot" parent="RuneSlotContainer" instance=ExtResource("3_drsq2")]
+layout_mode = 2
+
+[node name="RuneSlot2" parent="RuneSlotContainer" instance=ExtResource("3_drsq2")]
+layout_mode = 2
+rune_index = 1
+
+[node name="RuneSlot3" parent="RuneSlotContainer" instance=ExtResource("3_drsq2")]
+layout_mode = 2
+skill_slot_index = 1
+
+[node name="RuneSlot4" parent="RuneSlotContainer" instance=ExtResource("3_drsq2")]
+layout_mode = 2
+skill_slot_index = 1
+rune_index = 1

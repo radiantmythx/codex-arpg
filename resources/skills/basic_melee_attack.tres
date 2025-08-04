@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BasicMeleeAttackSkill" load_steps=2 format=3 uid="uid://by03j1bjumvfx"]
 
-[ext_resource type="Script" path="res://scripts/skills/basic_melee_attack_skill.gd" id="1"]
+[ext_resource type="Script" uid="uid://b6mncmd6v4xbk" path="res://scripts/skills/basic_melee_attack_skill.gd" id="1"]
 
 [resource]
 script = ExtResource("1")

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Rune" load_steps=12 format=3 uid="uid://n2ij1ckq3plx"]
+
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_m6ocu"]
+[ext_resource type="Resource" path="res://resources/affixes/aoe_inc.tres" id="2_k7inm"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/affix.gd" id="2_sjlme"]
+[ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="3_jem6n"]
+[ext_resource type="Script" uid="uid://b8jggh7fjjojw" path="res://scripts/rune.gd" id="3_l3hpt"]
+[ext_resource type="Resource" path="res://resources/affixes/luck_add.tres" id="4_q61ag"]
+[ext_resource type="Resource" path="res://resources/affixes/mind_add.tres" id="5_4480r"]
+[ext_resource type="Resource" path="res://resources/affixes/physical_damage_spell_add.tres" id="6_jtust"]
+[ext_resource type="Resource" path="res://resources/affixes/soul_add.tres" id="7_5k17p"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="8_vacb0"]
+[ext_resource type="Texture2D" uid="uid://d4kpwd06p66wr" path="res://images/area_rune.png" id="10_k7inm"]
+
+[resource]
+script = ExtResource("3_l3hpt")
+rune_type = 2
+item_name = "Zone Rune"
+description = "Area-Based Rune"
+icon = ExtResource("10_k7inm")
+max_stack = 1
+equip_slot = ""
+affix_pool = Array[ExtResource("1_m6ocu")]([ExtResource("2_k7inm"), ExtResource("3_jem6n"), ExtResource("4_q61ag"), ExtResource("5_4480r"), ExtResource("6_jtust"), ExtResource("7_5k17p"), ExtResource("8_vacb0")])
+affixes = Array[ExtResource("2_sjlme")]([])
+metadata/_custom_type_script = "uid://b8jggh7fjjojw"

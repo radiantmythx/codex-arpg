@@ -1,11 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=6 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
-[ext_resource type="Resource" uid="uid://uifjbs48fjf3" path="res://resources/runes/item_strike_rune.tres" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
-[ext_resource type="Resource" uid="uid://cfg5dy3eit87i" path="res://resources/runes/item_time_rune.tres" id="4_tefeu"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
 size = Vector2(35, 35)
@@ -28,40 +26,14 @@ skills_ui_path = NodePath("../SkillsUI")
 transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 0, 8.93768, 8.75395)
 
 [node name="Enemy2" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0735598, 0, -13.2491)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0735598, 0, -4.58097)
 max_health = 300.0
 
 [node name="Enemy3" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.54448, 0, -5.79471)
-
-[node name="Enemy5" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.54448, 0, -2.7103)
-
-[node name="Enemy6" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5872, 0, -2.7103)
-
-[node name="Enemy7" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5872, 0, -6.06736)
-
-[node name="Enemy8" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3042, 0, -4.28601)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.66489, 0, -5.79471)
 
 [node name="Enemy4" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.87853, 0, -2.84833)
-max_health = 1.0
-
-[node name="Enemy9" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.41684, 0, -6.09544)
-max_health = 1.0
-drop_table = [{
-"amount": 1,
-"chance": 1.0,
-"item": ExtResource("3_tefeu")
-}, {
-"amount": 1,
-"chance": 1.0,
-"item": ExtResource("4_tefeu")
-}]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.79421, 0, -5.30339)
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
 

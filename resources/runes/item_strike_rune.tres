@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Rune" load_steps=13 format=3 uid="uid://uifjbs48fjf3"]
+
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_kksce"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/affix.gd" id="2_bdg65"]
+[ext_resource type="Resource" path="res://resources/affixes/body_add.tres" id="2_q3hmd"]
+[ext_resource type="Resource" path="res://resources/affixes/body_inc.tres" id="3_6xogv"]
+[ext_resource type="Script" uid="uid://b8jggh7fjjojw" path="res://scripts/rune.gd" id="3_jxr7o"]
+[ext_resource type="Resource" path="res://resources/affixes/electric_damage_melee_add.tres" id="4_3jy1g"]
+[ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="5_0c30a"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="6_nlnnm"]
+[ext_resource type="Resource" path="res://resources/affixes/solar_damage_melee_add.tres" id="7_3rcya"]
+[ext_resource type="Resource" path="res://resources/affixes/physical_damage_melee_add.tres" id="8_jri3l"]
+[ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="9_kma6g"]
+[ext_resource type="Texture2D" uid="uid://bdodosrxxawob" path="res://images/strike_rune.png" id="11_q3hmd"]
+
+[resource]
+script = ExtResource("3_jxr7o")
+rune_type = 0
+item_name = "Strike Rune"
+description = "Melee Strike Rune"
+icon = ExtResource("11_q3hmd")
+max_stack = 1
+equip_slot = ""
+affix_pool = Array[ExtResource("1_kksce")]([ExtResource("2_q3hmd"), ExtResource("3_6xogv"), ExtResource("4_3jy1g"), ExtResource("5_0c30a"), ExtResource("6_nlnnm"), ExtResource("7_3rcya"), ExtResource("8_jri3l"), ExtResource("9_kma6g")])
+affixes = Array[ExtResource("2_bdg65")]([])
+metadata/_custom_type_script = "uid://b8jggh7fjjojw"

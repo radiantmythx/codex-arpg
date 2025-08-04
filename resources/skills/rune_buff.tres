@@ -1,10 +1,14 @@
-[ext_resource type="Script" path="res://scripts/skills/self_buff_skill.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/buffs/temp_buff.tres" id="2"]
+[gd_resource type="Resource" script_class="SelfBuffSkill" load_steps=2 format=3 uid="uid://d1cljyody3wfp"]
+
+[ext_resource type="Script" uid="uid://dnqifx53cki3c" path="res://scripts/skills/self_buff_skill.gd" id="1_rvnb1"]
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("1_rvnb1")
 name = "Blessing"
 mana_cost = 10.0
 cooldown = 5.0
-buff = ExtResource("2")
-tags = Array[String](["buff"])
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+tags = Array[String](["Spell"])
+metadata/_custom_type_script = "uid://dnqifx53cki3c"

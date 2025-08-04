@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="IcicleBlastSkill" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="IcicleBlastSkill" load_steps=2 format=3 uid="uid://7yoti6ttn0ac"]
 
-[ext_resource type="Script" path="res://scripts/skills/icicle_blast_skill.gd" id="1"]
+[ext_resource type="Script" uid="uid://k20x2lmx5uqe" path="res://scripts/skills/icicle_blast_skill.gd" id="1"]
 
 [resource]
 script = ExtResource("1")

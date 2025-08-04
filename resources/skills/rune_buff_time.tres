@@ -1,11 +1,15 @@
-[ext_resource type="Script" path="res://scripts/skills/aura_skill.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/buffs/temp_buff.tres" id="2"]
+[gd_resource type="Resource" script_class="AuraSkill" load_steps=2 format=3 uid="uid://c7bmcwdehf6i"]
+
+[ext_resource type="Script" uid="uid://cwhcjof4hr4ux" path="res://scripts/skills/aura_skill.gd" id="1_gw3uk"]
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("1_gw3uk")
+mana_reserve_percent = 10.0
 name = "Temporal Aura"
-mana_cost = 20.0
+mana_cost = 5.0
 cooldown = 1.0
-mana_reserve_percent = 0.1
-buff = ExtResource("2")
-tags = Array[String](["buff", "time", "aura"])
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+tags = Array[String](["Aura"])
+metadata/_custom_type_script = "uid://cwhcjof4hr4ux"

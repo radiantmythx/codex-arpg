@@ -1,11 +1,43 @@
-[ext_resource type="Script" path="res://scripts/skills/combo_skill.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/skills/rune_strike.tres" id="2"]
-[ext_resource type="Resource" path="res://resources/skills/rune_area.tres" id="3"]
+[gd_resource type="Resource" script_class="ComboSkill" load_steps=7 format=3 uid="uid://bt2qiok8ilc4y"]
+
+[ext_resource type="Script" uid="uid://d0vpy7l0kdlsx" path="res://scripts/skills/combo_skill.gd" id="1_y8e5p"]
+[ext_resource type="Script" uid="uid://cieo8o73ixbiv" path="res://scripts/skill.gd" id="2_rjr6g"]
+[ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="3_hf7uu"]
+[ext_resource type="Script" uid="uid://b2wxpuu1hqhiq" path="res://scripts/skills/blast_skill.gd" id="4_u8t7c"]
+
+[sub_resource type="Resource" id="Resource_wnhg8"]
+script = ExtResource("3_hf7uu")
+range = 2.0
+angle = 45.0
+name = ""
+mana_cost = 0.0
+cooldown = 0.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+tags = Array[String]([])
+metadata/_custom_type_script = "uid://cikfgr3vo4xex"
+
+[sub_resource type="Resource" id="Resource_ou076"]
+script = ExtResource("4_u8t7c")
+radius = 3.0
+name = ""
+mana_cost = 0.0
+cooldown = 0.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+tags = Array[String]([])
+metadata/_custom_type_script = "uid://b2wxpuu1hqhiq"
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("1_y8e5p")
+skills = Array[ExtResource("2_rjr6g")]([SubResource("Resource_wnhg8"), SubResource("Resource_ou076")])
 name = "Explosive Strike"
-mana_cost = 12.0
-cooldown = 1.0
-skills = [ExtResource("2"), ExtResource("3")]
-tags = Array[String](["melee", "area", "strike"])
+mana_cost = 5.0
+cooldown = 0.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+tags = Array[String]([])
+metadata/_custom_type_script = "uid://d0vpy7l0kdlsx"

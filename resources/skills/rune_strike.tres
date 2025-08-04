@@ -1,8 +1,16 @@
-[ext_resource type="Script" path="res://scripts/skills/melee_skill.gd" id="1"]
+[gd_resource type="Resource" script_class="MeleeSkill" load_steps=2 format=3 uid="uid://dimoq3yt1wxxo"]
+
+[ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="1_r0q43"]
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("1_r0q43")
+range = 2.0
+angle = 45.0
 name = "Melee Strike"
 mana_cost = 5.0
-cooldown = 0.5
-tags = Array[String](["melee", "strike"])
+cooldown = 0.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+tags = Array[String]([])
+metadata/_custom_type_script = "uid://cikfgr3vo4xex"

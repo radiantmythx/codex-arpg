@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3 uid="uid://dp4wcic3n0g5f"]
 
-[ext_resource type="Script" path="res://scripts/affix_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 name = "Health Regeneration (Increased)"
 description = "{value}% increased health regeneration"
 stat_key = "health_regen_inc"
-tiers = [Vector2(30,40), Vector2(20,30), Vector2(10,20)]
+main_stat = -1
+tiers = Array[Vector2]([Vector2(30, 40), Vector2(20, 30), Vector2(10, 20)])
+flags = Array[String]([])
