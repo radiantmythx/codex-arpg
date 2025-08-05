@@ -30,6 +30,7 @@ transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 
 [node name="Enemy2" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0735598, 0, -13.2491)
 max_health = 300.0
+tier = 2
 
 [node name="Enemy3" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.54448, 0, -5.79471)

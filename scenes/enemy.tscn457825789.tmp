@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://d3epfdpy5wkx5"]
+
+[ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="1_7p1mj"]
+[ext_resource type="Resource" uid="uid://bmmrsmwx0wtwj" path="res://resources/items/test_item.tres" id="2_md0e3"]
+[ext_resource type="PackedScene" uid="uid://c0vgaf5vs6gcq" path="res://scenes/ui/healthbar.tscn" id="3_4ra3w"]
+[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/chaos_orb.tres" id="3_5uy6h"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_md0e3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ra3w"]
+albedo_color = Color(0.938408, 0.261115, 0.284454, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5uy6h"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4ra3w"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_7p1mj")
+healthbar_node_path = NodePath("SubViewport/Healthbar")
+drop_table = [{
+"amount": 1,
+"chance": 0.5,
+"item": ExtResource("2_md0e3")
+}, {
+"amount": 5,
+"chance": 0.8,
+"item": ExtResource("3_5uy6h")
+}]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_md0e3")
+surface_material_override/0 = SubResource("StandardMaterial3D_4ra3w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_5uy6h")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(160, 27)
+
+[node name="Healthbar" parent="SubViewport" instance=ExtResource("3_4ra3w")]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 2.417, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_4ra3w")

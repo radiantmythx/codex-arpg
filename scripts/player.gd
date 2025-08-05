@@ -90,11 +90,11 @@ func _ready() -> void:
 	buff_manager.stats = stats
 	add_child(buff_manager)
 	if inventory_ui_path != NodePath():
-				_inventory_ui = get_node(inventory_ui_path)
-				if _inventory_ui:
-						_inventory_ui.bind_inventory(inventory)
-						_inventory_ui.bind_equipment(equipment)
-						_inventory_ui.bind_rune_manager(rune_manager)
+		_inventory_ui = get_node(inventory_ui_path)
+		if _inventory_ui:
+			_inventory_ui.bind_inventory(inventory)
+			_inventory_ui.bind_equipment(equipment)
+			_inventory_ui.bind_rune_manager(rune_manager)
 	if inventory_camera_path != NodePath():
 		_camera = get_node(inventory_camera_path)
 		if _camera:
@@ -225,27 +225,27 @@ func _shift_camera(open: bool) -> void:
 	tween.tween_property(_camera, "position", target, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func add_buff(buff: Buff) -> void:
-		if buff_manager:
-				buff_manager.apply_buff(buff)
+	if buff_manager:
+		buff_manager.apply_buff(buff)
 
 func remove_buff(buff: Buff) -> void:
-		if buff_manager:
-				buff_manager.remove_buff(buff)
+	if buff_manager:
+		buff_manager.remove_buff(buff)
 
 func _on_rune_skill_changed(index: int, skill: Skill) -> void:
-		if index == 0:
-				main_skill = skill
-		elif index == 1:
-				secondary_skill = skill
+	if index == 0:
+		main_skill = skill
+	elif index == 1:
+		secondary_skill = skill
 
 func get_skill_slot(index: int) -> Skill:
-		if rune_manager:
-				return rune_manager.get_skill(index)
-		return null
+	if rune_manager:
+		return rune_manager.get_skill(index)
+	return null
 
 func set_skill_slot(_index: int, _skill: Skill) -> void:
 		# Skills are determined by rune combinations; manual assignment disabled.
-		pass
+	pass
 
 func add_item(item: Item, amount: int = 1) -> void:
 	if _inventory_open and _inventory_ui:
