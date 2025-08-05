@@ -180,10 +180,26 @@ func get_damage(damage_type: DamageType = DamageType.PHYSICAL, tags: Array[Strin
 								return _compute_stat_tagged(base_damage.get(damage_type, 0.0), key, tags)
 
 func get_all_damage(tags: Array[String] = []) -> Dictionary:
-				var result: Dictionary = {}
-				for dt in DAMAGE_TYPES:
-								result[dt] = get_damage(dt, tags)
-				return result
+        return compute_damage({}, tags)
+
+
+func compute_damage(extra_base: Dictionary, tags: Array[String] = []) -> Dictionary:
+        # Calculates total damage per type using the actor's base damage
+        # plus any additional `extra_base` provided by skills. Values in
+        # `extra_base` should be Vector2 ranges representing min/max
+        # damage to roll.
+        var result: Dictionary = {}
+        for dt in DAMAGE_TYPES:
+                var base_val: float = base_damage.get(dt, 0.0)
+                if extra_base.has(dt):
+                        var val = extra_base[dt]
+                        if typeof(val) == TYPE_VECTOR2:
+                                base_val += randf_range(val.x, val.y)
+                        else:
+                                base_val += float(val)
+                var key = "%s_damage" % DAMAGE_TYPE_KEYS[dt]
+                result[dt] = _compute_stat_tagged(base_val, key, tags)
+        return result
 
 
 func get_move_speed() -> float:

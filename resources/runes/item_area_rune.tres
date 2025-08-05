@@ -15,6 +15,9 @@
 [resource]
 script = ExtResource("3_l3hpt")
 rune_type = 2
+base_damage_low = 1.0
+base_damage_high = 2.0
+base_damage_type = 2
 item_name = "Zone Rune"
 description = "Area-Based Rune"
 icon = ExtResource("10_k7inm")

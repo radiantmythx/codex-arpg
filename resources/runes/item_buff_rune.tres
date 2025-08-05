@@ -8,6 +8,9 @@
 [resource]
 script = ExtResource("3_s8uqw")
 rune_type = 1
+base_damage_low = 0.0
+base_damage_high = 0.0
+base_damage_type = 0
 item_name = "Buff Rune"
 description = "Applies a buff or debuff to skill"
 icon = ExtResource("3_qyiev")
