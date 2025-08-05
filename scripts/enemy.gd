@@ -13,7 +13,20 @@ extends CharacterBody3D
 @export var base_max_energy_shield: float = 0.0
 @export var base_energy_shield_regen: float = 0.0
 @export var base_energy_shield_recharge_delay: float = 2.0
-@export var base_damage: float = 1.0
+@export var base_damage_low: float = 1.0
+@export var base_damage_high: float = 2.0
+# Enemies can deal multiple damage types. All listed types use the same damage
+# range defined above. Designers can duplicate an enemy and tweak the lists to
+# create variants like fire or ice versions.
+@export var base_damage_types: Array[Stats.DamageType] = [Stats.DamageType.PHYSICAL]
+
+# Enemy tier determines how tough the monster is. Higher tiers get scaled stats
+# and damage and are intended for special encounters.
+enum Tier { PACK, LEADER, BOSS }
+@export var tier: Tier = Tier.PACK
+
+const TIER_HEALTH_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.5, Tier.BOSS: 3.0}
+const TIER_DAMAGE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.25, Tier.BOSS: 2.0}
 
 ## Drop table is an array of dictionaries like:
 ## {"item": Item, "chance": 0.5, "amount": 1}
@@ -37,16 +50,20 @@ var stats: Stats
 var buff_manager: BuffManager
 
 func _ready() -> void:
-		randomize()
-		add_to_group("enemy")
-		stats = Stats.new()
-		stats.base_max_health = max_health
-		stats.base_damage[Stats.DamageType.PHYSICAL] = base_damage
-		stats.base_armor = base_armor
-		stats.base_evasion = base_evasion
-		stats.base_max_energy_shield = base_max_energy_shield
-		stats.base_energy_shield_regen = base_energy_shield_regen
-		stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
+                randomize()
+                add_to_group("enemy")
+                stats = Stats.new()
+                # Scale core stats based on tier so bosses feel tougher.
+                stats.base_max_health = max_health * TIER_HEALTH_MULT[tier]
+                # Enemies don't rely on Stats.base_damage; damage is rolled from
+                # `get_base_damage_dict` instead, so set all base damages to zero.
+                for dt in Stats.DAMAGE_TYPES:
+                                stats.base_damage[dt] = 0.0
+                stats.base_armor = base_armor
+                stats.base_evasion = base_evasion
+                stats.base_max_energy_shield = base_max_energy_shield
+                stats.base_energy_shield_regen = base_energy_shield_regen
+                stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
 		max_health = float(stats.get_max_health())
 		current_health = max_health
 		max_energy_shield = stats.get_max_energy_shield()
@@ -58,10 +75,10 @@ func _ready() -> void:
 		_mesh = get_node_or_null("MeshInstance3D")
 		if _mesh:
 				_original_material = _mesh.material_override
-		if healthbar_node_path != NodePath():
-			_healthbar = get_node(healthbar_node_path)
-			if(_healthbar):
-				_healthbar.set_health(current_health, max_health)
+                if healthbar_node_path != NodePath():
+                        _healthbar = get_node(healthbar_node_path)
+                        if(_healthbar):
+                                _healthbar.set_health(current_health, max_health)
 
 func _physics_process(delta: float) -> void:
 				_process_regen(delta)
@@ -116,8 +133,18 @@ func add_buff(buff: Buff) -> void:
 								buff_manager.apply_buff(buff)
 
 func remove_buff(buff: Buff) -> void:
-				if buff_manager:
-								buff_manager.remove_buff(buff)
+                               if buff_manager:
+                                                               buff_manager.remove_buff(buff)
+
+# Returns the enemy's innate base damage ranges as a dictionary keyed by
+# DamageType.  Skill scripts call this so the values are merged with the
+# skill's own base damage when attacks are performed.
+func get_base_damage_dict() -> Dictionary:
+                var dict: Dictionary = {}
+                var mult = TIER_DAMAGE_MULT.get(tier, 1.0)
+                for dt in base_damage_types:
+                                dict[dt] = Vector2(base_damage_low * mult, base_damage_high * mult)
+                return dict
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
 		print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")
