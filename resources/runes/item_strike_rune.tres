@@ -16,6 +16,9 @@
 [resource]
 script = ExtResource("3_jxr7o")
 rune_type = 0
+base_damage_low = 3.0
+base_damage_high = 5.0
+base_damage_type = 0
 item_name = "Strike Rune"
 description = "Melee Strike Rune"
 icon = ExtResource("11_q3hmd")

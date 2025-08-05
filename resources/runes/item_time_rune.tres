@@ -8,6 +8,9 @@
 [resource]
 script = ExtResource("3_2x7mc")
 rune_type = 3
+base_damage_low = 1.0
+base_damage_high = 2.0
+base_damage_type = 5
 item_name = "Time Rune"
 description = "Changes skill to apply damage over time"
 icon = ExtResource("3_rlpnb")

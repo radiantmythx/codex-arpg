@@ -41,6 +41,17 @@ Runes act as itemized mini-skills. Two rune slots combine to create a single abi
 
 Single runes provide basic skills such as **Melee Strike**, **Blessing**, **Area Blast** and **Time Bolt**. Mixing two runes yields combination skills like **Explosive Strike** (Strike+Area), **Enchanted Strike** (Strike+Buff) or **Temporal Aura** (Buff+Time). Runes roll up to three affixes which are combined when the resulting skill is cast.
 
+### Rune Damage
+Runes now define their own base damage range and damage type using the `base_damage_low`, `base_damage_high` and `base_damage_type` fields in their `.tres` files. When runes are combined, each portion of the generated skill uses the base damage and type of its contributing rune. Flat damage affixes on runes apply only to the skill they create, while equipment affixes continue to apply globally to all skills. Damage over time buffs also expose `base_damage_low` and `base_damage_high`, allowing their DPS to be scaled by the caster's stats when applied.
+
+Updated resources:
+- `resources/runes/item_strike_rune.tres`
+- `resources/runes/item_area_rune.tres`
+- `resources/runes/item_time_rune.tres`
+- `resources/runes/item_buff_rune.tres`
+- `resources/skills/rune_time.tres`
+- `resources/skills/rune_strike_time.tres`
+
 ### Adding New Skills
 1. Create a script extending `Skill` (see `scripts/skills/` for examples) and export any parameters you need.
 2. Create a new `.tres` resource in `resources/skills/` that points to the script and assign appropriate tags.
@@ -52,6 +63,7 @@ Generic projectile and blast skills let you assign optional `projectile_scene`, 
 1. Launch the Godot editor and open the project folder.
 2. Press **Play** to run. The player can move and attack.
 3. Use the provided scripts as a starting point for building a larger ARPG.
+4. Run `godot --headless --check` to verify scripts compile after changes.
 
 
 ## Creating Enemy Scenes

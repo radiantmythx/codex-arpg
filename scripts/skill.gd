@@ -8,6 +8,8 @@ extends Resource
 @export var duration: float = 0.0
 @export var move_multiplier: float = 1.0
 @export var damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL
+@export var base_damage_low: float = 0.0
+@export var base_damage_high: float = 0.0
 @export var tags: Array[String] = []
 
 func perform(user):

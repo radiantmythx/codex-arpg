@@ -9,3 +9,6 @@ extends Item
 enum RuneType { STRIKE, BUFF, AREA, TIME }
 
 @export var rune_type: RuneType = RuneType.STRIKE
+@export var base_damage_low: float = 0.0
+@export var base_damage_high: float = 0.0
+@export var base_damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL

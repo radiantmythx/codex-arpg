@@ -30,21 +30,27 @@ func _explode(origin: Vector3, user):
 		params.shape = shape
 		params.transform = Transform3D(Basis(), origin)
 		params.collide_with_bodies = true
-		var bodies = user.get_world_3d().direct_space_state.intersect_shape(params)
-		var dmg_map = user.stats.get_all_damage(tags)
-		for result in bodies:
-				var body = result.get("collider")
-				if body and body.has_method("take_damage"):
-						if user.is_in_group("player") and body.is_in_group("enemy") or user.is_in_group("enemy") and body.is_in_group("player"):
-								for dt in dmg_map.keys():
-										var dmg = dmg_map[dt]
-										if dmg > 0:
-												body.take_damage(dmg, dt)
-								if on_hit_buff and body.has_method("add_buff"):
-										body.add_buff(on_hit_buff)
-								if on_hit_effect:
-										var eff = on_hit_effect.instantiate()
-										body.add_child(eff)
+                var bodies = user.get_world_3d().direct_space_state.intersect_shape(params)
+                var base_dict = {damage_type: Vector2(base_damage_low, base_damage_high)}
+                var dmg_map = user.stats.compute_damage(base_dict, tags)
+                for result in bodies:
+                                var body = result.get("collider")
+                                if body and body.has_method("take_damage"):
+                                                if user.is_in_group("player") and body.is_in_group("enemy") or user.is_in_group("enemy") and body.is_in_group("player"):
+                                                                for dt in dmg_map.keys():
+                                                                                var dmg = dmg_map[dt]
+                                                                                if dmg > 0:
+                                                                                                body.take_damage(dmg, dt)
+                                                                if on_hit_buff and body.has_method("add_buff"):
+                                                                                var b = on_hit_buff.duplicate(true)
+                                                                                if b is DamageOverTimeBuff:
+                                                                                                var dot_dict = {b.damage_type: Vector2(b.base_damage_low, b.base_damage_high)}
+                                                                                                var dot_map = user.stats.compute_damage(dot_dict, tags)
+                                                                                                b.damage_per_second = dot_map[b.damage_type]
+                                                                                body.add_buff(b)
+                                                                if on_hit_effect:
+                                                                                var eff = on_hit_effect.instantiate()
+                                                                                body.add_child(eff)
 		if explosion_effect:
 				var e = explosion_effect.instantiate()
 				e.global_transform.origin = origin

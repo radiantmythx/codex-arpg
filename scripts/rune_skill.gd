@@ -5,18 +5,20 @@ var base_skill: Skill
 var rune_affixes: Array[Affix] = []
 
 func _init(base: Skill = null, affixes: Array[Affix] = []):
-	base_skill = base
-	rune_affixes = affixes
-	if base_skill:
-		name = base_skill.name
-		icon = base_skill.icon
-		mana_cost = base_skill.mana_cost
-		cooldown = base_skill.cooldown
-		duration = base_skill.duration
-		move_multiplier = base_skill.move_multiplier
-		damage_type = base_skill.damage_type
-		tags = base_skill.tags.duplicate()
-	_apply_affix_modifiers()
+        base_skill = base
+        rune_affixes = affixes
+        if base_skill:
+                name = base_skill.name
+                icon = base_skill.icon
+                mana_cost = base_skill.mana_cost
+                cooldown = base_skill.cooldown
+                duration = base_skill.duration
+                move_multiplier = base_skill.move_multiplier
+                damage_type = base_skill.damage_type
+                base_damage_low = base_skill.base_damage_low
+                base_damage_high = base_skill.base_damage_high
+                tags = base_skill.tags.duplicate()
+        _apply_affix_modifiers()
 
 func _apply_affix_modifiers():
 	for a in rune_affixes:
