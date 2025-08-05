@@ -52,6 +52,16 @@ Updated resources:
 - `resources/skills/rune_time.tres`
 - `resources/skills/rune_strike_time.tres`
 
+### Damage Snapshotting
+Projectile, melee and blast skills now roll and store their damage when cast.
+This snapshot allows projectiles and delayed explosions to apply the correct
+damage even if the caster dies before they land. When creating or editing a
+skill `.tres` resource, make sure its `base_damage_low`, `base_damage_high` and
+`damage_type` fields are set so the snapshot has values to roll. If you want
+custom visual effects or projectile scenes, create a new `.tscn` in the editor
+and assign it to the skill's exported `projectile_scene`, `on_hit_effect` or
+`explosion_effect` properties.
+
 ### Adding New Skills
 1. Create a script extending `Skill` (see `scripts/skills/` for examples) and export any parameters you need.
 2. Create a new `.tres` resource in `resources/skills/` that points to the script and assign appropriate tags.
