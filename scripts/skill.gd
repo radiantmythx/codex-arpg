@@ -13,4 +13,16 @@ extends Resource
 @export var tags: Array[String] = []
 
 func perform(user):
-		pass
+                pass
+
+# Helper to construct the damage dictionary passed to Stats.compute_damage.
+# By default this uses the skill's own base damage values but, if the user
+# (player or enemy) exposes a `get_base_damage_dict()` method, those values are
+# merged in.  This lets enemies define innate damage ranges without relying on
+# rune combinations like the player does.
+func _build_base_damage_dict(user) -> Dictionary:
+                var dict: Dictionary = {}
+                if user and user.has_method("get_base_damage_dict"):
+                                dict = user.get_base_damage_dict()
+                dict[damage_type] = Vector2(base_damage_low, base_damage_high)
+                return dict

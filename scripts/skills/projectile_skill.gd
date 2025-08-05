@@ -44,8 +44,9 @@ func _create_projectile():
 func _on_projectile_body_entered(body, projectile, user):
 		if body and body.has_method("take_damage"):
                                 if user.is_in_group("player") and body.is_in_group("enemy") or user.is_in_group("enemy") and body.is_in_group("player"):
-                                                var base_dict = {damage_type: Vector2(base_damage_low, base_damage_high)}
-                                                var dmg_map = user.stats.compute_damage(base_dict, tags)
+                                               # Merge user's base damage with the skill's own values.
+                                               var base_dict = _build_base_damage_dict(user)
+                                               var dmg_map = user.stats.compute_damage(base_dict, tags)
                                                 for dt in dmg_map.keys():
                                                                 var dmg = dmg_map[dt]
                                                                 if dmg > 0:
@@ -82,8 +83,9 @@ func _explode(origin: Vector3, user):
 		params.transform = Transform3D(Basis(), origin)
 		params.collide_with_bodies = true
                 var bodies = user.get_world_3d().direct_space_state.intersect_shape(params)
-                var base_dict = {damage_type: Vector2(base_damage_low, base_damage_high)}
-                var dmg_map = user.stats.compute_damage(base_dict, tags)
+               # Merge the user's base damage with the skill's own when exploding.
+               var base_dict = _build_base_damage_dict(user)
+               var dmg_map = user.stats.compute_damage(base_dict, tags)
                 for result in bodies:
                                 var body = result.get("collider")
                                 if body and body.has_method("take_damage"):

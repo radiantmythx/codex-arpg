@@ -31,8 +31,9 @@ func _explode(origin: Vector3, user):
 		params.transform = Transform3D(Basis(), origin)
 		params.collide_with_bodies = true
                 var bodies = user.get_world_3d().direct_space_state.intersect_shape(params)
-                var base_dict = {damage_type: Vector2(base_damage_low, base_damage_high)}
-                var dmg_map = user.stats.compute_damage(base_dict, tags)
+               # Combine any innate user damage with the skill's base values.
+               var base_dict = _build_base_damage_dict(user)
+               var dmg_map = user.stats.compute_damage(base_dict, tags)
                 for result in bodies:
                                 var body = result.get("collider")
                                 if body and body.has_method("take_damage"):
