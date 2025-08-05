@@ -73,8 +73,12 @@ Follow these steps in the Godot editor to create your own enemy scene:
 1. **Create a new scene** with a `CharacterBody3D` as the root node.
 2. **Attach** `scripts/enemy.gd` to the root node.
 3. Add a `CollisionShape3D` and `MeshInstance3D` as children for collision and visuals.
-4. Optionally add the node to an **"enemies"** group for organization.
-5. Save the scene, e.g. `scenes/Enemy.tscn`, and instance it into `Main.tscn`.
+4. Configure the new damage fields:
+   - **base_damage_low/high** – roll damage between these values.
+   - **base_damage_types** – one or more damage types the enemy deals.
+   - **tier** – choose `PACK`, `LEADER` or `BOSS` to scale health and damage.
+5. Optionally add the node to an **"enemies"** group for organization.
+6. Save the scene, e.g. `scenes/Enemy.tscn`, and instance it into `Main.tscn`.
 
 When the player attacks, any node with a `take_damage` method will lose health
 and be removed when it reaches zero.
@@ -165,6 +169,16 @@ player. If the player reaches `attack_range`, the enemy performs a short
 wind‑up before dealing damage. During the wind‑up the enemy's material turns
 red to telegraph the attack and then reverts back afterwards.
 
+Each enemy rolls damage from its `base_damage_low/high` range for every type
+listed in `base_damage_types`.  These values are merged with the damage of the
+skill the enemy uses so designers can create fire‑dealing archers, ice mages and
+other variants without custom skills.  The `tier` export controls how tough an
+enemy is:
+
+* **PACK** – standard fodder.
+* **LEADER** – 50% more health and 25% more damage.  Intended to lead groups.
+* **BOSS** – large unique monsters with triple health and double damage.
+
 Enemies can drop loot using the `drop_table` export on `enemy.gd`. Each entry in
 the array is a dictionary like `{"item": Item, "chance": 0.5, "amount": 1}`.
 When the enemy dies every entry is rolled and a matching `item_drop.tscn`
@@ -174,7 +188,8 @@ instance is spawned for successful rolls.
 1. Open your enemy scene in Godot and ensure `enemy.gd` is attached to the root
    `CharacterBody3D`.
 2. Set the exported properties such as movement speeds, detection and attack
-   ranges, and configure the `drop_table` with your item resources.
+   ranges.  Configure `base_damage_low/high`, `base_damage_types` and the enemy
+   `tier`, then assign the `drop_table` with your item resources.
 3. The player scene automatically belongs to the **"players"** group so enemies
    will find it without additional setup.
 
