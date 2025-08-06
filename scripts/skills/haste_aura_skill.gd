@@ -1,7 +1,7 @@
 extends AuraSkill
 class_name HasteAuraSkill
 
-const BuffInst = preload("res://scripts/buff.gd")
+const BuffInst = preload("res://scripts/skills/buff.gd")
 
 func _init():
 	buff = BuffInst.new()

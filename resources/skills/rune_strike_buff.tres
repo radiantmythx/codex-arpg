@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="MeleeSkill" load_steps=4 format=3 uid="uid://csxiomvpppjey"]
 
-[ext_resource type="Script" uid="uid://cunkjx53ftdis" path="res://scripts/buff.gd" id="1_0vqpv"]
+[ext_resource type="Script" uid="uid://cunkjx53ftdis" path="res://scripts/skills/buff.gd" id="1_0vqpv"]
 [ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="1_3dqxp"]
 
 [sub_resource type="Resource" id="Resource_1bikt"]
@@ -16,4 +16,13 @@ script = ExtResource("1_3dqxp")
 range = 2.0
 angle = 45.0
 on_hit_buff = SubResource("Resource_1bikt")
+name = ""
+mana_cost = 0.0
+cooldown = 0.0
+duration = 0.0
+move_multiplier = 1.0
+damage_type = 0
+base_damage_low = 0.0
+base_damage_high = 0.0
+tags = Array[String]([])
 metadata/_custom_type_script = "uid://cikfgr3vo4xex"

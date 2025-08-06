@@ -11,5 +11,7 @@ cooldown = 1.0
 duration = 0.0
 move_multiplier = 1.0
 damage_type = 0
+base_damage_low = 0.0
+base_damage_high = 0.0
 tags = Array[String](["Aura"])
 metadata/_custom_type_script = "uid://cwhcjof4hr4ux"

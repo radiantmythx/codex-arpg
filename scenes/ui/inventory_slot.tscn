@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dkwfqusg1xv8n"]
 
-[ext_resource type="Script" uid="uid://dx8qksbg8q15r" path="res://scripts/inventory_slot.gd" id="1_kscix"]
+[ext_resource type="Script" uid="uid://dx8qksbg8q15r" path="res://scripts/ui/inventory_slot.gd" id="1_kscix"]
 
 [sub_resource type="Gradient" id="Gradient_f04ki"]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://v7qu6xwns0fv"]
 
 [ext_resource type="Texture2D" uid="uid://nuj4h5wgpw2f" path="res://images/chaos_orb.png" id="1_bcpw5"]
-[ext_resource type="Script" uid="uid://c23h3lwqfq1va" path="res://scripts/skill_slot.gd" id="1_mi17n"]
+[ext_resource type="Script" uid="uid://c23h3lwqfq1va" path="res://scripts/ui/skill_slot.gd" id="1_mi17n"]
 [ext_resource type="Texture2D" uid="uid://boy03glsiyfgl" path="res://images/axe_of_based.png" id="2_h8smx"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/sword_of_based.png" id="3_kolbf"]
 [ext_resource type="Texture2D" uid="uid://bvdnso1s8y5r7" path="res://images/test_item.png" id="4_byrs8"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b5dwqrndlimvv"]
 
-[ext_resource type="Script" uid="uid://djv8niqfv10ev" path="res://scripts/rune_slot.gd" id="1_jinje"]
+[ext_resource type="Script" uid="uid://djv8niqfv10ev" path="res://scripts/ui/rune_slot.gd" id="1_jinje"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_m6ksq"]
 
