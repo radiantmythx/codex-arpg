@@ -203,3 +203,19 @@ instance is spawned for successful rolls.
 3. The player scene automatically belongs to the **"players"** group so enemies
    will find it without additional setup.
 
+
+## Zone Shards and Level Generation
+Zone Shards are consumable items that open a temporary zone. They reuse the existing affix framework so shards can roll modifiers that influence the generated level.
+
+### Creating Zone Shards
+1. Create a new resource using **ZoneShard** (`scripts/items/zone_shard.gd`).
+2. Assign an icon and optional description.
+3. Populate `affix_pool` with zone affix definitions such as:
+   - `resources/affixes/zone/enemy_spawn_inc.tres` – increases number of enemy packs.
+   - `resources/affixes/zone/enemy_fire_damage.tres` – adds flat fire damage to enemies.
+   - `resources/affixes/zone/enemy_hp_inc.tres` – increases enemy life.
+
+Example: `resources/items/zone_shard.tres` shows a shard configured with these affixes. Zone Shards can be rerolled with Chaos Orbs like any other item.
+
+### Generating a Zone
+Attach `scripts/ui/zone_shard_slot.gd` to a `Control` that contains an `InventorySlot` for the shard and a `Button` to trigger the run. Export `zone_generator` to a `ZoneGenerator` resource (`scripts/zones/zone_generator.gd`) and set its `enemy_pack_scene` and `boss_scene` in the editor. When the button is pressed the control emits `zone_generated(PackedScene)`; instance this scene and warp the player to begin the encounter.
