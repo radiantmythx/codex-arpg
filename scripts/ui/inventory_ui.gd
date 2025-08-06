@@ -308,6 +308,16 @@ func pickup_to_cursor(item: Item, amount: int) -> void:
 	_cursor_amount = amount
 	_update_cursor()
 
+func get_cursor_item() -> Item:
+        return _cursor_item
+
+func take_cursor_item() -> Dictionary:
+        var data = {"item": _cursor_item, "amount": _cursor_amount}
+        _cursor_item = null
+        _cursor_amount = 0
+        _update_cursor()
+        return data
+
 
 func _update_cursor() -> void:
 	if _cursor_item:

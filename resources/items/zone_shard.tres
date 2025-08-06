@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ZoneShard" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/zone_shard.gd" id="1"]
+[ext_resource type="Texture2D" path="res://images/test_item.png" id="2"]
+[ext_resource type="Resource" path="res://resources/affixes/zone/enemy_spawn_inc.tres" id="3"]
+[ext_resource type="Resource" path="res://resources/affixes/zone/enemy_fire_damage.tres" id="4"]
+[ext_resource type="Resource" path="res://resources/affixes/zone/enemy_hp_inc.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Zone Shard"
+description = "Opens a random zone"
+icon = ExtResource("2")
+affix_pool = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
+max_stack = 20
