@@ -81,6 +81,8 @@ func _ready() -> void:
 		_healthbar = get_node(healthbar_node_path)
 		if(_healthbar):
 			_healthbar.set_health(current_health, max_health)
+			if(tier == Tier.BOSS):
+				$Sprite3D.position.y += 5
 
 func _physics_process(delta: float) -> void:
 	_process_regen(delta)

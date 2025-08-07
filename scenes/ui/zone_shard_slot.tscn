@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctc83vehvya02"]
+
+[ext_resource type="Script" uid="uid://4dc7ugdxci61" path="res://scripts/ui/zone_shard_slot.gd" id="1_4ovhg"]
+[ext_resource type="PackedScene" uid="uid://dkwfqusg1xv8n" path="res://scenes/ui/inventory_slot.tscn" id="2_20gb6"]
+[ext_resource type="Resource" path="res://resources/zones/default_zone_generator.tres" id="2_yi2vv"]
+
+[node name="ZoneShardSlot" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 48.0
+offset_bottom = 48.0
+script = ExtResource("1_4ovhg")
+shard_slot_path = NodePath("ShardSlot")
+zone_generator = ExtResource("2_yi2vv")
+
+[node name="ShardSlot" parent="." instance=ExtResource("2_20gb6")]
+layout_mode = 0

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dccbytm6erevq"]
+[gd_scene load_steps=5 format=3 uid="uid://dccbytm6erevq"]
 
 [ext_resource type="Script" uid="uid://dg08l7weib1fu" path="res://scripts/ui/inventory_ui.gd" id="1_4ycse"]
 [ext_resource type="PackedScene" uid="uid://dkwfqusg1xv8n" path="res://scenes/ui/inventory_slot.tscn" id="2_drsq2"]
 [ext_resource type="PackedScene" uid="uid://b5dwqrndlimvv" path="res://scenes/ui/rune_slot.tscn" id="3_drsq2"]
+[ext_resource type="PackedScene" uid="uid://ctc83vehvya02" path="res://scenes/ui/zone_shard_slot.tscn" id="4_nuief"]
 
 [node name="InventoryUI" type="CanvasLayer"]
 script = ExtResource("1_4ycse")
@@ -133,3 +134,22 @@ skill_slot_index = 1
 layout_mode = 2
 skill_slot_index = 1
 rune_index = 1
+
+[node name="ZoneShardSlotContainer" type="FlowContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 205.0
+grow_vertical = 0
+
+[node name="ZoneShardSlot" parent="ZoneShardSlotContainer" instance=ExtResource("4_nuief")]
+custom_minimum_size = Vector2(42.36, 19.61)
+layout_mode = 2
+inventory_ui_path = NodePath("../..")
+go_button_path = NodePath("../Button")
+
+[node name="Button" type="Button" parent="ZoneShardSlotContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Generate Map"
