@@ -219,3 +219,30 @@ Example: `resources/items/zone_shard.tres` shows a shard configured with these a
 
 ### Generating a Zone
 Attach `scripts/ui/zone_shard_slot.gd` to a `Control` that contains an `InventorySlot` for the shard and a `Button` to trigger the run. Export `zone_generator` to a `ZoneGenerator` resource (`scripts/zones/zone_generator.gd`) and set its `enemy_pack_scene` and `boss_scene` in the editor. When the button is pressed the control emits `zone_generated(PackedScene)`; instance this scene and warp the player to begin the encounter.
+
+## Passive Skill Tree
+The project now includes a framework for allocating passive skill nodes.
+Attach `scripts/passives/passive_tree.gd` to a `Control` that contains all of
+your passive nodes and set the following exports:
+
+- **player_path** – NodePath to the player so node effects can modify their
+  `Stats`.
+- **nodes_parent_path** – Optional path to the node container. If empty the
+  tree looks for `PassiveNode` children directly under itself.
+
+Create nodes by instancing Controls with one of the provided scripts:
+
+- `AttributeNode` – grants flat main stats. Set `stat` and `amount`.
+- `ModifierNode` – applies an `Affix` resource for standard stat bonuses.
+- `MasteryNode` – applies an `Affix` with powerful flags.
+- `WarpNode` – special node that links to other warp nodes.
+
+For each node use the exported `connections` array to link it to its neighbors.
+Warp nodes expose an additional `warp_connections` array. Set `is_root` on the
+starting node; it begins allocated. When the scene runs the tree automatically
+creates `Line2D` connections between nodes. Warp links are drawn in blue.
+
+Add passive points with `add_points()` and click nodes to allocate them.
+Nodes only become available if at least one connected node leading back to the
+root has already been allocated. Allocated nodes immediately apply their effects
+to the player's stats.
