@@ -1,0 +1,89 @@
+[gd_scene load_steps=11 format=3 uid="uid://dduutvhpgaapk"]
+
+[ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
+[ext_resource type="Resource" uid="uid://uifjbs48fjf3" path="res://resources/runes/item_strike_rune.tres" id="3_tefeu"]
+[ext_resource type="Resource" path="res://resources/items/zone_shard.tres" id="3_tipki"]
+[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/chaos_orb.tres" id="4_85g3d"]
+[ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
+[ext_resource type="Resource" uid="uid://cfg5dy3eit87i" path="res://resources/runes/item_time_rune.tres" id="4_tefeu"]
+[ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
+size = Vector2(35, 35)
+
+[node name="WorldRoot" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_0wfyh")
+
+[node name="Player" parent="." instance=ExtResource("1_o5qli")]
+inventory_ui_path = NodePath("../InventoryUI")
+inventory_camera_path = NodePath("../Camera3D")
+skills_ui_path = NodePath("../SkillsUI")
+target_display_path = NodePath("../CanvasLayer/EnemyTargetDisplay")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 0, 8.93768, 8.75395)
+
+[node name="Enemy2" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0735598, 0, -13.2491)
+max_health = 300.0
+tier = 2
+
+[node name="Enemy3" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.54448, 0, -5.79471)
+
+[node name="Enemy5" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.54448, 0, -2.7103)
+
+[node name="Enemy6" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5872, 0, -2.7103)
+
+[node name="Enemy7" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5872, 0, -6.06736)
+
+[node name="Enemy8" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3042, 0, -4.28601)
+
+[node name="Enemy4" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.87853, 0, -2.84833)
+max_health = 1.0
+drop_table = [{
+"amount": 1,
+"chance": 1.0,
+"item": ExtResource("3_tipki")
+}, {
+"amount": 5,
+"chance": 0.8,
+"item": ExtResource("4_85g3d")
+}]
+
+[node name="Enemy9" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.41684, 0, -6.09544)
+max_health = 1.0
+drop_table = [{
+"amount": 1,
+"chance": 1.0,
+"item": ExtResource("3_tefeu")
+}, {
+"amount": 1,
+"chance": 1.0,
+"item": ExtResource("4_tefeu")
+}]
+
+[node name="ItemTagLayer" type="CanvasLayer" parent="."]
+
+[node name="InventoryUI" parent="." instance=ExtResource("4_jyhfs")]
+camera_path = NodePath("../Camera3D")
+
+[node name="SkillsUI" parent="." instance=ExtResource("4_tbgi4")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("9_85g3d")]

@@ -25,31 +25,31 @@ func _ready() -> void:
 		_name_label = get_node_or_null(name_label_path)
 	if level_label_path != NodePath():
 		_level_label = get_node_or_null(level_label_path)
-        # Hide by default until something is hovered.
-        visible = false
+		# Hide by default until something is hovered.
+		visible = false
 
 func update_target(target: Node) -> void:
-        ## Call this every frame with the Node under the mouse cursor.
-        ## Pass `null` when nothing is hovered to hide the display.
-        if target != _target:
-                _set_new_target(target)
-        elif _target:
-                _update_health()
+		## Call this every frame with the Node under the mouse cursor.
+		## Pass `null` when nothing is hovered to hide the display.
+		if target != _target:
+				_set_new_target(target)
+		elif _target:
+				_update_health()
 
 func _set_new_target(target: Node) -> void:
-        # Disconnect previous target if needed and assign the new one.
-        if _target and _target.has_signal("died") and _target.is_connected("died", Callable(self, "_on_target_died")):
-                _target.disconnect("died", Callable(self, "_on_target_died"))
-        _target = target
-        if _target:
-                # Forward name and level to any connected labels or the healthbar scene.
-                _update_labels()
-                _update_health()
-                if _target.has_signal("died"):
-                        _target.connect("died", Callable(self, "_on_target_died"))
-                visible = true
-        else:
-                visible = false
+		# Disconnect previous target if needed and assign the new one.
+		if _target and _target.has_signal("died") and _target.is_connected("died", Callable(self, "_on_target_died")):
+				_target.disconnect("died", Callable(self, "_on_target_died"))
+		_target = target
+		if _target:
+				# Forward name and level to any connected labels or the healthbar scene.
+				_update_labels()
+				_update_health()
+				if _target.has_signal("died"):
+						_target.connect("died", Callable(self, "_on_target_died"))
+				visible = true
+		else:
+				visible = false
 
 func _update_health() -> void:
 	if _healthbar and _target and _healthbar.has_method("set_health"):
