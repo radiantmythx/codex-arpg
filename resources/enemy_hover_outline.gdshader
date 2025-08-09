@@ -10,7 +10,7 @@ uniform float outline_width = 0.03;
 
 void vertex() {
     // Move the vertices along their normals to create an expanded silhouette.
-    POSITION += NORMAL * outline_width;
+    VERTEX += NORMAL * outline_width;
 }
 
 void fragment() {

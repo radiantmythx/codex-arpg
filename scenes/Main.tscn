@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=11 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
 [ext_resource type="Resource" uid="uid://cfg5dy3eit87i" path="res://resources/runes/item_time_rune.tres" id="4_tefeu"]
+[ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
 size = Vector2(35, 35)
@@ -25,6 +26,7 @@ mesh = SubResource("PlaneMesh_0wfyh")
 inventory_ui_path = NodePath("../InventoryUI")
 inventory_camera_path = NodePath("../Camera3D")
 skills_ui_path = NodePath("../SkillsUI")
+target_display_path = NodePath("../CanvasLayer/EnemyTargetDisplay")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.734026, 0.679121, 0, -0.679121, 0.734026, 0, 8.93768, 8.75395)
@@ -81,3 +83,7 @@ drop_table = [{
 camera_path = NodePath("../Camera3D")
 
 [node name="SkillsUI" parent="." instance=ExtResource("4_tbgi4")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("9_85g3d")]

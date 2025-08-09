@@ -7,12 +7,12 @@ extends PassiveNode
 var _affix: Affix = null
 
 func apply_effect(player) -> void:
-    if player and player.stats:
-        _affix = Affix.new()
-        _affix.main_stat_bonuses[stat] = amount
-        player.stats.apply_affix(_affix)
+	if player and player.stats:
+		_affix = Affix.new()
+		_affix.main_stat_bonuses[stat] = amount
+		player.stats.apply_affix(_affix)
 
 func remove_effect(player) -> void:
-    if player and player.stats and _affix:
-        player.stats.remove_affix(_affix)
-        _affix = null
+	if player and player.stats and _affix:
+		player.stats.remove_affix(_affix)
+		_affix = null
