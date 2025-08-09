@@ -3,6 +3,7 @@ extends Area3D
 
 @export var item: Item
 @export var amount: int = 1
+@export var item_tag_layer_path: NodePath = NodePath("/root/WorldRoot/ItemTagLayer")
 
 var _player: Node
 var _tag: ItemTag
@@ -15,18 +16,13 @@ func _ready() -> void:
 	connect("mouse_exited", _on_mouse_exited)
 	connect("input_event", _on_input_event)
 
-	var layer = get_tree().get_root().get_node_or_null("WorldRoot/ItemTagLayer")
+        var layer: ItemTagLayer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
 
-	_tag = ItemTag.new()
-	_tag.text = item.item_name
-	var tip := "%s\n%s" % [item.item_name, item.description]
-	var aff_text := item.get_affix_text()
-	if aff_text != "":
-		tip += "\n" + aff_text
-	_tag.tooltip_text = tip
-	_tag.target = self
-	layer.add_child(_tag)
-	_tag.connect("pressed", Callable(self, "_collect"))
+        _tag = ItemTag.new()
+        _tag.target = self
+        _tag.set_item(item)
+        layer.add_child(_tag)
+        _tag.connect("pressed", Callable(self, "_collect"))
 
 
 func _on_body_entered(body: Node) -> void:
