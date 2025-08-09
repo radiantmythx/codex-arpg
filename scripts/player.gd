@@ -9,6 +9,9 @@ extends CharacterBody3D
 @export var inventory_camera_shift: float = 3.0
 @export var skills_ui_path: NodePath
 
+# UI control that displays the hovered enemy's health bar.
+@export var target_display_path: NodePath
+
 @export var healthbar_node_path: NodePath
 
 # Base combat and attribute values.
@@ -39,6 +42,8 @@ var _camera_default_pos: Vector3
 var _inventory_open := false
 var _skills_open := false
 var _healthbar: Healthbar
+var _target_display: EnemyTargetDisplay
+var _hovered_enemy: Node
 var _current_move_multiplier: float = 1.0
 var buff_manager: BuffManager
 var reserved_mana: float = 0.0
@@ -110,11 +115,14 @@ func _ready() -> void:
 		if _healthbar:
 			_healthbar.set_health(health, max_health)
 			_healthbar.set_mana(mana, max_mana)
-	if skills_ui_path != NodePath():
-		_skills_ui = get_node(skills_ui_path)
-		_skills_ui.bind_player(self)
+        if skills_ui_path != NodePath():
+                _skills_ui = get_node(skills_ui_path)
+                _skills_ui.bind_player(self)
 
-	add_to_group("player")
+        if target_display_path != NodePath():
+                _target_display = get_node_or_null(target_display_path)
+
+        add_to_group("player")
 
 func _get_click_direction() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
@@ -131,10 +139,11 @@ func _get_click_direction() -> Vector3:
 	return (target - global_transform.origin).normalized()
 
 func _physics_process(delta: float) -> void:
-	_process_inventory_input()
-	_process_attack(delta)
-	_process_movement(delta)
-	_process_regen(delta)
+        _process_inventory_input()
+        _process_attack(delta)
+        _process_movement(delta)
+        _process_regen(delta)
+        _update_enemy_hover()
 
 func _process_movement(delta: float) -> void:
 	var input_dir = Vector3.ZERO
@@ -289,4 +298,42 @@ func _process_regen(delta: float) -> void:
 		_healthbar.set_mana(mana, max_mana)
 
 func die():
-	queue_free()
+        queue_free()
+
+func _update_enemy_hover() -> void:
+    """Cast a ray from the camera to the mouse and update the target display."""
+    if not _target_display:
+        return
+    var camera := get_viewport().get_camera_3d()
+    if camera == null:
+        _target_display.update_enemy(null)
+        return
+    var mouse_pos := get_viewport().get_mouse_position()
+    var origin := camera.project_ray_origin(mouse_pos)
+    var dir := camera.project_ray_normal(mouse_pos)
+    var query := PhysicsRayQueryParameters3D.create(origin, origin + dir * 1000)
+    var result := get_world_3d().direct_space_state.intersect_ray(query)
+    var enemy: Node = null
+    if result and result.collider and result.collider.is_in_group("enemy"):
+        enemy = result.collider
+    elif result:
+        # If the ray hit something else, check a small sphere around the point
+        # of impact so near misses still select the enemy.
+        var sphere := SphereShape3D.new()
+        sphere.radius = 1.0
+        var shape_query := PhysicsShapeQueryParameters3D.new()
+        shape_query.shape = sphere
+        shape_query.transform = Transform3D(Basis(), result.position)
+        var hits := get_world_3d().direct_space_state.intersect_shape(shape_query)
+        for h in hits:
+            var c := h.collider
+            if c.is_in_group("enemy"):
+                enemy = c
+                break
+    if enemy != _hovered_enemy:
+        if _hovered_enemy and _hovered_enemy.has_method("set_hovered"):
+            _hovered_enemy.set_hovered(false)
+        _hovered_enemy = enemy
+        if _hovered_enemy and _hovered_enemy.has_method("set_hovered"):
+            _hovered_enemy.set_hovered(true)
+    _target_display.update_enemy(enemy)

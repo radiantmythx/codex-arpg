@@ -20,6 +20,11 @@ extends CharacterBody3D
 # create variants like fire or ice versions.
 @export var base_damage_types: Array[Stats.DamageType] = [Stats.DamageType.PHYSICAL]
 
+# Display properties used by the hover UI.  The health bar overlay will read
+# these so the enemy's name and level can be shown to the player.
+@export var enemy_name: String = "Enemy"
+@export var enemy_level: int = 1
+
 # Enemy tier determines how tough the monster is. Higher tiers get scaled stats
 # and damage and are intended for special encounters.
 enum Tier { PACK, LEADER, BOSS }
@@ -46,9 +51,12 @@ var _current_dir: Vector3 = Vector3.ZERO
 var _attack_timer: float = 0.0
 var _mesh: MeshInstance3D
 var _original_material: Material
+var _hover_outline_material: ShaderMaterial
 var _healthbar: Healthbar
 var stats: Stats
 var buff_manager: BuffManager
+
+const HOVER_OUTLINE_SHADER := preload("res://resources/enemy_hover_outline.gdshader")
 
 func _ready() -> void:
 	randomize()
@@ -72,16 +80,21 @@ func _ready() -> void:
 	buff_manager = BuffManager.new()
 	buff_manager.stats = stats
 	add_child(buff_manager)
-	_player = get_tree().get_root().find_child("Player", true, false)
-	_mesh = get_node_or_null("MeshInstance3D")
-	if _mesh:
-		_original_material = _mesh.material_override
-		_mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
-	if healthbar_node_path != NodePath():
-		_healthbar = get_node(healthbar_node_path)
-		if(_healthbar):
-			_healthbar.set_health(current_health, max_health)
-			if(tier == Tier.BOSS):
+        _player = get_tree().get_root().find_child("Player", true, false)
+        _mesh = get_node_or_null("MeshInstance3D")
+        if _mesh:
+                _original_material = _mesh.material_override
+                _mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
+                # Create a material using the hover outline shader.  It will be
+                # assigned to `material_overlay` when the mouse hovers this enemy
+                # so the original surface materials remain visible.
+                _hover_outline_material = ShaderMaterial.new()
+                _hover_outline_material.shader = HOVER_OUTLINE_SHADER
+        if healthbar_node_path != NodePath():
+                _healthbar = get_node(healthbar_node_path)
+                if(_healthbar):
+                        _healthbar.set_health(current_health, max_health)
+                        if(tier == Tier.BOSS):
 				$Sprite3D.position.y += 5
 
 func _physics_process(delta: float) -> void:
@@ -120,11 +133,18 @@ func _wander(delta: float) -> void:
 	move_and_slide()
 
 func _chase(player_pos: Vector3, delta: float) -> void:
-	var dir := (player_pos - global_transform.origin).normalized()
-	var target_rot := Transform3D().looking_at(dir, Vector3.UP).basis.get_euler().y
-	rotation.y = lerp_angle(rotation.y, target_rot, 5.0 * delta)
-	velocity = dir * move_speed
-	move_and_slide()
+        var dir := (player_pos - global_transform.origin).normalized()
+        var target_rot := Transform3D().looking_at(dir, Vector3.UP).basis.get_euler().y
+        rotation.y = lerp_angle(rotation.y, target_rot, 5.0 * delta)
+        velocity = dir * move_speed
+        move_and_slide()
+
+func set_hovered(hovered: bool) -> void:
+        # Toggles the thin red outline when the mouse is over the enemy.
+        # We use `material_overlay` so the original material is still rendered.
+        if not _mesh:
+                return
+        _mesh.material_overlay = _hover_outline_material if hovered else null
 
 
 func _get_player_position() -> Vector3:
