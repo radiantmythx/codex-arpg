@@ -13,6 +13,7 @@ const MAX_AFFIXES := 6
 @export var description: String = ""
 @export var icon: Texture2D
 @export var max_stack: int = 1
+@export var item_type: String = ""
 
 # Name of the equipment slot this item fits in. Leave empty for non-equipable
 # items such as consumables.  Example values: "weapon", "armor", "ring".
