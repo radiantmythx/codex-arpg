@@ -203,23 +203,44 @@ instance is spawned for successful rolls.
 3. The player scene automatically belongs to the **"players"** group so enemies
    will find it without additional setup.
 
-## Enemy Hover Health Bar
-When the mouse cursor rests over an enemy a small UI at the top of the screen
-shows that enemy's full health. The enemy is also outlined with a thin red
-shader so it is clear which foe is targeted.
+## Hover Target Display
+When the mouse cursor rests over an enemy or friendly NPC a small UI at the top
+of the screen shows that target's name and health. Enemies are outlined with a
+thin red shader while NPCs use a green outline.
 
 1. Instance your custom `Healthbar.tscn` somewhere in the UI and attach
-   `scripts/ui/enemy_target_display.gd` to a parent `Control`.
-2. On the `EnemyTargetDisplay` node set:
+   `scripts/ui/enemy_target_display.gd` (class `TargetDisplay`) to a parent
+   `Control`.
+2. On the `TargetDisplay` node set:
    - **healthbar_path** – NodePath to the `Healthbar` instance.
    - Optional **name_label_path** and **level_label_path** to `Label` nodes if
      you want the script to fill them automatically.
-3. On the Player scene assign **target_display_path** to this
-   `EnemyTargetDisplay` node.
-4. For each enemy set `enemy_name` and `enemy_level` in `enemy.gd`. The script
-   will call `set_enemy_info(name, level)` on your `Healthbar` if it exists and
-   automatically applies the red outline while hovered.
+3. On the Player scene assign **target_display_path** to this `TargetDisplay`
+   node.
+4. For each enemy or NPC set `enemy_name` and `enemy_level` on their scripts so
+   the display can show them.
 
+## NPCs
+NPCs are non-combat characters the player can interact with. Clicking an NPC
+within range pauses the game, centers the camera on both characters and opens a
+dialogue box offering **Talk**, **Trade** or **Quit** options. Trade currently
+acts the same as Quit.
+
+### Creating an NPC Scene
+1. Add a `CharacterBody3D` and attach `scripts/npc.gd`.
+2. Add a `MeshInstance3D` and `CollisionShape3D` much like
+   `scenes/enemy.tscn`.
+3. Edit the exported properties:
+   - **enemy_name/level** – values shown in the hover UI.
+   - **dialogue_lines** – array of strings for the Talk option.
+   - **can_trade** – hide the Trade button if false.
+   - **interaction_range** – how close the player must be to talk.
+4. NPCs automatically join the `npc` group and use a green hover outline.
+
+To enable conversations add a `Control` with `scripts/ui/dialogue_box.gd` to a
+`CanvasLayer` and set the Player's `dialogue_ui_path` to that node. If left
+empty the Player will automatically create a `DialogueBox` under a sibling
+`CanvasLayer` at runtime.
 
 ## Zone Shards and Level Generation
 Zone Shards are consumable items that open a temporary zone. They reuse the existing affix framework so shards can roll modifiers that influence the generated level.
