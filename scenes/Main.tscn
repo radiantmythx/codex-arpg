@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=16 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
@@ -11,10 +11,32 @@
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_choun"]
+sky_top_color = Color(0.253654, 0.42179, 0.817933, 1)
+sky_horizon_color = Color(0.393442, 0.708609, 0.910773, 1)
+sky_curve = 0.0588439
+ground_bottom_color = Color(0.0552533, 0.208095, 0.127584, 1)
+ground_horizon_color = Color(0.406454, 0.762812, 0.490387, 1)
+
+[sub_resource type="Sky" id="Sky_ya4ey"]
+sky_material = SubResource("ProceduralSkyMaterial_choun")
+
+[sub_resource type="Environment" id="Environment_eb6dy"]
+background_mode = 2
+sky = SubResource("Sky_ya4ey")
+tonemap_mode = 2
+glow_enabled = true
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
-size = Vector2(35, 35)
+size = Vector2(300, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_choun"]
+albedo_color = Color(0.328522, 0.547113, 0.270254, 1)
 
 [node name="WorldRoot" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_eb6dy")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
@@ -22,6 +44,7 @@ shadow_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_0wfyh")
+surface_material_override/0 = SubResource("StandardMaterial3D_choun")
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
 inventory_ui_path = NodePath("../InventoryUI")

@@ -56,3 +56,4 @@ func _collect() -> void:
 		if _tag:
 			_tag.queue_free()
 		get_parent().queue_free()
+		

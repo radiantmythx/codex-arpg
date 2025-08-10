@@ -5,6 +5,7 @@ var target: Node3D
 @export var vertical_offset: float = 1.5
 var _camera: Camera3D
 var item: Item
+var move_step = 0.5
 
 func _ready() -> void:
 	_camera = get_viewport().get_camera_3d()
@@ -45,3 +46,26 @@ func _process(delta: float) -> void:
 	var layer := get_parent()
 	if layer and layer.has_method("request_stack_update"):
 			layer.request_stack_update()
+	await get_tree().process_frame
+	resolve_overlap()
+			
+func resolve_overlap():
+	var siblings = get_parent().get_children()
+	var moved = true
+	
+	# Keep trying to move until no collisions remain
+	while moved:
+		moved = false
+		for other in siblings:
+			if other == self:
+				continue
+			if _is_colliding_with(other):
+				position.y -= move_step
+				moved = true
+				break # Check again from start after moving
+
+func _is_colliding_with(other: Control) -> bool:
+	# Check rectangle overlap in global space
+	var rect1 = get_global_rect()
+	var rect2 = other.get_global_rect()
+	return rect1.intersects(rect2)
