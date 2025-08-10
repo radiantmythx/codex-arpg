@@ -39,7 +39,7 @@ var inventory := Inventory.new()
 var _inventory_ui: InventoryUI
 var _skills_ui: SkillsUI
 var _camera: Camera3D
-var _camera_default_pos: Vector3
+var _camera_offset: Vector3 = Vector3.ZERO ## Offset from player to camera.
 var _inventory_open := false
 var _skills_open := false
 var _healthbar: Healthbar
@@ -102,14 +102,14 @@ func _ready() -> void:
 			_inventory_ui.bind_inventory(inventory)
 			_inventory_ui.bind_equipment(equipment)
 			_inventory_ui.bind_rune_manager(rune_manager)
-	if inventory_camera_path != NodePath():
-		_camera = get_node(inventory_camera_path)
-		if _camera:
-			_camera_default_pos = _camera.position
-		if healthbar_node_path != NodePath():
-				_healthbar = get_node(healthbar_node_path)
-				max_health = int(stats.get_max_health())
-				health = max_health
+        if inventory_camera_path != NodePath():
+                _camera = get_node(inventory_camera_path)
+                if _camera:
+                        _camera_offset = _camera.global_position - global_position
+                if healthbar_node_path != NodePath():
+                                _healthbar = get_node(healthbar_node_path)
+                                max_health = int(stats.get_max_health())
+                                health = max_health
 				max_mana = stats.get_max_mana()
 				mana = max_mana
 				max_energy_shield = stats.get_max_energy_shield()
@@ -148,12 +148,13 @@ func _get_click_direction() -> Vector3:
 	return (target - global_transform.origin).normalized()
 
 func _physics_process(delta: float) -> void:
-		_process_inventory_input()
-		_process_attack(delta)
-		_process_movement(delta)
-		_process_regen(delta)
-		_update_target_hover()
-		_process_npc_interact()
+                _process_inventory_input()
+                _process_attack(delta)
+                _process_movement(delta)
+                _process_regen(delta)
+                _update_target_hover()
+                _process_npc_interact()
+                _update_camera()
 
 func _process_movement(delta: float) -> void:
 	var input_dir = Vector3.ZERO
@@ -206,23 +207,32 @@ func _process_inventory_input() -> void:
 			open_inventory()
 
 func open_inventory() -> void:
-	_inventory_open = true
-	if _inventory_ui:
-		_inventory_ui.open()
-	_shift_camera(true)
+        _inventory_open = true
+        if _inventory_ui:
+                _inventory_ui.open()
 
 func close_inventory() -> void:
-	_inventory_open = false
-	if _inventory_ui:
-		_inventory_ui.close()
-	_shift_camera(false)
+        _inventory_open = false
+        if _inventory_ui:
+                _inventory_ui.close()
 	
 func _process_skills_input() -> void:
-	if Input.is_action_just_pressed("toggle_skills_inv"):
-		if _skills_open:
-			close_skills()
-		else:
-			open_skills()
+        if Input.is_action_just_pressed("toggle_skills_inv"):
+                if _skills_open:
+                        close_skills()
+                else:
+                        open_skills()
+
+## Update the main camera so it smoothly follows the player. The camera
+## maintains the initial offset from the player and shifts to the side when the
+## inventory is open.
+func _update_camera() -> void:
+        if not _camera:
+                return
+        var target := global_position + _camera_offset
+        if _inventory_open:
+                target.x += inventory_camera_shift
+        _camera.global_position = _camera.global_position.lerp(target, 0.1)
 
 func close_skills() -> void:
 	_skills_open = false
@@ -233,15 +243,6 @@ func open_skills() -> void:
 	_skills_open = true
 	if _skills_ui:
 		_skills_ui.close()
-
-func _shift_camera(open: bool) -> void:
-	if not _camera:
-		return
-	var target := _camera_default_pos
-	if open:
-		target.x += inventory_camera_shift
-	var tween := create_tween()
-	tween.tween_property(_camera, "position", target, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func add_buff(buff: Buff) -> void:
 	if buff_manager:
