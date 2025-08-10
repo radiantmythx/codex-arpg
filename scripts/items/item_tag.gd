@@ -6,6 +6,9 @@ var target: Node3D
 var _camera: Camera3D
 var item: Item
 var move_step = 0.5
+# Additional offset applied when resolving overlap. This is recomputed every
+# frame so the tag can react to movement of its target.
+var _offset: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	_camera = get_viewport().get_camera_3d()
@@ -37,35 +40,48 @@ func _process(delta: float) -> void:
 		_camera = get_viewport().get_camera_3d()
 		if not _camera:
 			return
-	var pos := target.global_transform.origin
-	pos.y += vertical_offset
-	var screen_point: Vector2 = _camera.unproject_position(pos)
-	position = screen_point - size * 0.5
-	#visible = _camera.is_position_behind(pos) == false
-	visible = true
-	var layer := get_parent()
-	if layer and layer.has_method("request_stack_update"):
-			layer.request_stack_update()
-	await get_tree().process_frame
-	resolve_overlap()
-			
-func resolve_overlap():
-	var siblings = get_parent().get_children()
-	var moved = true
-	
-	# Keep trying to move until no collisions remain
-	while moved:
-		moved = false
-		for other in siblings:
-			if other == self:
-				continue
-			if _is_colliding_with(other):
-				position.y -= move_step
-				moved = true
-				break # Check again from start after moving
+        # Project the target's 3D position into 2D screen space.
+        var pos := target.global_transform.origin
+        pos.y += vertical_offset
+        var screen_point: Vector2 = _camera.unproject_position(pos)
 
-func _is_colliding_with(other: Control) -> bool:
-	# Check rectangle overlap in global space
-	var rect1 = get_global_rect()
-	var rect2 = other.get_global_rect()
-	return rect1.intersects(rect2)
+        # Base position of the tag before applying any overlap resolution.
+        var base_pos := screen_point - size * 0.5
+        position = base_pos
+
+        # Item tags are always visible; camera culling is handled elsewhere.
+        visible = true
+
+        # Adjust position if this tag overlaps any siblings.
+        resolve_overlap(base_pos)
+			
+## Resolve 2D rectangle collisions against other tags in the same layer.
+## A small vertical offset is applied until no overlaps remain.
+func resolve_overlap(base_pos: Vector2) -> void:
+        var parent := get_parent()
+        if not parent:
+                return
+
+        var siblings = parent.get_children()
+        var moved := true
+        var iterations := 0
+        _offset = Vector2.ZERO
+        var my_rect := Rect2(base_pos, size)
+
+        # Keep trying to move until no collisions remain or a safety cap is hit.
+        while moved and iterations < 16:
+                moved = false
+                for other in siblings:
+                        if other == self:
+                                continue
+                        var other_rect = Rect2(other.position, other.size)
+                        if my_rect.intersects(other_rect):
+                                var overlap := (my_rect.position.y + my_rect.size.y) - other_rect.position.y
+                                _offset.y -= overlap + move_step
+                                my_rect.position.y -= overlap + move_step
+                                moved = true
+                                break # restart loop after adjusting
+                iterations += 1
+
+        position = base_pos + _offset
+

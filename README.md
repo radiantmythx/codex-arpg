@@ -18,6 +18,12 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
 - **Q** – Activate the secondary skill (e.g., the Haste aura).
 
+## Camera
+The main camera now tracks the player character. It preserves the original
+offset configured in the scene and lerps toward the player each frame. When the
+inventory is open the camera shifts sideways by `inventory_camera_shift` so the
+UI does not obscure the action.
+
 ## Mana System
 The player now uses mana to power abilities. Basic attacks consume mana and the
 player regenerates 1 mana per second up to a base maximum of 50. Affixes and
@@ -110,6 +116,12 @@ already has a container for items.
 4. A `CanvasLayer` named `ItemTagLayer` will be created automatically at
    runtime. If you prefer to manage it manually, add a `CanvasLayer` with that
    name to your main scene and optionally customize its draw order.
+
+### Item Tag Collision Handling
+Item tags spawned in the world will now avoid overlapping each other. Every tag
+projects its 3D position into screen space and checks for rectangle intersections
+with its siblings. When a collision is detected the tag is nudged upward by a
+small increment until it no longer overlaps, keeping nearby labels legible.
 
 You can inspect or modify the contents of the player's inventory through the
 `inventory` property on `player.gd` or by attaching the `Inventory` script to
