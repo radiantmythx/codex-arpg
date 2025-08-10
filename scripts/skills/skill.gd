@@ -11,6 +11,9 @@ extends Resource
 @export var base_damage_low: float = 0.0
 @export var base_damage_high: float = 0.0
 @export var tags: Array[String] = []
+@export var animation_name: StringName = &""
+@export var attack_time: float = 0.0 ## Seconds into the animation when the attack is applied.
+@export var cancel_time: float = 0.0 ## Seconds into the animation when the remainder can be cancelled.
 
 func perform(user):
 	pass

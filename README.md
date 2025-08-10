@@ -18,6 +18,34 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
 - **Q** – Activate the secondary skill (e.g., the Haste aura).
 
+## Player Animations
+The `player.gd` script now drives an `AnimationTree` for directional movement and attack animations.
+
+### Setting up the AnimationTree
+1. In `scenes/Player.tscn` add your character model with an `AnimationPlayer` containing at minimum: `idle`, `run_left`, `run_right`, `run_up`, `run_down`, `slash` and `cast` animations.
+2. Add an `AnimationTree` node and assign the `AnimationPlayer` to it. Set **Tree Root** to `StateMachine` and enable the tree.
+3. Inside the state machine create a state named **move** using an `AnimationNodeBlendSpace2D`. Place the run animations at
+   - `(0, 0)` – idle
+   - `(-1, 0)` – run_left
+   - `(1, 0)` – run_right
+   - `(0, -1)` – run_up
+   - `(0, 1)` – run_down
+4. Create states named **slash** and **cast**. Wrap each animation in an `AnimationNodeTimeScale` so their speed can be changed at runtime.
+5. Add transitions from **move** to **slash** and **cast**, and back to **move** when the animations finish.
+6. In the Player node's inspector set **animation_tree_path** to the new `AnimationTree`.
+
+`player.gd` updates the blend position at `parameters/move/blend_position` using the player's movement relative to the cursor. Attack states are entered by name via the skill's `animation_name` property and their `TimeScale/scale` parameter is adjusted using the character's attack speed.
+
+### Slash timing
+Skill resources now expose `animation_name`, `attack_time` and `cancel_time`. For a slash attack set:
+```
+duration     – length of the slash animation at 1× speed
+attack_time  – when the hit should occur
+cancel_time  – when the remaining animation can be cancelled
+animation_name = "slash"
+```
+The player script accelerates or slows the animation based on `attack_speed` and triggers the skill at `attack_time`.
+
 ## Camera
 The main camera now tracks the player character. It preserves the original
 offset configured in the scene and lerps toward the player each frame. When the
