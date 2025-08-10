@@ -40,48 +40,47 @@ func _process(delta: float) -> void:
 		_camera = get_viewport().get_camera_3d()
 		if not _camera:
 			return
-        # Project the target's 3D position into 2D screen space.
-        var pos := target.global_transform.origin
-        pos.y += vertical_offset
-        var screen_point: Vector2 = _camera.unproject_position(pos)
+		# Project the target's 3D position into 2D screen space.
+		var pos := target.global_transform.origin
+		pos.y += vertical_offset
+		var screen_point: Vector2 = _camera.unproject_position(pos)
 
-        # Base position of the tag before applying any overlap resolution.
-        var base_pos := screen_point - size * 0.5
-        position = base_pos
+		# Base position of the tag before applying any overlap resolution.
+		var base_pos := screen_point - size * 0.5
+		position = base_pos
 
-        # Item tags are always visible; camera culling is handled elsewhere.
-        visible = true
+		# Item tags are always visible; camera culling is handled elsewhere.
+		visible = true
 
-        # Adjust position if this tag overlaps any siblings.
-        resolve_overlap(base_pos)
+		# Adjust position if this tag overlaps any siblings.
+		resolve_overlap(base_pos)
 			
 ## Resolve 2D rectangle collisions against other tags in the same layer.
 ## A small vertical offset is applied until no overlaps remain.
 func resolve_overlap(base_pos: Vector2) -> void:
-        var parent := get_parent()
-        if not parent:
-                return
+		var parent := get_parent()
+		if not parent:
+				return
 
-        var siblings = parent.get_children()
-        var moved := true
-        var iterations := 0
-        _offset = Vector2.ZERO
-        var my_rect := Rect2(base_pos, size)
+		var siblings = parent.get_children()
+		var moved := true
+		var iterations := 0
+		_offset = Vector2.ZERO
+		var my_rect := Rect2(base_pos, size)
 
-        # Keep trying to move until no collisions remain or a safety cap is hit.
-        while moved and iterations < 16:
-                moved = false
-                for other in siblings:
-                        if other == self:
-                                continue
-                        var other_rect = Rect2(other.position, other.size)
-                        if my_rect.intersects(other_rect):
-                                var overlap := (my_rect.position.y + my_rect.size.y) - other_rect.position.y
-                                _offset.y -= overlap + move_step
-                                my_rect.position.y -= overlap + move_step
-                                moved = true
-                                break # restart loop after adjusting
-                iterations += 1
+		# Keep trying to move until no collisions remain or a safety cap is hit.
+		while moved and iterations < 16:
+				moved = false
+				for other in siblings:
+						if other == self:
+								continue
+						var other_rect = Rect2(other.position, other.size)
+						if my_rect.intersects(other_rect):
+								var overlap = (my_rect.position.y + my_rect.size.y) - other_rect.position.y
+								_offset.y -= overlap + move_step
+								my_rect.position.y -= overlap + move_step
+								moved = true
+								break # restart loop after adjusting
+				iterations += 1
 
-        position = base_pos + _offset
-
+		position = base_pos + _offset

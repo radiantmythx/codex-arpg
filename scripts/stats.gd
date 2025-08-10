@@ -204,11 +204,11 @@ func compute_damage(extra_base: Dictionary, tags: Array[String] = []) -> Diction
 
 
 func get_move_speed() -> float:
-    return _compute_stat(base_move_speed, "move_speed")
+	return _compute_stat(base_move_speed, "move_speed")
 
 
 func get_attack_speed() -> float:
-    return _compute_stat(base_attack_speed, "attack_speed")
+	return _compute_stat(base_attack_speed, "attack_speed")
 
 func get_defense() -> float:
 	return _compute_stat(base_defense, "defense")

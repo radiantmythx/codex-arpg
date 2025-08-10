@@ -77,7 +77,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3042, 0, -4.28601)
 
 [node name="Enemy4" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.87853, 0, -2.84833)
-max_health = 1.0
 drop_table = [{
 "amount": 1,
 "chance": 1.0,
@@ -87,10 +86,10 @@ drop_table = [{
 "chance": 0.8,
 "item": ExtResource("4_85g3d")
 }]
+max_health = 1.0
 
 [node name="Enemy9" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.41684, 0, -6.09544)
-max_health = 1.0
 drop_table = [{
 "amount": 1,
 "chance": 1.0,
@@ -100,6 +99,7 @@ drop_table = [{
 "chance": 1.0,
 "item": ExtResource("4_tefeu")
 }]
+max_health = 1.0
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
 script = ExtResource("7_choun")
