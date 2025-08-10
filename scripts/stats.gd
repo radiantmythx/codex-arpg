@@ -45,6 +45,7 @@ var base_damage: Dictionary = {
 	DamageType.UNHOLY: 0.0,
 }
 var base_move_speed: float = 5.0
+var base_attack_speed: float = 1.0
 var base_defense: float = 0.0
 var base_max_health: float = 0.0
 var base_max_mana: float = 0.0
@@ -203,8 +204,11 @@ func compute_damage(extra_base: Dictionary, tags: Array[String] = []) -> Diction
 
 
 func get_move_speed() -> float:
-	return _compute_stat(base_move_speed, "move_speed")
+    return _compute_stat(base_move_speed, "move_speed")
 
+
+func get_attack_speed() -> float:
+    return _compute_stat(base_attack_speed, "attack_speed")
 
 func get_defense() -> float:
 	return _compute_stat(base_defense, "defense")

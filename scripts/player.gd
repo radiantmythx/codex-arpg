@@ -2,12 +2,14 @@ extends CharacterBody3D
 
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 5.0
+@export var base_attack_speed: float = 1.0
 @export var main_skill: Skill = preload("res://resources/skills/holy_smite.tres")
 @export var secondary_skill: Skill = preload("res://resources/skills/haste.tres")
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
 @export var skills_ui_path: NodePath
+@export var animation_tree_path: NodePath
 
 # UI control that displays the hovered enemy's health bar.
 @export var target_display_path: NodePath
@@ -50,6 +52,14 @@ var _current_move_multiplier: float = 1.0
 var buff_manager: BuffManager
 var reserved_mana: float = 0.0
 
+var _anim_tree: AnimationTree
+var _anim_state: AnimationNodeStateMachinePlayback
+var _attack_progress: float = 0.0
+var _attack_execute_time: float = 0.0
+var _attack_cancel_time: float = 0.0
+var _attack_performed: bool = false
+var _last_local_input: Vector3 = Vector3.ZERO
+
 var energy_shield: float = 0.0
 var max_energy_shield: float = 0.0
 var _es_recharge_timer: float = 0.0
@@ -80,7 +90,8 @@ func _ready() -> void:
 	stats.base_max_health = base_max_health
 	stats.base_max_mana = base_max_mana
 	stats.base_health_regen = base_health_regen
-	stats.base_mana_regen = base_mana_regen
+        stats.base_mana_regen = base_mana_regen
+        stats.base_attack_speed = base_attack_speed
 
 	equipment = EquipmentManager.new()
 	equipment.stats = stats
@@ -95,7 +106,12 @@ func _ready() -> void:
 	add_child(inventory)
 	buff_manager = BuffManager.new()
 	buff_manager.stats = stats
-	add_child(buff_manager)
+        add_child(buff_manager)
+        if animation_tree_path != NodePath():
+                _anim_tree = get_node_or_null(animation_tree_path)
+                if _anim_tree:
+                        _anim_tree.active = true
+                        _anim_state = _anim_tree.get("parameters/playback")
 	if inventory_ui_path != NodePath():
 		_inventory_ui = get_node(inventory_ui_path)
 		if _inventory_ui:
@@ -151,53 +167,94 @@ func _physics_process(delta: float) -> void:
                 _process_inventory_input()
                 _process_attack(delta)
                 _process_movement(delta)
+                _update_animation()
                 _process_regen(delta)
                 _update_target_hover()
                 _process_npc_interact()
                 _update_camera()
 
 func _process_movement(delta: float) -> void:
-	var input_dir = Vector3.ZERO
-	if Input.is_action_pressed("move_forward"):
-		input_dir.z -= 1
-	if Input.is_action_pressed("move_back"):
-		input_dir.z += 1
-	if Input.is_action_pressed("move_left"):
-		input_dir.x -= 1
-	if Input.is_action_pressed("move_right"):
-		input_dir.x += 1
-	input_dir = input_dir.normalized()
+        var input_dir = Vector3.ZERO
+        if Input.is_action_pressed("move_forward"):
+                input_dir.z -= 1
+        if Input.is_action_pressed("move_back"):
+                input_dir.z += 1
+        if Input.is_action_pressed("move_left"):
+                input_dir.x -= 1
+        if Input.is_action_pressed("move_right"):
+                input_dir.x += 1
+        input_dir = input_dir.normalized()
+        _last_local_input = input_dir
 
-	if input_dir != Vector3.ZERO:
-		var target_rot = Transform3D().looking_at(input_dir, Vector3.UP).basis.get_euler().y
-		rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
-		var speed = stats.get_move_speed()
-		if _attacking_timer > 0.0:
-			speed *= _current_move_multiplier
-		velocity = input_dir * speed
-	else:
-		velocity = Vector3()
-	move_and_slide()
+        var look_dir = _get_click_direction()
+        var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
+        rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
+
+        if input_dir != Vector3.ZERO:
+                var world_dir = (global_transform.basis * input_dir)
+                world_dir.y = 0
+                world_dir = world_dir.normalized()
+                var speed = stats.get_move_speed()
+                if _attacking_timer > 0.0:
+                        speed *= _current_move_multiplier
+                velocity.x = world_dir.x * speed
+                velocity.z = world_dir.z * speed
+        else:
+                velocity.x = 0
+                velocity.z = 0
+        move_and_slide()
 
 func _process_attack(delta: float) -> void:
-	if _attack_timer > 0.0:
-		_attack_timer -= delta
-	if _attacking_timer > 0.0:
-		_attacking_timer -= delta
-	if _secondary_cooldown > 0.0:
-		_secondary_cooldown -= delta
-	if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill:
-		if mana >= main_skill.mana_cost:
-			_attack_timer = main_skill.cooldown
-			_attacking_timer = main_skill.duration
-			_current_move_multiplier = main_skill.move_multiplier
-			mana -= main_skill.mana_cost
-			main_skill.perform(self)
-	if secondary_skill and Input.is_action_just_pressed("skill_1") and _secondary_cooldown <= 0.0:
-		if mana >= secondary_skill.mana_cost:
-			_secondary_cooldown = secondary_skill.cooldown
-			mana -= secondary_skill.mana_cost
-			secondary_skill.perform(self)
+        if _attack_timer > 0.0:
+                _attack_timer -= delta
+        if _secondary_cooldown > 0.0:
+                _secondary_cooldown -= delta
+        if _attacking_timer > 0.0:
+                _attacking_timer -= delta
+                _attack_progress += delta
+                if not _attack_performed and _attack_progress >= _attack_execute_time:
+                        if main_skill:
+                                main_skill.perform(self)
+                        _attack_performed = true
+                if _attack_cancel_time > 0.0 and _attack_progress >= _attack_cancel_time:
+                        _attacking_timer = 0.0
+                if _attacking_timer <= 0.0 and _anim_state:
+                        _anim_state.travel("move")
+        if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill and _attacking_timer <= 0.0:
+                if mana >= main_skill.mana_cost:
+                        var speed = stats.get_attack_speed()
+                        _attack_timer = main_skill.cooldown / max(speed, 0.001)
+                        _attacking_timer = main_skill.duration / max(speed, 0.001)
+                        _attack_progress = 0.0
+                        _attack_execute_time = main_skill.attack_time / max(speed, 0.001)
+                        _attack_cancel_time = main_skill.cancel_time / max(speed, 0.001)
+                        _attack_performed = false
+                        _current_move_multiplier = main_skill.move_multiplier
+                        mana -= main_skill.mana_cost
+                        if _anim_state and main_skill.animation_name != &"":
+                                _anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
+                                _anim_state.travel(String(main_skill.animation_name))
+                        else:
+                                main_skill.perform(self)
+                                _attack_performed = true
+                                _attacking_timer = 0.0
+        if secondary_skill and Input.is_action_just_pressed("skill_1") and _secondary_cooldown <= 0.0:
+                if mana >= secondary_skill.mana_cost:
+                        _secondary_cooldown = secondary_skill.cooldown
+                        mana -= secondary_skill.mana_cost
+                        secondary_skill.perform(self)
+
+func _update_animation() -> void:
+        if not _anim_tree or not _anim_state:
+                return
+        if _attacking_timer > 0.0:
+                return
+        if _last_local_input != Vector3.ZERO:
+                _anim_state.travel("move")
+                _anim_tree.set("parameters/move/blend_position", Vector2(_last_local_input.x, _last_local_input.z))
+        else:
+                _anim_state.travel("move")
+                _anim_tree.set("parameters/move/blend_position", Vector2.ZERO)
 
 func _process_inventory_input() -> void:
 	if Input.is_action_just_pressed("toggle_inventory"):
