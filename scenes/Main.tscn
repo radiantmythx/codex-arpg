@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=12 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
 [ext_resource type="Resource" uid="uid://cfg5dy3eit87i" path="res://resources/runes/item_time_rune.tres" id="4_tefeu"]
+[ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0wfyh"]
@@ -78,6 +79,7 @@ drop_table = [{
 }]
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
+script = ExtResource("7_choun")
 
 [node name="InventoryUI" parent="." instance=ExtResource("4_jyhfs")]
 camera_path = NodePath("../Camera3D")

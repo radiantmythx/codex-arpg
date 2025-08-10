@@ -16,13 +16,13 @@ func _ready() -> void:
 	connect("mouse_exited", _on_mouse_exited)
 	connect("input_event", _on_input_event)
 
-        var layer: ItemTagLayer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
+	var layer: ItemTagLayer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
 
-        _tag = ItemTag.new()
-        _tag.target = self
-        _tag.set_item(item)
-        layer.add_child(_tag)
-        _tag.connect("pressed", Callable(self, "_collect"))
+	_tag = ItemTag.new()
+	_tag.target = self
+	_tag.set_item(item)
+	layer.add_child(_tag)
+	_tag.connect("pressed", Callable(self, "_collect"))
 
 
 func _on_body_entered(body: Node) -> void:

@@ -11,22 +11,22 @@ func _ready() -> void:
 	focus_mode = FOCUS_NONE
 	size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	size_flags_vertical = Control.SIZE_SHRINK_CENTER
-        clip_text = false
+	clip_text = false
 
 func set_item(it: Item) -> void:
-        item = it
-        text = it.item_name
-        var tip := "%s\n%s" % [it.item_name, it.description]
-        var aff_text := it.get_affix_text()
-        if aff_text != "":
-                tip += "\n" + aff_text
-        tooltip_text = tip
-        _apply_style()
+		item = it
+		text = it.item_name
+		var tip := "%s\n%s" % [it.item_name, it.description]
+		var aff_text := it.get_affix_text()
+		if aff_text != "":
+				tip += "\n" + aff_text
+		tooltip_text = tip
+		_apply_style()
 
 func _apply_style() -> void:
-        var layer := get_parent()
-        if layer and layer.has_method("apply_style"):
-                layer.apply_style(self)
+		var layer := get_parent()
+		if layer and layer.has_method("apply_style"):
+				layer.apply_style(self)
 
 func _process(delta: float) -> void:
 	if not target or not is_instance_valid(target):
@@ -38,10 +38,10 @@ func _process(delta: float) -> void:
 			return
 	var pos := target.global_transform.origin
 	pos.y += vertical_offset
-        var screen_point: Vector2 = _camera.unproject_position(pos)
-        position = screen_point - size * 0.5
-        #visible = _camera.is_position_behind(pos) == false
-        visible = true
-        var layer := get_parent()
-        if layer and layer.has_method("request_stack_update"):
-                layer.request_stack_update()
+	var screen_point: Vector2 = _camera.unproject_position(pos)
+	position = screen_point - size * 0.5
+	#visible = _camera.is_position_behind(pos) == false
+	visible = true
+	var layer := get_parent()
+	if layer and layer.has_method("request_stack_update"):
+			layer.request_stack_update()
