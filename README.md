@@ -17,6 +17,7 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 - **WASD** – Move the player.
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
 - **Q** – Activate the secondary skill (e.g., the Haste aura).
+- **Dodge action** – Perform a directional dodge roll with a short invincibility window. Configure the input mapping in Project Settings.
 
 ## Player Animations
 The `player.gd` script now drives an `AnimationTree` for directional movement and attack animations.
@@ -45,6 +46,16 @@ cancel_time  – when the remaining animation can be cancelled
 animation_name = "slash"
 ```
 The player script accelerates or slows the animation based on `attack_speed` and triggers the skill at `attack_time`.
+
+### Dodge Roll
+The player can perform a quick dodge roll to evade danger.
+
+1. In **Project Settings → Input Map** add an action named `dodge` and bind a key or gamepad button.
+2. Create a `roll` animation on the player's `AnimationPlayer`.
+3. In the `AnimationTree` state machine add a state called `roll` that plays this animation and connect it from `move` back to `move`.
+4. Tune the Player node's exported `dodge_speed`, `dodge_duration`, `dodge_cooldown` and `dodge_invincibility_time` values as desired.
+
+During a roll the player moves in their last movement direction, passes through enemies but still collides with the environment and ignores incoming damage for a brief window.
 
 ## Camera
 The main camera now tracks the player character. It preserves the original
