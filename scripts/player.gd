@@ -186,50 +186,50 @@ func _physics_process(delta: float) -> void:
 				_update_camera()
 
 func _process_movement(delta: float) -> void:
-    if _dodge_cooldown_timer > 0.0:
-        _dodge_cooldown_timer -= delta
-    if _dodge_timer > 0.0:
-        _dodge_timer -= delta
-        velocity = _dodge_direction * dodge_speed
-        if _dodge_timer <= 0.0:
-            _is_dodging = false
-            _remove_dodge_exceptions()
-            if _anim_state:
-                _anim_state.travel("move")
-    else:
-        var input_dir = Vector3.ZERO
-        if Input.is_action_pressed("move_forward"):
-            input_dir.z -= 1
-        if Input.is_action_pressed("move_back"):
-            input_dir.z += 1
-        if Input.is_action_pressed("move_left"):
-            input_dir.x -= 1
-        if Input.is_action_pressed("move_right"):
-            input_dir.x += 1
-        input_dir = input_dir.normalized()
-        _last_local_input = input_dir
-        if input_dir != Vector3.ZERO:
-            _last_move_input = input_dir
-        var look_dir = _get_click_direction()
-        var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
-        if(_attacking_timer <= 0.0):
-            rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
-        var speed = stats.get_move_speed()
-        if _attacking_timer > 0.0:
-            speed *= _current_move_multiplier
-        velocity.x = input_dir.x * speed
-        velocity.z = input_dir.z * speed
-        if Input.is_action_just_pressed("dodge") and _dodge_cooldown_timer <= 0.0 and not _is_dodging and _attacking_timer <= 0.0:
-            _start_dodge()
-    if _invincible_timer > 0.0:
-        _invincible_timer -= delta
-    move_and_slide()
+	if _dodge_cooldown_timer > 0.0:
+		_dodge_cooldown_timer -= delta
+	if _dodge_timer > 0.0:
+		_dodge_timer -= delta
+		velocity = _dodge_direction * dodge_speed
+		if _dodge_timer <= 0.0:
+			_is_dodging = false
+			_remove_dodge_exceptions()
+			if _anim_state:
+				_anim_state.travel("move")
+	else:
+		var input_dir = Vector3.ZERO
+		if Input.is_action_pressed("move_forward"):
+			input_dir.z -= 1
+		if Input.is_action_pressed("move_back"):
+			input_dir.z += 1
+		if Input.is_action_pressed("move_left"):
+			input_dir.x -= 1
+		if Input.is_action_pressed("move_right"):
+			input_dir.x += 1
+		input_dir = input_dir.normalized()
+		_last_local_input = input_dir
+		if input_dir != Vector3.ZERO:
+			_last_move_input = input_dir
+		var look_dir = _get_click_direction()
+		var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
+		if(_attacking_timer <= 0.0):
+			rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
+		var speed = stats.get_move_speed()
+		if _attacking_timer > 0.0:
+			speed *= _current_move_multiplier
+		velocity.x = input_dir.x * speed
+		velocity.z = input_dir.z * speed
+		if Input.is_action_just_pressed("dodge") and _dodge_cooldown_timer <= 0.0 and not _is_dodging and _attacking_timer <= 0.0:
+			_start_dodge()
+	if _invincible_timer > 0.0:
+		_invincible_timer -= delta
+	move_and_slide()
 
 func _process_attack(delta: float) -> void:
-                if _is_dodging:
-                                return
-                if _attack_timer > 0.0:
-                                _attack_timer -= delta
+		if _is_dodging:
+						return
+		if _attack_timer > 0.0:
+						_attack_timer -= delta
 		if _secondary_cooldown > 0.0:
 				_secondary_cooldown -= delta
 		if _attacking_timer > 0.0:
@@ -272,7 +272,7 @@ func _process_attack(delta: float) -> void:
 func _update_animation() -> void:
 		if not _anim_tree or not _anim_state:
 				return
-		if _attacking_timer > 0.0:
+		if _attacking_timer > 0.0 or _dodge_timer > 0.0:
 				return
 		if _last_local_input != Vector3.ZERO:
 				_anim_state.travel("move")
@@ -362,11 +362,11 @@ func add_item(item: Item, amount: int = 1) -> void:
 		inventory.add_item(item, amount)
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-        if _invincible_timer > 0.0:
-                return
-        if damage_type == Stats.DamageType.PHYSICAL:
-                if randf() < stats.get_evasion() / 100.0:
-                        return
+	if _invincible_timer > 0.0:
+			return
+	if damage_type == Stats.DamageType.PHYSICAL:
+		if randf() < stats.get_evasion() / 100.0:
+				return
 		amount = max(0.0, amount - stats.get_armor())
 	var resist = stats.get_resistance(damage_type)
 	amount = amount * (1.0 - resist / 100.0)
@@ -399,38 +399,38 @@ func _process_regen(delta: float) -> void:
 		_healthbar.set_mana(mana, max_mana)
 
 func die():
-                queue_free()
+				queue_free()
 
 ## Begin a dodge roll using the last movement direction.
 func _start_dodge() -> void:
-        _is_dodging = true
-        _dodge_timer = dodge_duration
-        _dodge_cooldown_timer = dodge_cooldown
-        _invincible_timer = dodge_invincibility_time
-        var dir = _last_move_input
-        if dir == Vector3.ZERO:
-                dir = Vector3.FORWARD
-        _dodge_direction = (global_transform.basis * dir)
-        _dodge_direction.y = 0.0
-        _dodge_direction = _dodge_direction.normalized()
-        _add_dodge_exceptions()
-        if _anim_state:
-                _anim_state.travel("roll")
+		_is_dodging = true
+		_dodge_timer = dodge_duration
+		_dodge_cooldown_timer = dodge_cooldown
+		_invincible_timer = dodge_invincibility_time
+		var dir = _last_move_input
+		if dir == Vector3.ZERO:
+				dir = Vector3.FORWARD
+		_dodge_direction = (global_transform.basis * dir)
+		_dodge_direction.y = 0.0
+		_dodge_direction = _dodge_direction.normalized()
+		_add_dodge_exceptions()
+		if _anim_state:
+				_anim_state.travel("roll")
 
 ## Ignore collisions with enemies during the roll.
 func _add_dodge_exceptions() -> void:
-        _dodge_exceptions.clear()
-        for e in get_tree().get_nodes_in_group("enemy"):
-                if e is CollisionObject3D:
-                        add_collision_exception_with(e)
-                        _dodge_exceptions.append(e)
+		_dodge_exceptions.clear()
+		for e in get_tree().get_nodes_in_group("enemy"):
+				if e is CollisionObject3D:
+						add_collision_exception_with(e)
+						_dodge_exceptions.append(e)
 
 ## Restore enemy collisions after rolling.
 func _remove_dodge_exceptions() -> void:
-        for e in _dodge_exceptions:
-                if is_instance_valid(e):
-                        remove_collision_exception_with(e)
-        _dodge_exceptions.clear()
+		for e in _dodge_exceptions:
+				if is_instance_valid(e):
+						remove_collision_exception_with(e)
+		_dodge_exceptions.clear()
 
 func _update_target_hover() -> void:
 		"""Cast a ray from the camera to the mouse and update the target display."""
