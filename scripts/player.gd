@@ -251,7 +251,13 @@ func _update_animation() -> void:
 				return
 		if _last_local_input != Vector3.ZERO:
 				_anim_state.travel("move")
-				_anim_tree.set("parameters/move/blend_position", Vector2(_last_local_input.x, _last_local_input.z))
+				var world_vel = Vector3(velocity.x, 0, velocity.z)
+				var basis = global_transform.basis.orthonormalized()
+				var right = basis.x
+				var forward = -basis.z
+				var local_x = world_vel.dot(right)
+				var local_y = world_vel.dot(forward)
+				_anim_tree.set("parameters/move/blend_position", Vector2(local_x, local_y))
 		else:
 				_anim_state.travel("move")
 				_anim_tree.set("parameters/move/blend_position", Vector2.ZERO)

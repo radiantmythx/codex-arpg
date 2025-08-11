@@ -16,3 +16,6 @@ damage_type = 1
 base_damage_low = 0.0
 base_damage_high = 0.0
 tags = Array[String](["Spell", "Projectile", "AoE"])
+animation_name = &""
+attack_time = 0.0
+cancel_time = 0.0

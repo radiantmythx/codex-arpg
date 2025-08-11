@@ -18,6 +18,9 @@ damage_type = 0
 base_damage_low = 0.0
 base_damage_high = 0.0
 tags = Array[String]([])
+animation_name = &""
+attack_time = 0.0
+cancel_time = 0.0
 metadata/_custom_type_script = "uid://cikfgr3vo4xex"
 
 [sub_resource type="Resource" id="Resource_ou076"]
@@ -32,6 +35,9 @@ damage_type = 0
 base_damage_low = 0.0
 base_damage_high = 0.0
 tags = Array[String]([])
+animation_name = &""
+attack_time = 0.0
+cancel_time = 0.0
 metadata/_custom_type_script = "uid://b2wxpuu1hqhiq"
 
 [resource]
@@ -46,4 +52,7 @@ damage_type = 0
 base_damage_low = 0.0
 base_damage_high = 0.0
 tags = Array[String]([])
+animation_name = &""
+attack_time = 0.0
+cancel_time = 0.0
 metadata/_custom_type_script = "uid://d0vpy7l0kdlsx"
