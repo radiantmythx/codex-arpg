@@ -5,7 +5,7 @@ var target: Node3D
 @export var vertical_offset: float = 1.5
 var _camera: Camera3D
 var item: Item
-var move_step = 0.5
+var move_step = 2.5
 # Additional offset applied when resolving overlap. This is recomputed every
 # frame so the tag can react to movement of its target.
 var _offset: Vector2 = Vector2.ZERO
@@ -41,19 +41,19 @@ func _process(delta: float) -> void:
 		if not _camera:
 			return
 		# Project the target's 3D position into 2D screen space.
-		var pos := target.global_transform.origin
-		pos.y += vertical_offset
-		var screen_point: Vector2 = _camera.unproject_position(pos)
+	var pos := target.global_transform.origin
+	pos.y += vertical_offset
+	var screen_point: Vector2 = _camera.unproject_position(pos)
 
-		# Base position of the tag before applying any overlap resolution.
-		var base_pos := screen_point - size * 0.5
-		position = base_pos
+	# Base position of the tag before applying any overlap resolution.
+	var base_pos := screen_point - size * 0.5
+	position = base_pos
 
-		# Item tags are always visible; camera culling is handled elsewhere.
-		visible = true
+	# Item tags are always visible; camera culling is handled elsewhere.
+	visible = true
 
-		# Adjust position if this tag overlaps any siblings.
-		resolve_overlap(base_pos)
+	# Adjust position if this tag overlaps any siblings.
+	resolve_overlap(base_pos)
 			
 ## Resolve 2D rectangle collisions against other tags in the same layer.
 ## A small vertical offset is applied until no overlaps remain.

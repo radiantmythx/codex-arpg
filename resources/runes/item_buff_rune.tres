@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_b6aeh"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="2_qyiev"]
-[ext_resource type="Texture2D" uid="uid://croody04lgw3s" path="res://images/buff_rune.png" id="3_qyiev"]
+[ext_resource type="Texture2D" uid="uid://croody04lgw3s" path="res://images/items/runes/buff_rune.png" id="3_qyiev"]
 [ext_resource type="Script" uid="uid://b8jggh7fjjojw" path="res://scripts/items/runes/rune.gd" id="3_s8uqw"]
 
 [resource]

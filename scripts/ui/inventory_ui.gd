@@ -53,10 +53,10 @@ func _ready() -> void:
 					rslot.connect("pressed", Callable(self, "_on_rune_slot_pressed").bind(rslot))
 				if rslot.has_signal("right_clicked"):
 					rslot.connect("right_clicked", Callable(self, "_on_rune_slot_right_clicked").bind(rslot))
-	if camera_path != NodePath():
-		_camera = get_node(camera_path)
-		if _camera:
-			_camera_base_pos = _camera.position
+#	if camera_path != NodePath():
+#		_camera = get_node(camera_path)
+#		if _camera:
+#			_camera_base_pos = _camera.position
 	_cursor_icon = TextureRect.new()
 	_cursor_icon.visible = false
 	_cursor_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -157,6 +157,7 @@ func _on_slot_pressed(index: int) -> void:
 	if not _inventory:
 		return
 	if _cursor_item:
+		print("cursor item")
 		var leftover = _inventory.place_item(index, _cursor_item, _cursor_amount)
 		if leftover:
 			_cursor_item = leftover["item"]

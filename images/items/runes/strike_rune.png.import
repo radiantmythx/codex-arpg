@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bdodosrxxawob"
-path="res://.godot/imported/strike_rune.png-38cb928676f6d4e2b3663419722a5b51.ctex"
+path="res://.godot/imported/strike_rune.png-c96244f99f2d511dbf468a660362dcf8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/strike_rune.png"
-dest_files=["res://.godot/imported/strike_rune.png-38cb928676f6d4e2b3663419722a5b51.ctex"]
+source_file="res://images/items/runes/strike_rune.png"
+dest_files=["res://.godot/imported/strike_rune.png-c96244f99f2d511dbf468a660362dcf8.ctex"]
 
 [params]
 

@@ -10,7 +10,7 @@
 [ext_resource type="Resource" path="res://resources/affixes/physical_damage_spell_add.tres" id="6_jtust"]
 [ext_resource type="Resource" path="res://resources/affixes/soul_add.tres" id="7_5k17p"]
 [ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="8_vacb0"]
-[ext_resource type="Texture2D" uid="uid://d4kpwd06p66wr" path="res://images/area_rune.png" id="10_k7inm"]
+[ext_resource type="Texture2D" uid="uid://d4kpwd06p66wr" path="res://images/items/runes/area_rune.png" id="10_k7inm"]
 
 [resource]
 script = ExtResource("3_l3hpt")

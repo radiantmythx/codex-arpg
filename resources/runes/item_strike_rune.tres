@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_kksce"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="2_bdg65"]
 [ext_resource type="Script" uid="uid://b8jggh7fjjojw" path="res://scripts/items/runes/rune.gd" id="3_jxr7o"]
-[ext_resource type="Texture2D" uid="uid://bdodosrxxawob" path="res://images/strike_rune.png" id="11_q3hmd"]
+[ext_resource type="Texture2D" uid="uid://bdodosrxxawob" path="res://images/items/runes/strike_rune.png" id="11_q3hmd"]
 
 [resource]
 script = ExtResource("3_jxr7o")

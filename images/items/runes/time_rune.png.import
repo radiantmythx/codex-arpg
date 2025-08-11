@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvdnso1s8y5r7"
-path="res://.godot/imported/test_item.png-2b3c5c182aae14c2a6175db763dafdba.ctex"
+uid="uid://dni7dqt4s43vx"
+path="res://.godot/imported/time_rune.png-cdd0ab3c974588e8b58708ea28d934fd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/test_item.png"
-dest_files=["res://.godot/imported/test_item.png-2b3c5c182aae14c2a6175db763dafdba.ctex"]
+source_file="res://images/items/runes/time_rune.png"
+dest_files=["res://.godot/imported/time_rune.png-cdd0ab3c974588e8b58708ea28d934fd.ctex"]
 
 [params]
 

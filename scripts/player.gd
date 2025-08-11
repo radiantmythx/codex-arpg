@@ -29,7 +29,7 @@ extends CharacterBody3D
 @export var base_mind: int = 0
 @export var base_soul: int = 0
 @export var base_luck: int = 0
-@export var base_max_health: float = 3.0
+@export var base_max_health: float = 50.0
 @export var base_max_mana: float = 50.0
 @export var base_health_regen: float = 0.0
 @export var base_mana_regen: float = 1.0
@@ -188,7 +188,8 @@ func _process_movement(delta: float) -> void:
 
 		var look_dir = _get_click_direction()
 		var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
-		rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
+		if(_attacking_timer <= 0.0):
+			rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
 
 		if input_dir != Vector3.ZERO:
 				var world_dir = (global_transform.basis * input_dir)
@@ -232,7 +233,9 @@ func _process_attack(delta: float) -> void:
 						_current_move_multiplier = main_skill.move_multiplier
 						mana -= main_skill.mana_cost
 						if _anim_state and main_skill.animation_name != &"":
+								print(main_skill.animation_name)
 								_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
+								print(String(main_skill.animation_name))
 								_anim_state.travel(String(main_skill.animation_name))
 						else:
 								main_skill.perform(self)

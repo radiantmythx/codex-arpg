@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ge8to51ucge8"
-path="res://.godot/imported/sword_of_based.png-7b96cd3b1a7d4902c22756e885e8c268.ctex"
+uid="uid://nuj4h5wgpw2f"
+path="res://.godot/imported/chaos_orb.png-d5f74d98cee648b13068713184f4709a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/sword_of_based.png"
-dest_files=["res://.godot/imported/sword_of_based.png-7b96cd3b1a7d4902c22756e885e8c268.ctex"]
+source_file="res://images/items/currency/chaos_orb.png"
+dest_files=["res://.godot/imported/chaos_orb.png-d5f74d98cee648b13068713184f4709a.ctex"]
 
 [params]
 

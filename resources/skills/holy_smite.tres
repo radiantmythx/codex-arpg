@@ -1,14 +1,22 @@
-[gd_resource type="Resource" script_class="HolySmiteSkill" load_steps=2 format=3 uid="uid://dmwf23aptr5pd"]
+[gd_resource type="Resource" script_class="HolySmiteSkill" load_steps=3 format=3 uid="uid://dmwf23aptr5pd"]
 
-[ext_resource type="Script" path="res://scripts/skills/holy_smite_skill.gd" id="1"]
+[ext_resource type="Script" uid="uid://puo8dhupuxl5" path="res://scripts/skills/holy_smite_skill.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="1_kir4m"]
 
 [resource]
 script = ExtResource("1")
 radius = 3.0
+on_hit_effect = ExtResource("1_kir4m")
+explosion_effect = ExtResource("1_kir4m")
 name = "Holy Smite"
 mana_cost = 8.0
-cooldown = 2.0
-duration = 0.0
-move_multiplier = 1.0
+cooldown = 0.2
+duration = 2.0
+move_multiplier = 0.3
 damage_type = 4
+base_damage_low = 0.0
+base_damage_high = 0.0
 tags = Array[String](["Spell", "AoE"])
+animation_name = &"strike"
+attack_time = 1.1
+cancel_time = 1.4
