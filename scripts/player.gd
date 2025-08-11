@@ -209,6 +209,7 @@ func _process_movement(delta: float) -> void:
 		input_dir = input_dir.normalized()
 		_last_local_input = input_dir
 		if input_dir != Vector3.ZERO:
+			print(_last_move_input)
 			_last_move_input = input_dir
 		var look_dir = _get_click_direction()
 		var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
@@ -411,6 +412,7 @@ func _start_dodge() -> void:
 		if dir == Vector3.ZERO:
 				dir = Vector3.FORWARD
 		_dodge_direction = (global_transform.basis * dir)
+		_dodge_direction = dir
 		_dodge_direction.y = 0.0
 		_dodge_direction = _dodge_direction.normalized()
 		_add_dodge_exceptions()
