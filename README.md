@@ -156,6 +156,39 @@ already has a container for items.
    runtime. If you prefer to manage it manually, add a `CanvasLayer` with that
    name to your main scene and optionally customize its draw order.
 
+### Equipping 3D Models
+Items can display 3D meshes on the player when equipped.  Each `Item` resource
+exposes two new properties:
+
+- **model** – `PackedScene` containing the mesh or mesh collection.
+- **equip_transform** – orientation and offset applied to the model when
+  attached.
+
+#### Importing Weapon or Offhand Models
+1. In Blender, orient the weapon so it points forward relative to the player's
+   hand and export it as a `.glb`.
+2. Drag the file into Godot. The importer will generate a `*.glb` scene.
+3. Create an `Item` resource and assign the imported scene to its `model`
+   property.
+4. Set `equip_slot` to `weapon` or `offhand`.
+5. Adjust `equip_transform` by rotating or translating the preview so the model
+   lines up with the hand.  The values are applied relative to the hand bone at
+   runtime (`mixamorig_RightHand` for weapons and `mixamorig_LeftHand` for
+   offhands).
+
+#### Importing Armor Pieces
+1. Author the armour in Blender using the same skeleton as the player and
+   export to `.glb` ensuring bone names are preserved.
+2. Import the file into Godot and save the resulting scene.
+3. Create an `Item` resource with `equip_slot` set to `armor` and assign the
+   scene to `model`.
+4. Optionally tweak `equip_transform` if the mesh needs an offset.
+
+When the player equips an item the scene is instanced and attached to the
+appropriate bone or the root skeleton.  All `MeshInstance3D` nodes inside the
+scene are re-targeted to the player's skeleton so animations drive the new
+mesh.
+
 ### Item Tag Collision Handling
 Item tags spawned in the world will now avoid overlapping each other. Every tag
 projects its 3D position into screen space and checks for rectangle intersections
