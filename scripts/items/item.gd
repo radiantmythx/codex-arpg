@@ -25,6 +25,18 @@ const MAX_AFFIXES := 6
 # Affixes currently attached to this item.
 @export var affixes: Array[Affix] = []
 
+# Optional 3D model representing the item when equipped.  The scene should
+# contain a `MeshInstance3D` (for armor it may contain multiple meshes) and is
+# instanced and attached to the player when this item is equipped. Leave null
+# for items that do not have a visual representation.
+@export var model: PackedScene
+
+# Transform applied to `model` when attached to the player.  This allows the
+# orientation and offset to be tweaked in the inspector so the item aligns
+# correctly with the hand or body.  The transform is relative to the attach
+# point (e.g. the character's hand bone).
+@export var equip_transform: Transform3D = Transform3D.IDENTITY
+
 
 func reroll_affixes() -> void:
 		# Clears existing affixes and rolls new ones from `affix_pool`.

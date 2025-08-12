@@ -11,6 +11,10 @@ extends CharacterBody3D
 @export var skills_ui_path: NodePath
 @export var animation_tree_path: NodePath
 
+# Skeleton containing the player's bones.  Equipment models are attached to
+# this skeleton so they follow animations.
+@export var skeleton_path: NodePath = NodePath("Armature/Skeleton3D")
+
 # UI control that displays the hovered enemy's health bar.
 @export var target_display_path: NodePath
 @export var dialogue_ui_path: NodePath ## NodePath to the DialogueBox control.
@@ -84,6 +88,7 @@ var max_mana:float = 50.0
 var stats: Stats
 var equipment: EquipmentManager
 var rune_manager: RuneManager
+var _equip_visuals: EquipmentVisualManager
 
 func _ready() -> void:
 	stats = Stats.new()
@@ -105,10 +110,17 @@ func _ready() -> void:
 	stats.base_mana_regen = base_mana_regen
 	stats.base_attack_speed = base_attack_speed
 
-	equipment = EquipmentManager.new()
-	equipment.stats = stats
-	equipment.set_slots(["weapon", "armor"])
-	add_child(equipment)
+        equipment = EquipmentManager.new()
+        equipment.stats = stats
+        equipment.set_slots(["weapon", "offhand", "armor"])
+        add_child(equipment)
+
+        # Visual manager displays meshes for equipped items.
+        var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
+        _equip_visuals = EquipmentVisualManager.new()
+        _equip_visuals.skeleton = skeleton
+        _equip_visuals.equipment = equipment
+        add_child(_equip_visuals)
 
 	rune_manager = RuneManager.new()
 	add_child(rune_manager)
