@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ceougyya8gbvc"
-path="res://.godot/imported/PlateLegs.glb-b0515c779f7669d5e4637dd2347e93e1.scn"
+uid="uid://bsb2cgc3dtamt"
+path="res://.godot/imported/shield.glb-ffba0ebcaba714be60365d58eb420a69.scn"
 
 [deps]
 
-source_file="res://models/PlateLegs.glb"
-dest_files=["res://.godot/imported/PlateLegs.glb-b0515c779f7669d5e4637dd2347e93e1.scn"]
+source_file="res://models/imports/shield.glb"
+dest_files=["res://.godot/imported/shield.glb-ffba0ebcaba714be60365d58eb420a69.scn"]
 
 [params]
 

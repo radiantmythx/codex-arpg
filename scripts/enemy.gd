@@ -201,19 +201,19 @@ func die() -> void:
 	queue_free()
 
 func _drop_loot() -> void:
-        var drop_scene := preload("res://scenes/item_drop.tscn")
-        var combined: Array = []
-        combined.append_array(drop_table)
-        for table in drop_tables:
-                if table:
-                        combined.append_array(table.entries)
-        for entry in combined:
-                if randf() <= float(entry.get("chance", 1.0)):
-                        var drop := drop_scene.instantiate()
-                        var area := drop.get_node_or_null("Area3D")
-                        if area and entry.has("item"):
-                                area.item = entry["item"]
-                        if area and entry.has("amount"):
-                                area.amount = entry["amount"]
-                        get_parent().add_child(drop)
-                        drop.global_transform.origin = global_transform.origin
+		var drop_scene := preload("res://scenes/item_drop.tscn")
+		var combined: Array = []
+		combined.append_array(drop_table)
+		for table in drop_tables:
+				if table:
+						combined.append_array(table.entries)
+		for entry in combined:
+				if randf() <= float(entry.get("chance", 1.0)):
+						var drop := drop_scene.instantiate()
+						var area := drop.get_node_or_null("Area3D")
+						if area and entry.has("item"):
+								area.item = entry["item"]
+						if area and entry.has("amount"):
+								area.amount = entry["amount"]
+						get_parent().add_child(drop)
+						drop.global_transform.origin = global_transform.origin

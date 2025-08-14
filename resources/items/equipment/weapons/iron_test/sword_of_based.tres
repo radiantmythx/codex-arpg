@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="Item" load_steps=11 format=3 uid="uid://jpdhdcxly3x4"]
+[gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://jpdhdcxly3x4"]
 
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="1_1ay02"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_c58uo"]
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_wq8vy"]
 [ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="2_66ulg"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/items/equipment/sword_of_based.png" id="2_bken0"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="2_j70qe"]
@@ -9,7 +10,7 @@
 [ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="4_wq8vy"]
 [ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="5_e7ole"]
 [ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="6_37riy"]
-[ext_resource type="PackedScene" uid="uid://ctgav8eh68yuy" path="res://scenes/items/sword.tscn" id="9_ur1a0"]
+[ext_resource type="PackedScene" uid="uid://ctgav8eh68yuy" path="res://scenes/items/equipment/weapons/iron_test/sword.tscn" id="9_ur1a0"]
 
 [resource]
 script = ExtResource("2_j70qe")
@@ -20,6 +21,7 @@ max_stack = 1
 item_type = ""
 equip_slot = "weapon"
 affix_pool = Array[ExtResource("1_c58uo")]([ExtResource("2_66ulg"), ExtResource("3_ur1a0"), ExtResource("4_wq8vy"), ExtResource("5_e7ole"), ExtResource("6_37riy")])
+affix_groups = Array[ExtResource("1_wq8vy")]([])
 affixes = Array[ExtResource("1_1ay02")]([])
 model = ExtResource("9_ur1a0")
 equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

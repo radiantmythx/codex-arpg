@@ -44,23 +44,23 @@ const MAX_AFFIXES := 6
 
 
 func reroll_affixes() -> void:
-                # Clears existing affixes and rolls new ones from `affix_pool`.
-        affixes.clear()
-        var pool: Array[AffixDefinition] = []
-        pool.append_array(affix_pool)
-        for g in affix_groups:
-                if g:
-                        pool.append_array(g.affixes)
-        if pool.is_empty():
-                return
-        for i in range(MAX_AFFIXES):
-                if pool.is_empty():
-                        break
-		if i < 3 or randf() < 0.5:
-			var def: AffixDefinition = pool.pick_random()
-			pool.erase(def)
-			var tier := _roll_weighted_tier(def.get_tier_count())
-			affixes.append(def.roll(tier))
+				# Clears existing affixes and rolls new ones from `affix_pool`.
+		affixes.clear()
+		var pool: Array[AffixDefinition] = []
+		pool.append_array(affix_pool)
+		for g in affix_groups:
+				if g:
+						pool.append_array(g.affixes)
+		if pool.is_empty():
+				return
+		for i in range(MAX_AFFIXES):
+				if pool.is_empty():
+						break
+				if i < 3 or randf() < 0.5:
+					var def: AffixDefinition = pool.pick_random()
+					pool.erase(def)
+					var tier := _roll_weighted_tier(def.get_tier_count())
+					affixes.append(def.roll(tier))
 
 
 func _roll_weighted_tier(count: int) -> int:

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://2m88kj64161u"]
+
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_3wl58"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_5pq40"]
+[ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="3_v34q6"]
+[ext_resource type="Resource" uid="uid://bgvlwtf7ig8rh" path="res://resources/affixes/soul_inc.tres" id="4_wun17"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="5_ou325"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="6_oj4u1"]
+[ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="7_j0gwi"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="8_i5xre"]
+[ext_resource type="Texture2D" uid="uid://ciec8m54byuj4" path="res://images/items/equipment/shield_of_based.png" id="9_3wl58"]
+[ext_resource type="PackedScene" uid="uid://fkx7nou7gfx1" path="res://scenes/items/equipment/armor/iron_test/shield.tscn" id="10_3wl58"]
+[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="11_xcqmn"]
+
+[resource]
+script = ExtResource("11_xcqmn")
+item_name = "Shield of Based"
+description = "Armor of the Based God"
+icon = ExtResource("9_3wl58")
+max_stack = 1
+item_type = ""
+equip_slot = "offhand"
+affix_pool = Array[ExtResource("2_5pq40")]([ExtResource("3_v34q6"), ExtResource("4_wun17"), ExtResource("5_ou325"), ExtResource("6_oj4u1"), ExtResource("7_j0gwi")])
+affix_groups = Array[ExtResource("1_3wl58")]([])
+affixes = Array[ExtResource("8_i5xre")]([])
+model = ExtResource("10_3wl58")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(0.224891, 0.0628352, 0.136744)
+equip_rotation_rads = Vector3(-0.243151, 1.50788, -2.29493)
+metadata/_custom_type_script = "uid://cy34tikq4w1km"

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="1_7p1mj"]
 [ext_resource type="Resource" uid="uid://bmmrsmwx0wtwj" path="res://resources/items/test_item.tres" id="2_md0e3"]
 [ext_resource type="PackedScene" uid="uid://c0vgaf5vs6gcq" path="res://scenes/ui/healthbar.tscn" id="3_4ra3w"]
-[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/chaos_orb.tres" id="3_5uy6h"]
+[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_orb.tres" id="3_5uy6h"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_md0e3"]
 
