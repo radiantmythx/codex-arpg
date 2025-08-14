@@ -38,6 +38,10 @@ const TIER_SIZE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.5, Tier.BOSS: 2.5}
 ## {"item": Item, "chance": 0.5, "amount": 1}
 @export var drop_table: Array = []
 
+# Optional list of reusable DropTable resources. All entries from these tables
+# are merged with `drop_table` when generating loot.
+@export var drop_tables: Array[DropTable] = []
+
 var current_health: float
 var energy_shield: float = 0.0
 var max_energy_shield: float = 0.0
@@ -197,18 +201,19 @@ func die() -> void:
 	queue_free()
 
 func _drop_loot() -> void:
-	var drop_scene := preload("res://scenes/item_drop.tscn")
-	for entry in drop_table:
-		if randf() <= float(entry.get("chance", 1.0)):
-			var drop := drop_scene.instantiate()
-			var area := drop.get_node_or_null("Area3D")
-			print(entry)
-			if area and entry.has("item"):
-				#print("that being said, entry item is ", entry["item"].item_name)
-				area.item = entry["item"]
-			if entry.has("amount"):
-				area.amount = entry["amount"]
-			print("dropping item ", area.item)
-			
-			get_parent().add_child(drop)
-			drop.global_transform.origin = global_transform.origin
+        var drop_scene := preload("res://scenes/item_drop.tscn")
+        var combined: Array = []
+        combined.append_array(drop_table)
+        for table in drop_tables:
+                if table:
+                        combined.append_array(table.entries)
+        for entry in combined:
+                if randf() <= float(entry.get("chance", 1.0)):
+                        var drop := drop_scene.instantiate()
+                        var area := drop.get_node_or_null("Area3D")
+                        if area and entry.has("item"):
+                                area.item = entry["item"]
+                        if area and entry.has("amount"):
+                                area.amount = entry["amount"]
+                        get_parent().add_child(drop)
+                        drop.global_transform.origin = global_transform.origin
