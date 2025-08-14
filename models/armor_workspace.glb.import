@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://boff5ng0fops1"
-path="res://.godot/imported/base_human_mixamo_workspace.glb-3ba6e16ca7b2d76d06187f53c22ab5ec.scn"
+uid="uid://cvan37760vcrj"
+path="res://.godot/imported/armor_workspace.glb-b3a905e338408ffdf5754f9a39dd688c.scn"
 
 [deps]
 
-source_file="res://models/humanoid/base_human_mixamo_workspace.glb"
-dest_files=["res://.godot/imported/base_human_mixamo_workspace.glb-3ba6e16ca7b2d76d06187f53c22ab5ec.scn"]
+source_file="res://models/armor_workspace.glb"
+dest_files=["res://.godot/imported/armor_workspace.glb-b3a905e338408ffdf5754f9a39dd688c.scn"]
 
 [params]
 

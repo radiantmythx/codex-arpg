@@ -142,7 +142,7 @@ func _chase(player_pos: Vector3, delta: float) -> void:
 func set_hovered(hovered: bool) -> void:
 		# Toggles the thin red outline when the mouse is over the enemy.
 		# We use `material_overlay` so the original material is still rendered.
-		print(hovered)
+		#print(hovered)
 		if not _mesh:
 				return
 		_mesh.material_overlay = _hover_outline_material if hovered else null
@@ -172,7 +172,7 @@ func get_base_damage_dict() -> Dictionary:
 	return dict
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-	print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")
+	#print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")
 	if damage_type == Stats.DamageType.PHYSICAL:
 		if randf() < stats.get_evasion() / 100.0:
 			return

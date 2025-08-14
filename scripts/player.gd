@@ -110,17 +110,17 @@ func _ready() -> void:
 	stats.base_mana_regen = base_mana_regen
 	stats.base_attack_speed = base_attack_speed
 
-        equipment = EquipmentManager.new()
-        equipment.stats = stats
-        equipment.set_slots(["weapon", "offhand", "armor"])
-        add_child(equipment)
+	equipment = EquipmentManager.new()
+	equipment.stats = stats
+	equipment.set_slots(["weapon", "offhand", "armor"])
+	add_child(equipment)
 
-        # Visual manager displays meshes for equipped items.
-        var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
-        _equip_visuals = EquipmentVisualManager.new()
-        _equip_visuals.skeleton = skeleton
-        _equip_visuals.equipment = equipment
-        add_child(_equip_visuals)
+	# Visual manager displays meshes for equipped items.
+	var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
+	_equip_visuals = EquipmentVisualManager.new()
+	_equip_visuals.skeleton = skeleton
+	_equip_visuals.equipment = equipment
+	add_child(_equip_visuals)
 
 	rune_manager = RuneManager.new()
 	add_child(rune_manager)
@@ -221,7 +221,7 @@ func _process_movement(delta: float) -> void:
 		input_dir = input_dir.normalized()
 		_last_local_input = input_dir
 		if input_dir != Vector3.ZERO:
-			print(_last_move_input)
+			#print(_last_move_input)
 			_last_move_input = input_dir
 		var look_dir = _get_click_direction()
 		var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
@@ -268,11 +268,12 @@ func _process_attack(delta: float) -> void:
 						_current_move_multiplier = main_skill.move_multiplier
 						mana -= main_skill.mana_cost
 						if _anim_state and main_skill.animation_name != &"":
-								print(main_skill.animation_name)
+								#print(main_skill.animation_name)
 								_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
 								print(String(main_skill.animation_name))
 								_anim_state.travel(String(main_skill.animation_name))
 						else:
+								print("no anim for skill")
 								main_skill.perform(self)
 								_attack_performed = true
 								_attacking_timer = 0.0

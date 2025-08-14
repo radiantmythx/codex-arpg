@@ -36,6 +36,8 @@ const MAX_AFFIXES := 6
 # correctly with the hand or body.  The transform is relative to the attach
 # point (e.g. the character's hand bone).
 @export var equip_transform: Transform3D = Transform3D.IDENTITY
+@export var equip_position: Vector3 = Vector3.ZERO
+@export var equip_rotation_rads:Vector3 = Vector3.ZERO
 
 
 func reroll_affixes() -> void:

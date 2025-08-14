@@ -107,13 +107,46 @@ offset_bottom = 40.0
 [node name="WeaponSlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-offset_left = 996.0
-offset_top = 359.0
-offset_right = 1044.0
-offset_bottom = 407.0
+offset_left = 911.0
+offset_top = 271.0
+offset_right = 959.0
+offset_bottom = 319.0
 size_flags_vertical = 0
 is_equipment = true
 slot_type = "weapon"
+
+[node name="BodySlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+offset_left = 979.0
+offset_top = 271.0
+offset_right = 1027.0
+offset_bottom = 319.0
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "body"
+
+[node name="LegsSlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+offset_left = 979.0
+offset_top = 331.0
+offset_right = 1027.0
+offset_bottom = 379.0
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "legs"
+
+[node name="OffhandSlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+offset_left = 1044.0
+offset_top = 271.0
+offset_right = 1092.0
+offset_bottom = 319.0
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "offhand"
 
 [node name="RuneSlotContainer" type="FlowContainer" parent="."]
 offset_right = 223.71

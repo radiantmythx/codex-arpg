@@ -19,4 +19,7 @@ item_type = ""
 equip_slot = ""
 affix_pool = Array[ExtResource("1_kksce")]([])
 affixes = Array[ExtResource("2_bdg65")]([])
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(0, 0, 0)
+equip_rotation_rads = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://b8jggh7fjjojw"

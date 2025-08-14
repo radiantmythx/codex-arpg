@@ -66,6 +66,17 @@ static func build_skill(runes: Array[Rune]) -> Skill:
 	var base_skill: Skill = base.duplicate(true)
 	_apply_base_damage(base_skill, runes)
 	var skill = RuneSkill.new(base_skill, affixes)
+	print("base skill")
+	print(base_skill.name)
+	print(base_skill.animation_name)
+	print("created skill")
+	print(skill.name)
+	print(skill.animation_name)
+	if(base_skill.animation_name):
+		skill.animation_name = base_skill.animation_name
+		skill.attack_time = base_skill.attack_time
+		skill.cooldown = base_skill.cooldown
+		skill.cancel_time = base_skill.cancel_time
 	return skill
 
 

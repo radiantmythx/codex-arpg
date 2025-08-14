@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Item" load_steps=10 format=3 uid="uid://jpdhdcxly3x4"]
+[gd_resource type="Resource" script_class="Item" load_steps=11 format=3 uid="uid://jpdhdcxly3x4"]
 
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="1_1ay02"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_c58uo"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="4_wq8vy"]
 [ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="5_e7ole"]
 [ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="6_37riy"]
+[ext_resource type="PackedScene" uid="uid://ctgav8eh68yuy" path="res://scenes/items/sword.tscn" id="9_ur1a0"]
 
 [resource]
 script = ExtResource("2_j70qe")
@@ -16,7 +17,12 @@ item_name = "Sword of Based"
 description = "Sword of the Based God"
 icon = ExtResource("2_bken0")
 max_stack = 1
+item_type = ""
 equip_slot = "weapon"
 affix_pool = Array[ExtResource("1_c58uo")]([ExtResource("2_66ulg"), ExtResource("3_ur1a0"), ExtResource("4_wq8vy"), ExtResource("5_e7ole"), ExtResource("6_37riy")])
 affixes = Array[ExtResource("1_1ay02")]([])
+model = ExtResource("9_ur1a0")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(0, 0, 0)
+equip_rotation_rads = Vector3(-0.247753, 1.51865, -1.23666)
 metadata/_custom_type_script = "uid://cy34tikq4w1km"

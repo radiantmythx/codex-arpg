@@ -1,14 +1,16 @@
-[gd_scene load_steps=18 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=20 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="2_0wfyh"]
-[ext_resource type="Resource" uid="uid://uifjbs48fjf3" path="res://resources/runes/item_strike_rune.tres" id="3_tefeu"]
 [ext_resource type="Resource" path="res://resources/items/zone_shard.tres" id="3_tipki"]
 [ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/chaos_orb.tres" id="4_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
-[ext_resource type="Resource" uid="uid://cfg5dy3eit87i" path="res://resources/runes/item_time_rune.tres" id="4_tefeu"]
+[ext_resource type="Resource" uid="uid://jpdhdcxly3x4" path="res://resources/items/sword_of_based.tres" id="5_ya4ey"]
+[ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/armor_of_based.tres" id="6_ya4ey"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
+[ext_resource type="Resource" uid="uid://dqt40e75y6d5r" path="res://resources/items/platelegs_of_based.tres" id="7_trceg"]
+[ext_resource type="Resource" uid="uid://uifjbs48fjf3" path="res://resources/runes/item_strike_rune.tres" id="8_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 [ext_resource type="ArrayMesh" uid="uid://bbhmk34t3gy7d" path="res://models/grass/grass.res" id="11_ya4ey"]
 
@@ -101,11 +103,24 @@ max_health = 1.0
 drop_table = [{
 "amount": 1,
 "chance": 1.0,
-"item": ExtResource("3_tefeu")
+"item": ExtResource("5_ya4ey")
 }, {
 "amount": 1,
 "chance": 1.0,
-"item": ExtResource("4_tefeu")
+"item": ExtResource("6_ya4ey")
+}]
+
+[node name="Enemy10" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.22115, 0, -4.07588)
+max_health = 1.0
+drop_table = [{
+"amount": 1,
+"chance": 1.0,
+"item": ExtResource("7_trceg")
+}, {
+"amount": 1,
+"chance": 1.0,
+"item": ExtResource("8_a8y0u")
 }]
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
