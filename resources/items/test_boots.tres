@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/item.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/items/affix.gd" id="2"]
+[ext_resource type="Texture2D" path="res://images/items/test_item.png" id="3"]
+[ext_resource type="Resource" path="res://resources/affix_groups/boots.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Test Boots"
+description = "Example item using a shared affix group"
+icon = ExtResource("3")
+max_stack = 1
+equip_slot = "feet"
+affix_pool = []
+affix_groups = [ExtResource("4")]
+affixes = Array[ExtResource("2")]([])

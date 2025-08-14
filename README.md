@@ -237,6 +237,18 @@ code.
 3. Save the resource inside `resources/affixes/` and assign it to an item's
    `affix_pool` array. Call `reroll_affixes()` to roll new affixes.
 
+### Affix Groups
+Multiple items can now share a common pool of affixes. Create an
+**AffixGroup** resource (`scripts/items/affix_group.gd`) and populate its
+`affixes` array with `AffixDefinition` resources. Items expose a new exported
+`affix_groups` array; all definitions from these groups are merged with the
+item's own `affix_pool` when `reroll_affixes()` is called.
+
+This allows creating broad categories such as *boots* or *rings* without
+manually listing the same affixes on every item. See
+`resources/affix_groups/boots.tres` and `resources/items/test_boots.tres` for an
+example.
+
 Several sample definitions are included covering additive and increased bonuses
 for Body, Mind, Soul, Luck, movement speed, maximum health/mana and their
 regeneration.  Unique examples like `life_steal.tres` and `body_to_mind.tres`
@@ -275,15 +287,21 @@ enemy is:
 
 Enemies can drop loot using the `drop_table` export on `enemy.gd`. Each entry in
 the array is a dictionary like `{"item": Item, "chance": 0.5, "amount": 1}`.
-When the enemy dies every entry is rolled and a matching `item_drop.tscn`
-instance is spawned for successful rolls.
+Enemies may also reference any number of reusable **DropTable** resources via
+the new `drop_tables` array. When the enemy dies all entries from the local
+`drop_table` and assigned `DropTable` resources are rolled and a matching
+`item_drop.tscn` instance is spawned for successful rolls.
+Create shared tables as resources using `scripts/drop_table.gd` and populate
+their `entries` array with the same dictionaries used in `drop_table`.
+An example can be found at `resources/drop_tables/basic.tres`.
 
 ### Updating Existing Scenes
 1. Open your enemy scene in Godot and ensure `enemy.gd` is attached to the root
    `CharacterBody3D`.
 2. Set the exported properties such as movement speeds, detection and attack
    ranges.  Configure `base_damage_low/high`, `base_damage_types` and the enemy
-   `tier`, then assign the `drop_table` with your item resources.
+   `tier`, then assign the `drop_table` with your item resources. Optional
+   global tables can be added through the `drop_tables` array.
 3. The player scene automatically belongs to the **"players"** group so enemies
    will find it without additional setup.
 

@@ -22,6 +22,9 @@ const MAX_AFFIXES := 6
 # Pool of definitions this item may roll affixes from when crafted.
 @export var affix_pool: Array[AffixDefinition] = []
 
+# Optional groups of affixes that can be shared across multiple items.
+@export var affix_groups: Array[AffixGroup] = []
+
 # Affixes currently attached to this item.
 @export var affixes: Array[Affix] = []
 
@@ -41,14 +44,18 @@ const MAX_AFFIXES := 6
 
 
 func reroll_affixes() -> void:
-		# Clears existing affixes and rolls new ones from `affix_pool`.
-	affixes.clear()
-	if affix_pool.is_empty():
-		return
-	var pool := affix_pool.duplicate()
-	for i in range(MAX_AFFIXES):
-		if pool.is_empty():
-			break
+                # Clears existing affixes and rolls new ones from `affix_pool`.
+        affixes.clear()
+        var pool: Array[AffixDefinition] = []
+        pool.append_array(affix_pool)
+        for g in affix_groups:
+                if g:
+                        pool.append_array(g.affixes)
+        if pool.is_empty():
+                return
+        for i in range(MAX_AFFIXES):
+                if pool.is_empty():
+                        break
 		if i < 3 or randf() < 0.5:
 			var def: AffixDefinition = pool.pick_random()
 			pool.erase(def)
