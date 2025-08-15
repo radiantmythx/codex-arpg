@@ -68,6 +68,22 @@ The player now uses mana to power abilities. Basic attacks consume mana and the
 player regenerates 1 mana per second up to a base maximum of 50. Affixes and
 items can modify maximum mana and regeneration rates.
 
+## Skill Hotbar UI
+`skill_icon.gd` displays icons for equipped skills and shows their cooldowns,
+active state and whether the player has enough mana.
+
+### Setup
+1. Add a `TextureButton` for each hotbar slot.
+2. Optionally add child nodes:
+   - `TextureProgressBar` for cooldown progress.
+   - `Control` (e.g. `ColorRect`) to highlight when the skill is active.
+   - `Control` for an overlay when mana is insufficient.
+3. Attach `scripts/ui/skill_icon.gd` to the button.
+4. Set **player_path**, **slot_index** and the overlay NodePaths in the inspector.
+5. Hovering the button displays the skill name and description.
+6. Fill out the new `description` field on each `Skill` resource to populate the tooltip.
+
+
 ## Skills and Tags
 Skills are `Resource` files that carry tags describing how they behave. Supported tags include `Melee`, `Spell`, `Projectile`, `AoE`, `Aura`, `Channel`, `Summon` and `Movement`. Affixes can grant flat or increased damage to specific tags such as `physical_damage_melee` or `holy_damage_spell`. Damage from equipped items is applied when a skill with matching tags is used, allowing weapons and armor to contribute to spell or melee damage independently.
 
