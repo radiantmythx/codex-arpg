@@ -69,6 +69,7 @@ var stats: Stats
 var buff_manager: BuffManager
 var _anim_tree: AnimationTree
 var _anim_state: AnimationNodeStateMachinePlayback
+var _player_detected: bool = false
 
 const HOVER_OUTLINE_SHADER := preload("res://resources/enemy_hover_outline.gdshader")
 
@@ -117,14 +118,21 @@ func _ready() -> void:
 					$Sprite3D.position.y *= 3
 
 func _physics_process(delta: float) -> void:
-		_process_regen(delta)
-		var player_pos := _get_player_position()
-		_process_attack(delta, player_pos)
-		if player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
-				_chase(player_pos, delta)
-		else:
-				_wander(delta)
-		_update_animation()
+                _process_regen(delta)
+                var player_pos := _get_player_position()
+                _process_attack(delta, player_pos)
+                if player_pos:
+                                var dist := global_transform.origin.distance_to(player_pos)
+                                if _player_detected:
+                                                if dist > detection_range * 5.0:
+                                                                _player_detected = false
+                                elif dist <= detection_range:
+                                                _player_detected = true
+                if _player_detected and player_pos:
+                                _chase(player_pos, delta)
+                else:
+                                _wander(delta)
+                _update_animation()
 
 func _process_attack(delta: float, player_pos: Vector3) -> void:
 		if _attack_timer > 0.0:
