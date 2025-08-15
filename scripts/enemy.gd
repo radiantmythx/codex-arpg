@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var main_skill: Skill = preload("res://resources/skills/fireball.tres")
 @export var healthbar_node_path: NodePath
 @export var animation_tree_path: NodePath
+@export var mesh: MeshInstance3D
 @export var base_armor: float = 0.0
 @export var base_evasion: float = 0.0
 @export var base_max_energy_shield: float = 0.0
@@ -16,6 +17,7 @@ extends CharacterBody3D
 @export var base_energy_shield_recharge_delay: float = 2.0
 @export var base_damage_low: float = 1.0
 @export var base_damage_high: float = 2.0
+@export var base_attack_speed: float = 1.0
 # Enemies can deal multiple damage types. All listed types use the same damage
 # range defined above. Designers can duplicate an enemy and tweak the lists to
 # create variants like fire or ice versions.
@@ -33,7 +35,7 @@ enum Tier { PACK, LEADER, BOSS }
 
 const TIER_HEALTH_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.5, Tier.BOSS: 3.0}
 const TIER_DAMAGE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.25, Tier.BOSS: 2.0}
-const TIER_SIZE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.5, Tier.BOSS: 2.5}
+const TIER_SIZE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.25, Tier.BOSS: 1.75}
 
 ## Drop table is an array of dictionaries like:
 ## {"item": Item, "chance": 0.5, "amount": 1}
@@ -85,73 +87,74 @@ func _ready() -> void:
 	stats.base_max_energy_shield = base_max_energy_shield
 	stats.base_energy_shield_regen = base_energy_shield_regen
 	stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
+	stats.base_attack_speed = base_attack_speed
 	max_health = float(stats.get_max_health())
 	current_health = max_health
 	max_energy_shield = stats.get_max_energy_shield()
 	energy_shield = max_energy_shield
-        buff_manager = BuffManager.new()
-        buff_manager.stats = stats
-        add_child(buff_manager)
-        _player = get_tree().get_root().find_child("Player", true, false)
-        if animation_tree_path != NodePath():
-                _anim_tree = get_node_or_null(animation_tree_path)
-                if _anim_tree:
-                        _anim_state = _anim_tree.get("parameters/playback")
-        _mesh = get_node_or_null("MeshInstance3D")
-        if _mesh:
-                        _original_material = _mesh.material_override
-                        _mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
-                        # Create a material using the hover outline shader.  It will be
+	buff_manager = BuffManager.new()
+	buff_manager.stats = stats
+	add_child(buff_manager)
+	_player = get_tree().get_root().find_child("Player", true, false)
+	if animation_tree_path != NodePath():
+			_anim_tree = get_node_or_null(animation_tree_path)
+			if _anim_tree:
+					_anim_state = _anim_tree.get("parameters/playback")
+	_mesh = mesh
+	if _mesh:
+			_original_material = _mesh.material_override
+			_mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
+						# Create a material using the hover outline shader.  It will be
 			# assigned to `material_overlay` when the mouse hovers this enemy
 			# so the original surface materials remain visible.
-			_hover_outline_material = ShaderMaterial.new()
-			_hover_outline_material.shader = HOVER_OUTLINE_SHADER
+	_hover_outline_material = ShaderMaterial.new()
+	_hover_outline_material.shader = HOVER_OUTLINE_SHADER
 	if healthbar_node_path != NodePath():
 			_healthbar = get_node(healthbar_node_path)
 			if(_healthbar):
 				_healthbar.set_health(current_health, max_health)
 				if(tier == Tier.BOSS):
-					$Sprite3D.position.y += 2
+					$Sprite3D.position.y *= 3
 
 func _physics_process(delta: float) -> void:
-        _process_regen(delta)
-        var player_pos := _get_player_position()
-        _process_attack(delta, player_pos)
-        if player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
-                _chase(player_pos, delta)
-        else:
-                _wander(delta)
-        _update_animation()
+		_process_regen(delta)
+		var player_pos := _get_player_position()
+		_process_attack(delta, player_pos)
+		if player_pos and global_transform.origin.distance_to(player_pos) <= detection_range:
+				_chase(player_pos, delta)
+		else:
+				_wander(delta)
+		_update_animation()
 
 func _process_attack(delta: float, player_pos: Vector3) -> void:
-        if _attack_timer > 0.0:
-                _attack_timer -= delta
-        if _attacking_timer > 0.0:
-                _attacking_timer -= delta
-                _attack_progress += delta
-                if not _attack_performed and _attack_progress >= _attack_execute_time:
-                        if main_skill:
-                                main_skill.perform(self)
-                        _attack_performed = true
-                if _attack_cancel_time > 0.0 and _attack_progress >= _attack_cancel_time:
-                        _attacking_timer = 0.0
-                if _attacking_timer <= 0.0 and _anim_state:
-                        _anim_state.travel("move")
-        elif player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
-                var speed = stats.get_attack_speed()
-                _attack_timer = main_skill.cooldown / max(speed, 0.001)
-                _attacking_timer = main_skill.duration / max(speed, 0.001)
-                _attack_progress = 0.0
-                _attack_execute_time = main_skill.attack_time / max(speed, 0.001)
-                _attack_cancel_time = main_skill.cancel_time / max(speed, 0.001)
-                _attack_performed = false
-                if _anim_state and main_skill.animation_name != &"":
-                        _anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
-                        _anim_state.travel(String(main_skill.animation_name))
-                else:
-                        main_skill.perform(self)
-                        _attack_performed = true
-                        _attacking_timer = 0.0
+		if _attack_timer > 0.0:
+				_attack_timer -= delta
+		if _attacking_timer > 0.0:
+				_attacking_timer -= delta
+				_attack_progress += delta
+				if not _attack_performed and _attack_progress >= _attack_execute_time:
+						if main_skill:
+								main_skill.perform(self)
+						_attack_performed = true
+				if _attack_cancel_time > 0.0 and _attack_progress >= _attack_cancel_time:
+						_attacking_timer = 0.0
+				if _attacking_timer <= 0.0 and _anim_state:
+						_anim_state.travel("move")
+		elif player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
+				var speed = stats.get_attack_speed()
+				_attack_timer = main_skill.cooldown / max(speed, 0.001)
+				_attacking_timer = main_skill.duration / max(speed, 0.001)
+				_attack_progress = 0.0
+				_attack_execute_time = main_skill.attack_time / max(speed, 0.001)
+				_attack_cancel_time = main_skill.cancel_time / max(speed, 0.001)
+				_attack_performed = false
+				if _anim_state and main_skill.animation_name != &"":
+						_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
+						_anim_state.travel(String(main_skill.animation_name))
+				else:
+						main_skill.perform(self)
+						_attack_performed = true
+						_attacking_timer = 0.0
 
 func _process_regen(delta: float) -> void:
 	max_energy_shield = stats.get_max_energy_shield()
@@ -162,42 +165,48 @@ func _process_regen(delta: float) -> void:
 			energy_shield = min(max_energy_shield, energy_shield + stats.get_energy_shield_regen() * delta)
 
 func _wander(delta: float) -> void:
-        _wander_timer -= delta
-        if _wander_timer <= 0.0:
-                _wander_timer = wander_change_interval
-                _current_dir = Vector3(randf() * 2.0 - 1.0, 0, randf() * 2.0 - 1.0).normalized()
-        if _current_dir != Vector3.ZERO:
-                var target_rot := Transform3D().looking_at(_current_dir, Vector3.UP).basis.get_euler().y
-                rotation.y = lerp_angle(rotation.y, target_rot, 5.0 * delta)
-        if _attacking_timer > 0.0:
-                velocity = Vector3.ZERO
-        else:
-                velocity = _current_dir * wander_speed
-        move_and_slide()
+		_wander_timer -= delta
+		if _wander_timer <= 0.0:
+				_wander_timer = (randf() + 1) * wander_change_interval
+				if(randf() < 0.9):
+					_current_dir = Vector3(randf() * 2.0 - 1.0, 0, randf() * 2.0 - 1.0).normalized()
+				else:
+					_current_dir = Vector3.ZERO
+		if _current_dir != Vector3.ZERO:
+				var target_rot := Transform3D().looking_at(_current_dir, Vector3.UP).basis.get_euler().y
+				rotation.y = lerp_angle(rotation.y, target_rot, 5.0 * delta)
+		if _attacking_timer > 0.0:
+				velocity = Vector3.ZERO
+		else:
+				if(_current_dir != Vector3.ZERO):
+					velocity = _current_dir * wander_speed
+				else:
+					velocity = Vector3.ZERO
+		move_and_slide()
 
 func _chase(player_pos: Vector3, delta: float) -> void:
-                var dir := (player_pos - global_transform.origin).normalized()
-                var target_rot := Transform3D().looking_at(dir, Vector3.UP).basis.get_euler().y
-                rotation.y = lerp_angle(rotation.y, target_rot, 5.0 * delta)
-                if _attacking_timer > 0.0:
-                        velocity = Vector3.ZERO
-                else:
-                        velocity = dir * move_speed
-                move_and_slide()
+				var dir := (player_pos - global_transform.origin).normalized()
+				var target_rot := Transform3D().looking_at(dir, Vector3.UP).basis.get_euler().y
+				rotation.y = lerp_angle(rotation.y, target_rot, 5.0 * delta)
+				if _attacking_timer > 0.0:
+						velocity = Vector3.ZERO
+				else:
+						velocity = dir * move_speed
+				move_and_slide()
 
 func _update_animation() -> void:
-        if not _anim_tree or not _anim_state:
-                return
-        if _attacking_timer > 0.0:
-                return
-        _anim_state.travel("move")
-        var world_vel = Vector3(velocity.x, 0, velocity.z)
-        var basis = global_transform.basis.orthonormalized()
-        var right = basis.x
-        var forward = -basis.z
-        var local_x = world_vel.dot(right)
-        var local_y = world_vel.dot(forward)
-        _anim_tree.set("parameters/move/blend_position", Vector2(local_x, local_y))
+		if not _anim_tree or not _anim_state:
+				return
+		if _attacking_timer > 0.0:
+				return
+		_anim_state.travel("move")
+		var world_vel = Vector3(velocity.x, 0, velocity.z)
+		var basis = global_transform.basis.orthonormalized()
+		var right = basis.x
+		var forward = -basis.z
+		var local_x = world_vel.dot(right)
+		var local_y = world_vel.dot(forward)
+		_anim_tree.set("parameters/move/blend_position", Vector2(local_x, local_y))
 
 func set_hovered(hovered: bool) -> void:
 		# Toggles the thin red outline when the mouse is over the enemy.

@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Rune" load_steps=5 format=3 uid="uid://uifjbs48fjf3"]
+[gd_resource type="Resource" script_class="Rune" load_steps=6 format=3 uid="uid://uifjbs48fjf3"]
 
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_jxr7o"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_kksce"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="2_bdg65"]
 [ext_resource type="Script" uid="uid://b8jggh7fjjojw" path="res://scripts/items/runes/rune.gd" id="3_jxr7o"]
@@ -18,6 +19,7 @@ max_stack = 1
 item_type = ""
 equip_slot = ""
 affix_pool = Array[ExtResource("1_kksce")]([])
+affix_groups = Array[ExtResource("1_jxr7o")]([])
 affixes = Array[ExtResource("2_bdg65")]([])
 equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 equip_position = Vector3(0, 0, 0)
