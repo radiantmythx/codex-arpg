@@ -4,20 +4,29 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sgot"]
 bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.470076, 0.470076, 0.470076, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.718612, 0.568686, 0.0822825, 1)
 corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0k5hr"]
 bg_color = Color(0.790753, 0.186325, 0.186339, 1)
-border_color = Color(0.54099, 0.540991, 0.54099, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.715326, 0.49188, 0.0319548, 1)
 corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kl70x"]
 bg_color = Color(0.264256, 0.605355, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.708541, 0.60625, 1.92523e-07, 1)
 
 [node name="Healthbar" type="Control"]
 layout_mode = 3

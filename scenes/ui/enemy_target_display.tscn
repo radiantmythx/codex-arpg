@@ -18,25 +18,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hn25v")
-healthbar_path = NodePath("FlowContainer/HealthBar")
+healthbar_path = NodePath("HealthBar")
 name_label_path = NodePath("VBoxContainer/NameLabel")
 level_label_path = NodePath("VBoxContainer/LevelLabel")
 
-[node name="FlowContainer" type="FlowContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="HealthBar" type="Control" parent="FlowContainer"]
+[node name="HealthBar" type="Control" parent="."]
 layout_mode = 2
+anchors_preset = 0
+offset_right = 1152.0
 size_flags_horizontal = 3
 script = ExtResource("2_otnhr")
 
-[node name="ProgressBar" type="ProgressBar" parent="FlowContainer/HealthBar"]
+[node name="ProgressBar" type="ProgressBar" parent="HealthBar"]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 offset_left = 278.0
