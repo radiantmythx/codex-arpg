@@ -361,13 +361,31 @@ func _on_rune_skill_changed(index: int, skill: Skill) -> void:
 		secondary_skill = skill
 
 func get_skill_slot(index: int) -> Skill:
-	if rune_manager:
-		return rune_manager.get_skill(index)
-	return null
+        if rune_manager:
+                return rune_manager.get_skill(index)
+        return null
+
+func get_skill_cooldown_remaining(index: int) -> float:
+	match index:
+		0:
+			return max(_attack_timer, 0.0)
+		1:
+			return max(_secondary_cooldown, 0.0)
+		_:
+			return 0.0
+
+func is_skill_active(index: int) -> bool:
+	match index:
+		0:
+			return _attacking_timer > 0.0
+		1:
+			return false
+		_:
+			return false
 
 func set_skill_slot(_index: int, _skill: Skill) -> void:
-		# Skills are determined by rune combinations; manual assignment disabled.
-	pass
+                # Skills are determined by rune combinations; manual assignment disabled.
+        pass
 
 func add_item(item: Item, amount: int = 1) -> void:
 	if _inventory_open and _inventory_ui:
