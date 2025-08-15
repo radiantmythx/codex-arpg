@@ -258,11 +258,24 @@ Three sample items – `mystic_ring.tres`, `mystic_amulet.tres` and
 `mystic_boots.tres` – showcase how to create items that can roll any of these
 affixes.
 
-### Crafting with Chaos Orbs
-When a **Chaos Orb** is on the cursor, right‑clicking an item consumes one orb
-and rerolls all of that item's affixes. Affix tiers are rolled with weighted
-probabilities; lower tier numbers (better rolls) are rarer than higher tier
-numbers.
+### Crafting with Currency Items
+Placing a crafting currency on the cursor and right‑clicking an item attempts to
+modify that item's affixes. The following currencies are supported:
+
+* **Chaos Orb** – rerolls all affixes.
+* **Temper Jewel** – rerolls the tier of one random affix.
+* **Culling Jewel** – removes one random affix.
+* **Elevating Jewel** – adds a new random affix.
+* **Cleansing Jewel** – removes all affixes.
+
+These currencies are only consumed when the action succeeds; for example a
+Culling Jewel will not be spent on an item with no affixes.
+
+To create a jewel in Godot 4.4, make a new `.tres` Resource using
+`scripts/items/item.gd`, set `item_name` to the jewel's name, assign an icon and
+`max_stack`, then place the resource anywhere under `resources/items/`.
+Icons can be assigned like the existing `chaos_orb.tres` under
+`resources/items/currency/`.
 
 ### Displaying Affixes
 Hovering over an item tag in the world or over an inventory slot now shows the
@@ -271,7 +284,8 @@ item's affixes in its tooltip.
 ## Enemy Behavior
 Enemies now wander around randomly until the player gets close. When the player
 enters the `detection_range` exported on `enemy.gd`, the enemy will chase the
-player. If the player reaches `attack_range`, the enemy performs a short
+player and will continue to pursue until the player moves more than five times
+that distance away. If the player reaches `attack_range`, the enemy performs a short
 wind‑up before dealing damage. During the wind‑up the enemy's material turns
 red to telegraph the attack and then reverts back afterwards.
 

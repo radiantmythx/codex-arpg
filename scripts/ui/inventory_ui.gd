@@ -178,26 +178,39 @@ func _on_slot_right_clicked(index: int) -> void:
 	if not _inventory:
 		return
 
-		# Consume one Chaos Orb and reroll the item's affixes.
-	var data = _inventory.get_slot(index)
-	var item: Item = data["item"]
-	if _cursor_item and _cursor_item.item_name == "Chaos Orb" and item:
-		# Consume one Chaos Orb and reroll the item's affixes.
-		item.reroll_affixes()
-		_cursor_amount -= 1
-		if _cursor_amount <= 0:
-			_cursor_item = null
-			_cursor_amount = 0
-		_inventory.clear_slot(index)
-		_inventory.place_item(index, item, data["amount"])
-		_update_cursor()
-		_update_slots()
-		return
-	if not _equipment:
-		return
-	if item and item.equip_slot != "":
-		_inventory.clear_slot(index)
-		var swapped = _equipment.equip(item)
+        var data = _inventory.get_slot(index)
+        var item: Item = data["item"]
+        if _cursor_item and item:
+                var success := false
+                match _cursor_item.item_name:
+                        "Chaos Orb":
+                                success = item.reroll_affixes()
+                        "Temper Jewel":
+                                success = item.temper_random_affix()
+                        "Culling Jewel":
+                                success = item.remove_random_affix()
+                        "Elevating Jewel":
+                                success = item.add_random_affix()
+                        "Cleansing Jewel":
+                                success = item.clear_affixes()
+                        _:
+                                pass
+                if _cursor_item.item_name in ["Chaos Orb", "Temper Jewel", "Culling Jewel", "Elevating Jewel", "Cleansing Jewel"]:
+                        if success:
+                                _cursor_amount -= 1
+                                if _cursor_amount <= 0:
+                                        _cursor_item = null
+                                        _cursor_amount = 0
+                                _inventory.clear_slot(index)
+                                _inventory.place_item(index, item, data["amount"])
+                                _update_slots()
+                        _update_cursor()
+                        return
+        if not _equipment:
+                return
+        if item and item.equip_slot != "":
+                _inventory.clear_slot(index)
+                var swapped = _equipment.equip(item)
 		if swapped:
 			var leftover = _inventory.place_item(index, swapped, 1)
 			if leftover:
