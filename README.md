@@ -449,3 +449,22 @@ Add passive points with `add_points()` and click nodes to allocate them.
 Nodes only become available if at least one connected node leading back to the
 root has already been allocated. Allocated nodes immediately apply their effects
 to the player's stats.
+
+## Tile-Based Level Generation
+The project includes a tile-based level generator that operates independently of Zone Shards. It assembles rooms and tunnels using a nine-tile set of scenes.
+
+### Creating Settings Resources
+1. Make a `Tile9Set` resource (`scripts/tile_levels/tile9_set.gd`) and assign scenes for the center, edges, and corners.
+2. (Optional) Create `LevelDecoration` resources for props such as trees or ruins and set their `frequency` between 0 and 1.
+3. Create a `TileLevelSettings` resource (`scripts/tile_levels/tile_level_settings.gd`) to choose room counts, room sizes, tunnel width, obstacle density, tile spacing, decorations, and an optional RNG seed.
+
+### Generating a Level in Code
+```gdscript
+var settings: TileLevelSettings = load("res://path/to/settings.tres")
+var level_scene := TileLevelGenerator.new().generate(settings)
+add_child(level_scene)
+```
+
+### Editor Preview
+`scripts/tile_levels/tile_level_preview.gd` is an `EditorScript` that can generate a `.tscn` from a settings resource. Open the script in Godot, set `settings_path` and `output_path`, then run it from the editor to inspect a sample generation.
+
