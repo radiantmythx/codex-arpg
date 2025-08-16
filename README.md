@@ -205,6 +205,14 @@ appropriate bone or the root skeleton.  All `MeshInstance3D` nodes inside the
 scene are re-targeted to the player's skeleton so animations drive the new
 mesh.
 
+### Hair and Helmets
+Players may have a standalone hair model which is attached to the head at
+runtime.  Equipable items expose a new **hide_hair** checkbox.  When an item
+with this flag is worn (for example a helmet or hood) the hair model is
+temporarily hidden and re-enabled when the item is removed.  Assign the hair
+`PackedScene` to the Player's **hair_scene** export and the
+`EquipmentVisualManager` will handle attachment and visibility automatically.
+
 ### Item Tag Collision Handling
 Item tags spawned in the world will now avoid overlapping each other. Every tag
 projects its 3D position into screen space and checks for rectangle intersections

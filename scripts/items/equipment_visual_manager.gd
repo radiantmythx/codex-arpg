@@ -19,12 +19,18 @@ class_name EquipmentVisualManager
 
 @export var skeleton: Skeleton3D ## Player skeleton used for attachments.
 @export var equipment: EquipmentManager ## Source of equip/unequip events.
+# Optional hair scene that is attached to the head and hidden when certain
+# items (e.g. helmets) request it.  The scene should be authored in the
+# player's local space with the origin at the head bone.
+@export var hair_scene: PackedScene
+@export var hair_bone: String = "mixamorig_Head"
 
 ## Mapping of equipment slot names to the skeleton bone used for attachment.
 ## Slots not listed here will be added directly under the skeleton.
 const SLOT_BONES := {
-	"weapon": "mixamorig_RightHand",
-	"offhand": "mixamorig_LeftHand",
+        "weapon": "mixamorig_RightHand",
+        "offhand": "mixamorig_LeftHand",
+        "helmet": "mixamorig_Head",
 }
 
 # Instanced models currently attached, indexed by slot.
@@ -33,43 +39,57 @@ var _models: Dictionary = {}
 # BoneAttachment3D nodes created for hand slots.
 var _attachments: Dictionary = {}
 
+# Instanced hair model if `hair_scene` is provided.
+var _hair_instance: Node3D
+
 func _ready() -> void:
-	if equipment:
-		equipment.connect("slot_changed", _on_slot_changed)
-	# Pre-create attachment points for mapped slots.
-	if skeleton:
-		for slot in SLOT_BONES.keys():
+        if equipment:
+                equipment.connect("slot_changed", _on_slot_changed)
+        # Pre-create attachment points for mapped slots.
+        if skeleton:
+                for slot in SLOT_BONES.keys():
 			var bone_find := skeleton.find_bone(SLOT_BONES[slot])
 			if bone_find == -1:
 				print("COULD NOT FIND SKELETON")
 			var bone_name: String = SLOT_BONES[slot]
 			var attach := BoneAttachment3D.new()
 			attach.bone_name = bone_name
-			skeleton.add_child(attach)
-			print("Set up attach slot for slot: ", slot)
-			_attachments[slot] = attach
+                        skeleton.add_child(attach)
+                        print("Set up attach slot for slot: ", slot)
+                        _attachments[slot] = attach
+
+                # Attach the optional hair model to the specified bone.
+                if hair_scene:
+                        var hair_attach := BoneAttachment3D.new()
+                        hair_attach.bone_name = hair_bone
+                        skeleton.add_child(hair_attach)
+                        _hair_instance = hair_scene.instantiate()
+                        hair_attach.add_child(_hair_instance)
+        _update_hair_visibility()
 
 func _on_slot_changed(slot: String, item: Item) -> void:
 	## Remove existing model for this slot and attach the new one if any.
 	_clear_slot(slot)
-	if not item or item.model == null:
-		print("no item or no item model")
-		return
+        if not item or item.model == null:
+                print("no item or no item model")
+                _update_hair_visibility()
+                return
 	var instance: Node3D = item.model.instantiate()
 	if slot == "armor":
 		_equip_armor(instance)
-	elif slot in SLOT_BONES:
-		print("equipping ", item.item_name, " in ", slot, " slot")
-		_attachments[slot].add_child(instance)
-		var local_xform := Transform3D(Basis.from_euler(item.equip_rotation_rads), item.equip_position)
-		instance.transform = local_xform
-		#skeleton.add_child(instance)
-		_models[slot] = instance
-		#instance.transform = item.equip_transform
-	else:
-		skeleton.add_child(instance)
-		_models[slot] = instance
-		#instance.transform = item.equip_transform
+        elif slot in SLOT_BONES:
+                print("equipping ", item.item_name, " in ", slot, " slot")
+                _attachments[slot].add_child(instance)
+                var local_xform := Transform3D(Basis.from_euler(item.equip_rotation_rads), item.equip_position)
+                instance.transform = local_xform
+                #skeleton.add_child(instance)
+                _models[slot] = instance
+                #instance.transform = item.equip_transform
+        else:
+                skeleton.add_child(instance)
+                _models[slot] = instance
+                #instance.transform = item.equip_transform
+        _update_hair_visibility()
 
 func _clear_slot(slot: String) -> void:
 	var model = _models.get(slot, null)
@@ -98,8 +118,23 @@ func _equip_armor(root: Node3D) -> void:
 	_models["armor"] = meshes
 
 func _collect_meshes(node: Node, out: Array) -> void:
-	## Recursively gather MeshInstance3D nodes from `node` into `out`.
-	if node is MeshInstance3D:
-		out.append(node)
-	for c in node.get_children():
-		_collect_meshes(c, out)
+        ## Recursively gather MeshInstance3D nodes from `node` into `out`.
+        if node is MeshInstance3D:
+                out.append(node)
+        for c in node.get_children():
+                _collect_meshes(c, out)
+
+func _update_hair_visibility() -> void:
+        ## Shows or hides the hair model based on equipped items that request
+        ## hair to be hidden.  Iterates all items using the EquipmentManager's
+        ## `get_all_items` helper.  If any item has `hide_hair` set the hair is
+        ## hidden; otherwise it is shown.
+        if not _hair_instance:
+                return
+        var hide := false
+        if equipment:
+                for itm in equipment.get_all_items():
+                        if itm and itm.hide_hair:
+                                hide = true
+                                break
+        _hair_instance.visible = not hide

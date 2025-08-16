@@ -19,6 +19,13 @@ const MAX_AFFIXES := 6
 # items such as consumables.  Example values: "weapon", "armor", "ring".
 @export var equip_slot: String = ""
 
+# When true, equipping this item will hide the player's hair model if present.
+# Helmets and hoods can toggle this flag so the hair is temporarily removed
+# while the item is worn.  The hair will automatically reappear when the
+# item is unequipped.  Exposed via the inspector for easy configuration in
+# Godot 4.4.
+@export var hide_hair: bool = false
+
 # Pool of definitions this item may roll affixes from when crafted.
 @export var affix_pool: Array[AffixDefinition] = []
 
