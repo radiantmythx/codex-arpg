@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_rvnb1")
 name = ""
+description = ""
 mana_cost = 0.0
 cooldown = 0.0
 duration = 0.0

@@ -6,6 +6,7 @@
 script = ExtResource("1_gw3uk")
 mana_reserve_percent = 10.0
 name = "Temporal Aura"
+description = ""
 mana_cost = 5.0
 cooldown = 1.0
 duration = 0.0

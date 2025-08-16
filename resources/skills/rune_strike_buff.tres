@@ -17,6 +17,7 @@ range = 2.0
 angle = 45.0
 on_hit_buff = SubResource("Resource_1bikt")
 name = ""
+description = ""
 mana_cost = 0.0
 cooldown = 0.0
 duration = 0.0

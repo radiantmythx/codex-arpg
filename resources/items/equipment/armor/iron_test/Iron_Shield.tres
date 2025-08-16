@@ -14,12 +14,13 @@
 
 [resource]
 script = ExtResource("11_xcqmn")
-item_name = "Shield of Based"
-description = "Armor of the Based God"
+item_name = "Iron Kiteshield"
+description = "Kiteshield made of Iron"
 icon = ExtResource("9_3wl58")
 max_stack = 1
 item_type = ""
 equip_slot = "offhand"
+hide_hair = false
 affix_pool = Array[ExtResource("2_5pq40")]([ExtResource("3_v34q6"), ExtResource("4_wun17"), ExtResource("5_ou325"), ExtResource("6_oj4u1"), ExtResource("7_j0gwi")])
 affix_groups = Array[ExtResource("1_3wl58")]([])
 affixes = Array[ExtResource("8_i5xre")]([])

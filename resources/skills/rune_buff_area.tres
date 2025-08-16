@@ -16,6 +16,7 @@ script = ExtResource("1_lsaw0")
 radius = 3.0
 buff = SubResource("Resource_ntm02")
 name = ""
+description = ""
 mana_cost = 0.0
 cooldown = 0.0
 duration = 0.0

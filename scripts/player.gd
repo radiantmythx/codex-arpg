@@ -117,17 +117,16 @@ func _ready() -> void:
 
 	equipment = EquipmentManager.new()
 	equipment.stats = stats
-        equipment.set_slots(["weapon", "offhand", "armor", "helmet"])
-        add_child(equipment)
+	equipment.set_slots(["weapon", "offhand", "armor", "helmet"])
+	add_child(equipment)
 
-        # Visual manager displays meshes for equipped items.
-        var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
-        _equip_visuals = EquipmentVisualManager.new()
-        _equip_visuals.skeleton = skeleton
-        _equip_visuals.equipment = equipment
-        _equip_visuals.hair_scene = hair_scene
-        _equip_visuals.hair_bone = hair_bone
-        add_child(_equip_visuals)
+	# Visual manager displays meshes for equipped items.
+	var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
+	_equip_visuals = EquipmentVisualManager.new()
+	_equip_visuals.skeleton = skeleton
+	_equip_visuals.equipment = equipment
+	_equip_visuals.hair_scene = hair_scene
+	add_child(_equip_visuals)
 
 	rune_manager = RuneManager.new()
 	add_child(rune_manager)
@@ -263,8 +262,9 @@ func _process_attack(delta: float) -> void:
 						_attacking_timer = 0.0
 				if _attacking_timer <= 0.0 and _anim_state:
 						_anim_state.travel("move")
-		if Input.is_action_just_pressed("attack") and _attack_timer <= 0.0 and main_skill and _attacking_timer <= 0.0:
+		if Input.is_action_pressed("attack") and _attack_timer <= 0.0 and main_skill and _attacking_timer <= 0.0:
 				if mana >= main_skill.mana_cost:
+						_anim_state.travel("move") #reset anim state
 						var speed = stats.get_attack_speed()
 						_attack_timer = main_skill.cooldown / max(speed, 0.001)
 						_attacking_timer = main_skill.duration / max(speed, 0.001)
@@ -274,11 +274,15 @@ func _process_attack(delta: float) -> void:
 						_attack_performed = false
 						_current_move_multiplier = main_skill.move_multiplier
 						mana -= main_skill.mana_cost
+						var look_dir = _get_click_direction()
+						var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
+						rotation.y = target_rot
 						if _anim_state and main_skill.animation_name != &"":
 								#print(main_skill.animation_name)
 								_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
-								print(String(main_skill.animation_name))
-								_anim_state.travel(String(main_skill.animation_name))
+								# Reset animation time to start (0.0)
+								#_anim_tree.set("parameters/%s/time" % str(main_skill.animation_name), 0.0)
+								_anim_state.start(String(main_skill.animation_name), true)
 						else:
 								print("no anim for skill")
 								main_skill.perform(self)
@@ -368,9 +372,9 @@ func _on_rune_skill_changed(index: int, skill: Skill) -> void:
 		secondary_skill = skill
 
 func get_skill_slot(index: int) -> Skill:
-        if rune_manager:
-                return rune_manager.get_skill(index)
-        return null
+		if rune_manager:
+				return rune_manager.get_skill(index)
+		return null
 
 func get_skill_cooldown_remaining(index: int) -> float:
 	match index:
@@ -391,8 +395,8 @@ func is_skill_active(index: int) -> bool:
 			return false
 
 func set_skill_slot(_index: int, _skill: Skill) -> void:
-                # Skills are determined by rune combinations; manual assignment disabled.
-        pass
+				# Skills are determined by rune combinations; manual assignment disabled.
+		pass
 
 func add_item(item: Item, amount: int = 1) -> void:
 	if _inventory_open and _inventory_ui:
@@ -453,6 +457,9 @@ func _start_dodge() -> void:
 		_dodge_direction = dir
 		_dodge_direction.y = 0.0
 		_dodge_direction = _dodge_direction.normalized()
+		var target_y := Basis.looking_at(_dodge_direction, Vector3.UP).get_euler().y
+		rotation.y = target_y
+
 		_add_dodge_exceptions()
 		if _anim_state:
 				_anim_state.travel("roll")

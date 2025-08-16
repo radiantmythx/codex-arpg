@@ -8,6 +8,7 @@ speed = 10.0
 range = 15.0
 explosion_radius = 5.0
 name = "Fireball"
+description = ""
 mana_cost = 5.0
 cooldown = 1.0
 duration = 0.0

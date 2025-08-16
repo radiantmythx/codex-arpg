@@ -5,12 +5,12 @@
 [ext_resource type="Resource" path="res://resources/items/mapItems/zone_shard.tres" id="3_tipki"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
-[ext_resource type="Resource" uid="uid://2m88kj64161u" path="res://resources/items/equipment/armor/iron_test/shield_of_based.tres" id="4_trceg"]
+[ext_resource type="Resource" uid="uid://2m88kj64161u" path="res://resources/items/equipment/armor/iron_test/Iron_Shield.tres" id="4_trceg"]
 [ext_resource type="Resource" uid="uid://jpdhdcxly3x4" path="res://resources/items/equipment/weapons/iron_test/sword_of_based.tres" id="5_ya4ey"]
-[ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/armor_of_based.tres" id="6_ya4ey"]
+[ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/Iron_Helmet.tres" id="6_ya4ey"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
-[ext_resource type="Resource" uid="uid://dqt40e75y6d5r" path="res://resources/items/equipment/armor/iron_test/platelegs_of_based.tres" id="7_trceg"]
-[ext_resource type="Resource" uid="uid://uifjbs48fjf3" path="res://resources/runes/item_strike_rune.tres" id="8_a8y0u"]
+[ext_resource type="Resource" uid="uid://dqt40e75y6d5r" path="res://resources/items/equipment/armor/iron_test/Iron_Platelegs.tres" id="7_trceg"]
+[ext_resource type="Resource" uid="uid://cwwkpoowfo5u6" path="res://resources/items/equipment/armor/iron_test/Iron_Platebody.tres" id="8_trceg"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 [ext_resource type="ArrayMesh" uid="uid://bbhmk34t3gy7d" path="res://models/grass/grass.res" id="11_ya4ey"]
 
@@ -120,7 +120,7 @@ drop_table = [{
 }, {
 "amount": 1,
 "chance": 1.0,
-"item": ExtResource("8_a8y0u")
+"item": ExtResource("8_trceg")
 }]
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]

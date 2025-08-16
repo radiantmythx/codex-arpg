@@ -18,6 +18,7 @@ icon = ExtResource("11_q3hmd")
 max_stack = 1
 item_type = ""
 equip_slot = ""
+hide_hair = false
 affix_pool = Array[ExtResource("1_kksce")]([])
 affix_groups = Array[ExtResource("1_jxr7o")]([])
 affixes = Array[ExtResource("2_bdg65")]([])

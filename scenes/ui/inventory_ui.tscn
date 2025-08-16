@@ -126,6 +126,17 @@ size_flags_vertical = 0
 is_equipment = true
 slot_type = "body"
 
+[node name="HelmetSlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+offset_left = 980.0
+offset_top = 208.0
+offset_right = 1028.0
+offset_bottom = 256.0
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "helmet"
+
 [node name="LegsSlot" parent="EquipSlotContainer" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2

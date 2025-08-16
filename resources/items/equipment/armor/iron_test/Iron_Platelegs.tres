@@ -14,12 +14,13 @@
 
 [resource]
 script = ExtResource("10_ui4fx")
-item_name = "Platelegs of Based"
-description = "Armor of the Based God"
+item_name = "Iron Platelegs"
+description = "Platelegs made of Iron"
 icon = ExtResource("8_clj57")
 max_stack = 1
 item_type = ""
 equip_slot = "legs"
+hide_hair = false
 affix_pool = Array[ExtResource("1_clj57")]([ExtResource("2_xrkgp"), ExtResource("3_gnnxd"), ExtResource("4_cupf5"), ExtResource("5_k3yut"), ExtResource("6_ef1l7")])
 affix_groups = Array[ExtResource("1_xrkgp")]([])
 affixes = Array[ExtResource("7_yoegr")]([])

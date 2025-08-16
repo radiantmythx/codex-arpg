@@ -21,6 +21,7 @@ range = 15.0
 explosion_radius = 0.0
 on_hit_buff = SubResource("Resource_eis8h")
 name = ""
+description = ""
 mana_cost = 0.0
 cooldown = 0.0
 duration = 0.0

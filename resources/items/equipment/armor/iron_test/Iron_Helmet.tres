@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://c0n8red0j2huk"]
+
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_bqph7"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_bxu0j"]
+[ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="3_82cos"]
+[ext_resource type="Resource" uid="uid://bgvlwtf7ig8rh" path="res://resources/affixes/soul_inc.tres" id="4_wq8yy"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="5_msbht"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="6_ljk2x"]
+[ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="7_mstbw"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="8_8x7n4"]
+[ext_resource type="Texture2D" uid="uid://boy03glsiyfgl" path="res://images/items/equipment/axe_of_based.png" id="9_w1ghj"]
+[ext_resource type="PackedScene" uid="uid://0ssw2ee00e0i" path="res://scenes/items/equipment/armor/iron_test/plate_helm.tscn" id="10_fvm0h"]
+[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="11_0osv1"]
+
+[resource]
+script = ExtResource("11_0osv1")
+item_name = "Iron Helmet"
+description = "Helmet made of Iron"
+icon = ExtResource("9_w1ghj")
+max_stack = 1
+item_type = ""
+equip_slot = "helmet"
+hide_hair = true
+affix_pool = Array[ExtResource("2_bxu0j")]([ExtResource("3_82cos"), ExtResource("4_wq8yy"), ExtResource("5_msbht"), ExtResource("6_ljk2x"), ExtResource("7_mstbw")])
+affix_groups = Array[ExtResource("1_bqph7")]([])
+affixes = Array[ExtResource("8_8x7n4")]([])
+model = ExtResource("10_fvm0h")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(-3.65199, 10.4911, 3.21081)
+equip_rotation_rads = Vector3(0.281258, 1.61489, 2.15432)
+metadata/_custom_type_script = "uid://cy34tikq4w1km"
