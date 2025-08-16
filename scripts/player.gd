@@ -14,6 +14,11 @@ extends CharacterBody3D
 # Skeleton containing the player's bones.  Equipment models are attached to
 # this skeleton so they follow animations.
 @export var skeleton_path: NodePath = NodePath("Armature/Skeleton3D")
+## Optional hair model that will be attached to the head.  The hair is
+## automatically hidden when equipped items request it (e.g. helmets with the
+## `hide_hair` flag).
+@export var hair_scene: PackedScene
+@export var hair_bone: String = "mixamorig_Head"
 
 # UI control that displays the hovered enemy's health bar.
 @export var target_display_path: NodePath
@@ -112,15 +117,17 @@ func _ready() -> void:
 
 	equipment = EquipmentManager.new()
 	equipment.stats = stats
-	equipment.set_slots(["weapon", "offhand", "armor"])
-	add_child(equipment)
+        equipment.set_slots(["weapon", "offhand", "armor", "helmet"])
+        add_child(equipment)
 
-	# Visual manager displays meshes for equipped items.
-	var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
-	_equip_visuals = EquipmentVisualManager.new()
-	_equip_visuals.skeleton = skeleton
-	_equip_visuals.equipment = equipment
-	add_child(_equip_visuals)
+        # Visual manager displays meshes for equipped items.
+        var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
+        _equip_visuals = EquipmentVisualManager.new()
+        _equip_visuals.skeleton = skeleton
+        _equip_visuals.equipment = equipment
+        _equip_visuals.hair_scene = hair_scene
+        _equip_visuals.hair_bone = hair_bone
+        add_child(_equip_visuals)
 
 	rune_manager = RuneManager.new()
 	add_child(rune_manager)

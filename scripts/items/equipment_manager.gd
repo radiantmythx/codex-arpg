@@ -18,7 +18,14 @@ func set_slots(names: Array) -> void:
 		_slots[n] = null
 
 func get_item(slot: String) -> Item:
-	return _slots.get(slot, null)
+        return _slots.get(slot, null)
+
+func get_all_items() -> Array[Item]:
+        ## Returns an array of all items currently equipped across all slots.
+        ## The array may contain `null` for empty slots.  Useful for systems
+        ## that need to query every equipped item, such as hiding the player's
+        ## hair when a helmet is worn.  Introduced for Godot 4.4 integration.
+        return _slots.values()
 
 func equip(item: Item) -> Item:
 	# Equips the given item and returns any item that was previously in the slot.
