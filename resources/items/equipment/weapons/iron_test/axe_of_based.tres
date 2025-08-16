@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bg85e3yo43p5e"]
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://bg85e3yo43p5e"]
 
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_dgqrh"]
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_kvf67"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="1_wwwwf"]
 [ext_resource type="Texture2D" uid="uid://boy03glsiyfgl" path="res://images/items/equipment/axe_of_based.png" id="2_wwwwf"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="3_51daw"]
@@ -22,7 +23,9 @@ icon = ExtResource("2_wwwwf")
 max_stack = 1
 item_type = ""
 equip_slot = "weapon"
+hide_hair = false
 affix_pool = Array[ExtResource("1_dgqrh")]([])
+affix_groups = Array[ExtResource("1_kvf67")]([])
 affixes = Array[ExtResource("1_wwwwf")]([SubResource("Resource_j70qe")])
 equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 equip_position = Vector3(0, 0, 0)

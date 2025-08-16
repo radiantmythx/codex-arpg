@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
 [ext_resource type="Resource" uid="uid://2m88kj64161u" path="res://resources/items/equipment/armor/iron_test/Iron_Shield.tres" id="4_trceg"]
-[ext_resource type="Resource" uid="uid://jpdhdcxly3x4" path="res://resources/items/equipment/weapons/iron_test/sword_of_based.tres" id="5_ya4ey"]
+[ext_resource type="Resource" uid="uid://dosbesunnt4ky" path="res://resources/items/equipment/weapons/iron_test/Iron_Sword.tres" id="5_trceg"]
 [ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/Iron_Helmet.tres" id="6_ya4ey"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
 [ext_resource type="Resource" uid="uid://dqt40e75y6d5r" path="res://resources/items/equipment/armor/iron_test/Iron_Platelegs.tres" id="7_trceg"]
@@ -103,7 +103,7 @@ max_health = 1.0
 drop_table = [{
 "amount": 1,
 "chance": 1.0,
-"item": ExtResource("5_ya4ey")
+"item": ExtResource("5_trceg")
 }, {
 "amount": 1,
 "chance": 1.0,

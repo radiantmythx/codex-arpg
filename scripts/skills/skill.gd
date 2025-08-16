@@ -26,8 +26,8 @@ func perform(user):
 # players to contribute weapon damage only when the skill's tags match the
 # weapon type.
 func _build_base_damage_dict(user) -> Dictionary:
-        var dict: Dictionary = {}
-        if user and user.has_method("get_base_damage_dict"):
-                dict = user.get_base_damage_dict(tags)
-        dict[damage_type] = Vector2(base_damage_low, base_damage_high)
-        return dict
+		var dict: Dictionary = {}
+		if user and user.has_method("get_base_damage_dict"):
+				dict = user.get_base_damage_dict(tags)
+		dict[damage_type] = Vector2(base_damage_low, base_damage_high)
+		return dict

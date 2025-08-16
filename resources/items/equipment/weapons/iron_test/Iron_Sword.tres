@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=9 format=3 uid="uid://dosbesunnt4ky"]
+
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_kypck"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_mqyvr"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_ggk64"]
+[ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="4_mqyvr"]
+[ext_resource type="Script" uid="uid://d34nu4qiyhmri" path="res://scripts/items/weapon.gd" id="4_vf126"]
+[ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/items/equipment/sword_of_based.png" id="5_ggk64"]
+[ext_resource type="PackedScene" uid="uid://ctgav8eh68yuy" path="res://scenes/items/equipment/weapons/iron_test/sword.tscn" id="6_vf126"]
+
+[sub_resource type="Resource" id="Resource_ggk64"]
+script = ExtResource("4_mqyvr")
+range = 2.0
+angle = 45.0
+name = "Sword Strike"
+description = ""
+mana_cost = 1.0
+cooldown = 0.05
+duration = 1.1
+move_multiplier = 1.0
+damage_type = 0
+base_damage_low = 2.0
+base_damage_high = 4.0
+tags = Array[String](["melee"])
+animation_name = &"strike"
+attack_time = 0.8
+cancel_time = 1.0
+metadata/_custom_type_script = "uid://cikfgr3vo4xex"
+
+[resource]
+script = ExtResource("4_vf126")
+base_damage_low = 2.0
+base_damage_high = 4.0
+damage_type = 0
+speed = 3.0
+weapon_type = 0
+default_skill = SubResource("Resource_ggk64")
+item_name = "Iron Sword"
+description = "Sword made of Iron"
+icon = ExtResource("5_ggk64")
+max_stack = 1
+item_type = ""
+equip_slot = "weapon"
+hide_hair = false
+affix_pool = Array[ExtResource("2_mqyvr")]([])
+affix_groups = Array[ExtResource("1_kypck")]([])
+affixes = Array[ExtResource("3_ggk64")]([])
+model = ExtResource("6_vf126")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(0, 0, 0)
+equip_rotation_rads = Vector3(-0.247753, 1.51865, -1.23666)
+metadata/_custom_type_script = "uid://d34nu4qiyhmri"

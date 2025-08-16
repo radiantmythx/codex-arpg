@@ -242,11 +242,11 @@ func remove_buff(buff: Buff) -> void:
 # DamageType.  Skill scripts call this so the values are merged with the
 # skill's own base damage when attacks are performed.
 func get_base_damage_dict(_tags := []) -> Dictionary:
-        var dict: Dictionary = {}
-        var mult = TIER_DAMAGE_MULT.get(tier, 1.0)
-        for dt in base_damage_types:
-                dict[dt] = Vector2(base_damage_low * mult, base_damage_high * mult)
-        return dict
+		var dict: Dictionary = {}
+		var mult = TIER_DAMAGE_MULT.get(tier, 1.0)
+		for dt in base_damage_types:
+				dict[dt] = Vector2(base_damage_low * mult, base_damage_high * mult)
+		return dict
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
 	#print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")
