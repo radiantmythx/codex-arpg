@@ -115,10 +115,11 @@ func _ready() -> void:
 	stats.base_mana_regen = base_mana_regen
 	stats.base_attack_speed = base_attack_speed
 
-	equipment = EquipmentManager.new()
-	equipment.stats = stats
-	equipment.set_slots(["weapon", "offhand", "armor", "helmet"])
-	add_child(equipment)
+        equipment = EquipmentManager.new()
+        equipment.stats = stats
+        equipment.set_slots(["weapon", "offhand", "armor", "helmet"])
+        equipment.connect("slot_changed", Callable(self, "_on_equipment_slot_changed"))
+        add_child(equipment)
 
 	# Visual manager displays meshes for equipped items.
 	var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
@@ -265,7 +266,7 @@ func _process_attack(delta: float) -> void:
 		if Input.is_action_pressed("attack") and _attack_timer <= 0.0 and main_skill and _attacking_timer <= 0.0:
 				if mana >= main_skill.mana_cost:
 						_anim_state.travel("move") #reset anim state
-						var speed = stats.get_attack_speed()
+                                                var speed = get_attack_speed(main_skill.tags)
 						_attack_timer = main_skill.cooldown / max(speed, 0.001)
 						_attacking_timer = main_skill.duration / max(speed, 0.001)
 						_attack_progress = 0.0
@@ -395,8 +396,50 @@ func is_skill_active(index: int) -> bool:
 			return false
 
 func set_skill_slot(_index: int, _skill: Skill) -> void:
-				# Skills are determined by rune combinations; manual assignment disabled.
-		pass
+        # Skills are determined by rune combinations; manual assignment disabled.
+        pass
+
+## Equip slot callback. When a weapon is equipped, apply its default skill if provided.
+func _on_equipment_slot_changed(slot: String, item: Item) -> void:
+        if slot != "weapon":
+                return
+        if item is Weapon and item.default_skill:
+                main_skill = item.default_skill
+
+## Returns a dictionary of base damage contributed by the equipped weapon for
+## skills with the given tags.
+func get_base_damage_dict(tags: Array[String] = []) -> Dictionary:
+        var dict: Dictionary = {}
+        var weapon: Item = equipment.get_item("weapon") if equipment else null
+        if weapon is Weapon:
+                var use := false
+                match weapon.weapon_type:
+                        Weapon.WeaponType.MELEE:
+                                use = tags.has("melee")
+                        Weapon.WeaponType.PROJECTILE:
+                                use = tags.has("projectile")
+                        Weapon.WeaponType.SPELL:
+                                use = tags.has("spell")
+                if use:
+                        dict[weapon.damage_type] = Vector2(weapon.base_damage_low, weapon.base_damage_high)
+        return dict
+
+## Calculates attack speed for a skill, factoring in weapon speed for matching tags.
+func get_attack_speed(tags: Array[String] = []) -> float:
+        var speed = stats.get_attack_speed_tagged(tags)
+        var weapon: Item = equipment.get_item("weapon") if equipment else null
+        if weapon is Weapon:
+                match weapon.weapon_type:
+                        Weapon.WeaponType.MELEE:
+                                if tags.has("melee"):
+                                        speed *= weapon.speed
+                        Weapon.WeaponType.PROJECTILE:
+                                if tags.has("projectile"):
+                                        speed *= weapon.speed
+                        Weapon.WeaponType.SPELL:
+                                if tags.has("spell"):
+                                        speed *= weapon.speed
+        return speed
 
 func add_item(item: Item, amount: int = 1) -> void:
 	if _inventory_open and _inventory_ui:
