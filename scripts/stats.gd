@@ -208,7 +208,10 @@ func get_move_speed() -> float:
 
 
 func get_attack_speed() -> float:
-	return _compute_stat(base_attack_speed, "attack_speed")
+        return _compute_stat(base_attack_speed, "attack_speed")
+
+func get_attack_speed_tagged(tags: Array[String] = []) -> float:
+        return _compute_stat_tagged(base_attack_speed, "attack_speed", tags)
 
 func get_defense() -> float:
 	return _compute_stat(base_defense, "defense")

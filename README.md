@@ -219,6 +219,31 @@ projects its 3D position into screen space and checks for rectangle intersection
 with its siblings. When a collision is detected the tag is nudged upward by a
 small increment until it no longer overlaps, keeping nearby labels legible.
 
+### Weapon Resources
+Weapons now have a dedicated resource script at `scripts/items/weapon.gd` that
+extends the base `Item`.  In the Inspector you can configure:
+
+- **weapon_type** – choose `Melee`, `Projectile` or `Spell` to determine which
+  skill tags can use the weapon's stats.
+- **base_damage_low / base_damage_high** and **damage_type** – the damage range
+  contributed to compatible skills.
+- **speed** – attack speed multiplier applied to matching skills (e.g. `1.3`
+  makes them 30% faster).
+- **default_skill** – an optional `Skill` resource that becomes the player's
+  main skill when the weapon is equipped.
+
+When a weapon is worn, its damage is automatically merged into any skill whose
+tags match the weapon type and the speed value multiplies the player's attack
+speed for those skills only.
+
+#### Converting existing items
+1. Open an existing weapon `.tres` in the Godot editor.
+2. In the Inspector, change its script to `scripts/items/weapon.gd`.
+3. Set the new properties (damage range, `weapon_type`, `speed` and optional
+   `default_skill`).
+4. Save the resource. No other files need changes; the player will pick up the
+   weapon's stats automatically when it is equipped.
+
 You can inspect or modify the contents of the player's inventory through the
 `inventory` property on `player.gd` or by attaching the `Inventory` script to
 other nodes if needed.
