@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=4 uid="uid://bp1n088ig3xf6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_np2g4"]
+resource_name = "Material.001"
+cull_mode = 2
+albedo_color = Color(0.328831, 0.69603, 0.3304, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wfbmx"]
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 0.108152, 2),
+"format": 34359742465,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAQADAAIAAAAEAAEAAgADAAUAAgAFAAAAAAAGAAQAAAAFAAYABAAHAAEAAQAHAAMABAAGAAcABQADAAcABQAHAAYA"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AACAvwAAAAAAAIA/AACAPwAAAAAAAIC/AACAvwAAAAAAAIC/AACAvwx/3T0AAIC/AACAPwAAAAAAAIA/AACAvwx/3T0AAIA/AACAPwx/3T0AAIA/AACAPwx/3T0AAIC/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_yi6dg"]
+resource_name = "center_tile_Plane"
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 0.108152, 2),
+"attribute_data": PackedByteArray("AAAAAAAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAgD8AAIA/AACAPwAAgD8AAAAAAACAPwAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAgD8AAAAAAACAPwAAAAAAAAAA"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_np2g4"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AACAvwAAAAAAAIA/AACAPwAAAAAAAIC/AACAvwAAAAAAAIC/AACAPwAAAAAAAIA/AACAvwx/3T0AAIA/AACAPwx/3T0AAIC/AACAPwx/3T0AAIA/AACAvwx/3T0AAIC/AACAPwAAAAAAAIC/AACAvwx/3T0AAIC/AACAvwAAAAAAAIC/AACAPwx/3T0AAIC/AACAvwAAAAAAAIA/AACAPwx/3T0AAIA/AACAPwAAAAAAAIA/AACAvwx/3T0AAIA/AACAPwAAAAAAAIA/AACAPwx/3T0AAIC/AACAPwAAAAAAAIC/AACAPwx/3T0AAIA/AACAvwAAAAAAAIC/AACAvwx/3T0AAIA/AACAvwAAAAAAAIA/AACAvwx/3T0AAIC//38AAP///z//fwAA////P/9/AAD///8//38AAP///z//f///////v/9///////+//3///////7//f///////v/////////+//////////7//////////v/////////+//3//f////z//f/9/////P/9//3////8//3//f////z////9/////v////3////+/////f////7////9/////vwAA/3////+/AAD/f////78AAP9/////vwAA/3////+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_wfbmx")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_yi6dg")
+skeleton = NodePath("")

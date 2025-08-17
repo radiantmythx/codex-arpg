@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://parrs2wlbftg"]
+
+[ext_resource type="PackedScene" uid="uid://b0nofje6dmhip" path="res://models/tiles/corner_tile.glb" id="1_hc822"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_71tae"]
+size = Vector3(0.53006, 1.64368, 1.84094)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ovc6y"]
+size = Vector3(1.92336, 1.64368, 0.339905)
+
+[node name="Node3D" type="Node3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="corner_tile" parent="." instance=ExtResource("1_hc822")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.724655, 0.321838, -0.0546265)
+shape = SubResource("BoxShape3D_71tae")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0280075, 0.321838, 0.695892)
+shape = SubResource("BoxShape3D_ovc6y")

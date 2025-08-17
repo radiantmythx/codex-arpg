@@ -29,16 +29,16 @@ var _hover_outline_material: ShaderMaterial
 const HOVER_OUTLINE_SHADER := preload("res://resources/enemy_hover_outline.gdshader")
 
 func _ready() -> void:
-    current_health = max_health
-    add_to_group("npc")
-    _mesh = get_node_or_null("MeshInstance3D")
-    if _mesh:
-        _hover_outline_material = ShaderMaterial.new()
-        _hover_outline_material.shader = HOVER_OUTLINE_SHADER
-        _hover_outline_material.set_shader_parameter("outline_color", Color.GREEN)
+	current_health = max_health
+	add_to_group("npc")
+	_mesh = get_node_or_null("MeshInstance3D")
+	if _mesh:
+		_hover_outline_material = ShaderMaterial.new()
+		_hover_outline_material.shader = HOVER_OUTLINE_SHADER
+		_hover_outline_material.set_shader_parameter("outline_color", Color.GREEN)
 
 func set_hovered(hovered: bool) -> void:
-    ## Toggle the green outline when the mouse hovers this NPC.
-    if not _mesh:
-        return
-    _mesh.material_overlay = _hover_outline_material if hovered else null
+	## Toggle the green outline when the mouse hovers this NPC.
+	if not _mesh:
+		return
+	_mesh.material_overlay = _hover_outline_material if hovered else null

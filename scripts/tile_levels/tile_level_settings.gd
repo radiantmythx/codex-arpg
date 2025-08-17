@@ -6,13 +6,13 @@ extends Resource
 # and optional decorations.
 
 const TunnelSize := {
-    NONE = 0,
-    EXTRA_SMALL = 1,
-    SMALL = 2,
-    MEDIUM = 3,
-    LARGE = 4,
-    EXTRA_LARGE = 5,
-    GIGANTIC = 6,
+	NONE = 0,
+	EXTRA_SMALL = 1,
+	SMALL = 2,
+	MEDIUM = 3,
+	LARGE = 4,
+	EXTRA_LARGE = 5,
+	GIGANTIC = 6,
 }
 
 @export var tiles: Tile9Set

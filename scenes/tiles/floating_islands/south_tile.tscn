@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8fci54esu2gx"]
+
+[ext_resource type="PackedScene" uid="uid://dla1ekaesnvvh" path="res://models/tiles/edge_tile.glb" id="1_foklc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ra7gs"]
+size = Vector3(1.88635, 1.59033, 0.668424)
+
+[node name="Node3D" type="Node3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="edge_tile" parent="." instance=ExtResource("1_foklc")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1.00311, 0, 0, 0, 1.00311, 0, 0, 0, 1.00311, -0.0257032, 0.295166, -0.776569)
+shape = SubResource("BoxShape3D_ra7gs")
