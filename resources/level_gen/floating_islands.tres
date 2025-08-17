@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TileLevelSettings" load_steps=59 format=4 uid="uid://bdmknthkdkvu4"]
+[gd_resource type="Resource" script_class="TileLevelSettings" load_steps=62 format=4 uid="uid://bdmknthkdkvu4"]
 
 [ext_resource type="Script" uid="uid://2p6ddtwx1rs7" path="res://scripts/tile_levels/level_decoration.gd" id="1_matm0"]
 [ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="1_sqcl2"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://c0vgaf5vs6gcq" path="res://scenes/ui/healthbar.tscn" id="5_yea8u"]
 [ext_resource type="PackedScene" uid="uid://cbx7locqf4jmh" path="res://scenes/tiles/floating_islands/southeast_tile.tscn" id="6_ufcej"]
 [ext_resource type="PackedScene" uid="uid://7qoead5w2fwv" path="res://scenes/tiles/floating_islands/southwest_tile.tscn" id="7_3nyuq"]
+[ext_resource type="Script" uid="uid://dt8rewgoljepn" path="res://scripts/tile_levels/default_tile_decoration.gd" id="7_8qhee"]
+[ext_resource type="ArrayMesh" uid="uid://bkvoa4lc61crv" path="res://meshes/environ/trees/pine_01.mesh" id="8_8qhee"]
 [ext_resource type="PackedScene" uid="uid://bb5s2a2iok27x" path="res://scenes/tiles/floating_islands/east_tile.tscn" id="8_sqcl2"]
 [ext_resource type="PackedScene" uid="uid://dktja5kkjo3sq" path="res://scenes/tiles/floating_islands/north_tile.tscn" id="9_ksrbg"]
 [ext_resource type="PackedScene" uid="uid://c8fci54esu2gx" path="res://scenes/tiles/floating_islands/south_tile.tscn" id="10_8qhee"]
@@ -14070,6 +14072,12 @@ _bundled = {
 "version": 3
 }
 
+[sub_resource type="Resource" id="Resource_qjmfd"]
+script = ExtResource("7_8qhee")
+mesh = ExtResource("8_8qhee")
+frequency = 0.75
+metadata/_custom_type_script = "uid://dt8rewgoljepn"
+
 [sub_resource type="PackedScene" id="PackedScene_qi1a3"]
 _bundled = {
 "conn_count": 0,
@@ -14109,15 +14117,20 @@ metadata/_custom_type_script = "uid://c73kghteohvdy"
 [resource]
 script = ExtResource("2_xdu3f")
 tiles = SubResource("Resource_hh22a")
-room_count = 3
+room_count = 4
 room_min_size = Vector2i(10, 10)
-room_max_size = Vector2i(15, 15)
+room_max_size = Vector2i(20, 20)
 tunnel_size = 3
 obstacle_chance = 0.0
 tile_size = 2.0
+default_tile = ExtResource("3_sieb2")
+draw_default_tiles = true
+draw_default_tiles_outside_level = false
+default_tile_outside_scale = 8.0
+default_decorations = Array[ExtResource("7_8qhee")]([SubResource("Resource_qjmfd")])
 decorations = Array[ExtResource("1_matm0")]([])
 seed = 0
-level_size = Vector2i(40, 40)
+level_size = Vector2i(100, 100)
 enemy_scenes = Array[PackedScene]([SubResource("PackedScene_qi1a3")])
 enemy_density = 0.081
 boss_scene = SubResource("PackedScene_mnexp")
