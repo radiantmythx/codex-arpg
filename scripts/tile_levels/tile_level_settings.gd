@@ -27,6 +27,24 @@ const TunnelSize := {
 # Optional fixed seed. Set to 0 to randomize.
 @export var seed: int = 0
 
+# --- Level bounds ----------------------------------------------------------
+# Maximum size of the generated level in tile coordinates. Rooms are
+# positioned so their rectangles fit within these dimensions. Any tiles or
+# corridors carved outside the bounds are discarded.
+@export var level_size: Vector2i = Vector2i(100, 100)
+
+# --- Enemy spawning --------------------------------------------------------
+# Collection of enemy scenes that may be instanced on valid floor tiles. One
+# is chosen at random for each spawn point.
+@export var enemy_scenes: Array[PackedScene] = []
+# Chance per valid center tile to spawn an enemy. Values near 0 produce sparse
+# encounters while 1.0 fills every available tile.
+@export_range(0.0, 1.0) var enemy_density: float = 0.0
+
+# Optional boss scene placed at the farthest room from the player spawn. If
+# left empty a simple Node3D marker named "BossSpawn" will be added instead.
+@export var boss_scene: PackedScene
+
 # Example usage in code:
 # var settings := load("res://path/to/your_settings.tres")
 # var level := TileLevelGenerator.new().generate(settings)
