@@ -17,6 +17,13 @@ resource. The generator:
   become.
 All spawned nodes are positioned using the resource's `tile_size` so they line up with the generated tiles.
 
+### Default tiles and ambient decoration
+Tile levels can optionally fill empty grid spaces with a `default_tile`.
+`draw_default_tiles` places this tile anywhere no normal level tile was generated.
+Enabling `draw_default_tiles_outside_level` surrounds the level with a ring of the default tile scaled up so the border extends beyond the play area.
+`default_decorations` lets you scatter meshes such as trees or rocks across these default tiles using efficient `MultiMeshInstance3D` nodes.
+Decoration density is calculated per tile-sized area so it remains consistent even when outside tiles are enlarged.
+
 ## Creating Additional Scenes
 1. Open the project in Godot.
 2. Add 3D nodes (enemies, environment, etc.) to `scenes/Main.tscn` or create new scenes that can be instanced into Main.

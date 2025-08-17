@@ -23,6 +23,11 @@ const TunnelSize := {
 @export_range(0.0, 1.0) var obstacle_chance: float = 0.0
 # Distance in world units between tile centers.
 @export_range(0.1, 4.0) var tile_size: float = 1.0
+@export var default_tile: PackedScene  # tile used when a space has no normal tile
+@export var draw_default_tiles: bool = false  # place `default_tile` in empty positions
+@export var draw_default_tiles_outside_level: bool = false  # surround the level with huge default tiles
+@export_range(1.0, 100.0) var default_tile_outside_scale: float = 8.0  # size multiplier for outside tiles
+@export var default_decorations: Array[DefaultTileDecoration] = []  # MultiMesh decorations for default tiles
 @export var decorations: Array[LevelDecoration] = []
 # Optional fixed seed. Set to 0 to randomize.
 @export var seed: int = 0

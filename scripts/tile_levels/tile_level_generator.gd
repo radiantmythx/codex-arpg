@@ -44,6 +44,8 @@ func generate(settings: TileLevelSettings) -> Node3D:
 			_ensure_connected(tiles)
 
 	var root := Node3D.new()
+	var default_positions: Array[Vector2i] = []
+	var outside_rects: Array[Rect2] = []
 	for pos in tiles.keys():
 			var scene := _select_tile_scene(pos, tiles, settings.tiles)
 			if scene:
@@ -52,6 +54,11 @@ func generate(settings: TileLevelSettings) -> Node3D:
 					inst.name = "ground" + random_string(8)
 					root.add_child(inst, true)
 
+        if settings.draw_default_tiles and settings.default_tile:
+                default_positions = _spawn_default_tiles(root, tiles, settings.default_tile, settings.level_size, settings.tile_size)
+        if settings.draw_default_tiles_outside_level and settings.default_tile:
+                outside_rects = _spawn_outside_default_tiles(root, settings.default_tile, settings.level_size, settings.tile_size, settings.default_tile_outside_scale)
+        _spawn_default_decorations(root, default_positions, outside_rects, settings.default_decorations, rng, settings.tile_size)
 	_spawn_decorations(root, tiles, settings.decorations, rng, settings.tile_size)
 
 	# Determine spawn locations using room centers.
@@ -205,6 +212,78 @@ func _spawn_decorations(parent: Node3D, tiles: Dictionary, decos: Array[LevelDec
 							inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
 							parent.add_child(inst)
 
+
+func _spawn_default_tiles(parent: Node3D, tiles: Dictionary, scene: PackedScene, level_size: Vector2i, tile_size: float) -> Array[Vector2i]:
+        var positions: Array[Vector2i] = []
+        for x in range(level_size.x):
+                for y in range(level_size.y):
+                        var p := Vector2i(x, y)
+                        if tiles.has(p):
+                                continue
+                        var inst = scene.instantiate()
+                        inst.position = Vector3(x * tile_size, 0, y * tile_size)
+                        parent.add_child(inst, true)
+                        positions.append(p)
+        return positions
+
+func _spawn_outside_default_tiles(parent: Node3D, scene: PackedScene, level_size: Vector2i, tile_size: float, scale_factor: float) -> Array[Rect2]:
+        var rects: Array[Rect2] = []
+        var w = level_size.x * tile_size
+        var h = level_size.y * tile_size
+        var sx = level_size.x * scale_factor
+        var sz = level_size.y * scale_factor
+        var half_w_scaled = sx * tile_size / 2
+        var half_h_scaled = sz * tile_size / 2
+        var half_w = w / 2
+        var half_h = h / 2
+        var centers = [
+                Vector3(-half_w_scaled - half_w, 0, half_h),
+                Vector3(w + half_w_scaled + half_w, 0, half_h),
+                Vector3(half_w, 0, -half_h_scaled - half_h),
+                Vector3(half_w, 0, h + half_h_scaled + half_h),
+                Vector3(-half_w_scaled - half_w, 0, -half_h_scaled - half_h),
+                Vector3(w + half_w_scaled + half_w, 0, -half_h_scaled - half_h),
+                Vector3(-half_w_scaled - half_w, 0, h + half_h_scaled + half_h),
+                Vector3(w + half_w_scaled + half_w, 0, h + half_h_scaled + half_h)
+        ]
+        for c in centers:
+                var inst = scene.instantiate()
+                inst.position = c
+                inst.scale = Vector3(sx, 1, sz)
+                parent.add_child(inst, true)
+                rects.append(Rect2(c.x - half_w_scaled, c.z - half_h_scaled, sx * tile_size, sz * tile_size))
+        return rects
+
+func _spawn_default_decorations(parent: Node3D, tile_positions: Array[Vector2i], outside_rects: Array[Rect2], decos: Array[DefaultTileDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
+        if decos.is_empty():
+                return
+        for deco in decos:
+                if deco.mesh == null or deco.frequency <= 0.0:
+                        continue
+                var transforms: Array[Transform3D] = []
+                for p in tile_positions:
+                        if rng.randf() < deco.frequency:
+                                var offset = Vector3((p.x + rng.randf()) * tile_size, 0, (p.y + rng.randf()) * tile_size)
+                                transforms.append(Transform3D(Basis(), offset))
+                for rect in outside_rects:
+                        var cells_x = int(rect.size.x / tile_size)
+                        var cells_y = int(rect.size.y / tile_size)
+                        for x in range(cells_x):
+                                for y in range(cells_y):
+                                        if rng.randf() < deco.frequency:
+                                                var pos = Vector3(rect.position.x + (x + rng.randf()) * tile_size, 0, rect.position.y + (y + rng.randf()) * tile_size)
+                                                transforms.append(Transform3D(Basis(), pos))
+                if transforms.size() == 0:
+                        continue
+                var mm = MultiMesh.new()
+                mm.mesh = deco.mesh
+                mm.transform_format = MultiMesh.TRANSFORM_3D
+                mm.instance_count = transforms.size()
+                for i in range(transforms.size()):
+                        mm.set_instance_transform(i, transforms[i])
+                var mmi = MultiMeshInstance3D.new()
+                mmi.multimesh = mm
+                parent.add_child(mmi, true)
 # ---------------------------------------------------------------------------
 # Helper functions
 
