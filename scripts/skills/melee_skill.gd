@@ -32,7 +32,7 @@ func perform(user):
 	mesh.material_override = StandardMaterial3D.new()
 	mesh.material_override.albedo_color = Color(1, 0, 0, 0.5)
 	mesh.visible = true
-	attack_area.add_child(mesh)
+	#attack_area.add_child(mesh)
 	var timer = Timer.new()
 	timer.wait_time = 0.1
 	timer.one_shot = true
@@ -67,4 +67,6 @@ func perform(user):
 									body.add_buff(buff_snapshot.duplicate(true))
 							if on_hit_effect:
 									var eff = on_hit_effect.instantiate()
-									body.add_child(eff)
+									eff.global_transform = body.global_transform
+									eff.position.y += 2
+									body.get_tree().current_scene.add_child(eff)

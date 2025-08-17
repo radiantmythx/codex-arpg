@@ -56,7 +56,9 @@ func _explode(origin: Vector3, parent, world, dmg_map, buff_snapshot, mult, is_p
 								body.add_buff(buff_snapshot.duplicate(true))
 							if on_hit_effect:
 									var eff = on_hit_effect.instantiate()
-									body.add_child(eff)
+									eff.global_transform = body.global_transform
+									body.get_tree().current_scene.add_child(eff)
+
 	if explosion_effect:
 			var e = explosion_effect.instantiate()
 			e.global_transform.origin = origin

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dh6ejveto58s1"
-path.s3tc="res://.godot/imported/triple_bead.png-8b38e7b884996addee2f93f6701f679e.s3tc.ctex"
+uid="uid://c411isx1ptumo"
+path.s3tc="res://.godot/imported/portal_overlay.png-26abfefaec1343493c1146c52297bc57.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://images/particles/triple_bead.png"
-dest_files=["res://.godot/imported/triple_bead.png-8b38e7b884996addee2f93f6701f679e.s3tc.ctex"]
+source_file="res://images/shaders/portal_overlay.png"
+dest_files=["res://.godot/imported/portal_overlay.png-26abfefaec1343493c1146c52297bc57.s3tc.ctex"]
 
 [params]
 

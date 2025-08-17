@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=9 format=3 uid="uid://dosbesunnt4ky"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=10 format=3 uid="uid://dosbesunnt4ky"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_kypck"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_mqyvr"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_ggk64"]
+[ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="4_kxats"]
 [ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="4_mqyvr"]
 [ext_resource type="Script" uid="uid://d34nu4qiyhmri" path="res://scripts/items/weapon.gd" id="4_vf126"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/items/equipment/sword_of_based.png" id="5_ggk64"]
@@ -12,12 +13,13 @@
 script = ExtResource("4_mqyvr")
 range = 2.0
 angle = 45.0
+on_hit_effect = ExtResource("4_kxats")
 name = "Sword Strike"
 description = ""
 mana_cost = 1.0
 cooldown = 0.05
 duration = 1.1
-move_multiplier = 1.0
+move_multiplier = 0.2
 damage_type = 0
 base_damage_low = 2.0
 base_damage_high = 4.0
@@ -32,7 +34,7 @@ script = ExtResource("4_vf126")
 base_damage_low = 2.0
 base_damage_high = 4.0
 damage_type = 0
-speed = 3.0
+speed = 0.7
 weapon_type = 0
 default_skill = SubResource("Resource_ggk64")
 item_name = "Iron Sword"

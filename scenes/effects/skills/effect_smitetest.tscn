@@ -1,40 +1,50 @@
-[gd_scene load_steps=8 format=3 uid="uid://b3er6xewdlpeq"]
+[gd_scene load_steps=10 format=3 uid="uid://b3er6xewdlpeq"]
 
-[ext_resource type="Texture2D" uid="uid://bvdnso1s8y5r7" path="res://images/items/test_item.png" id="1_2byvc"]
+[ext_resource type="Texture2D" uid="uid://dh6ejveto58s1" path="res://images/particles/triple_bead.png" id="1_m8eba"]
 [ext_resource type="Script" uid="uid://bof67xrx4hr7p" path="res://scenes/effects/skills/OneShotParticle.gd" id="2_m8eba"]
 
+[sub_resource type="Gradient" id="Gradient_pai51"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m2xm1"]
+gradient = SubResource("Gradient_pai51")
+
 [sub_resource type="Curve" id="Curve_2byvc"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.294118, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.554572, 0.665888), 0.0, 0.0, 0, 0, Vector2(0.569322, 1), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_m8eba"]
 curve = SubResource("Curve_2byvc")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pai51"]
+resource_local_to_scene = true
 radial_velocity_min = -2.23517e-05
-radial_velocity_max = 11.49
+radial_velocity_max = 4.99998
 gravity = Vector3(0, 0, 0)
-scale_min = 0.0
 scale_curve = SubResource("CurveTexture_m8eba")
-color = Color(9.945, 9.945, 0, 1)
-hue_variation_min = -1.0
-hue_variation_max = 1.0
+color_ramp = SubResource("GradientTexture1D_m2xm1")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2byvc"]
+resource_local_to_scene = true
 transparency = 1
+shading_mode = 0
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_2byvc")
-billboard_mode = 1
+albedo_texture = ExtResource("1_m8eba")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_m2xm1"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_2byvc")
 
 [node name="EffectSmitetest" type="GPUParticles3D"]
 emitting = false
-amount = 100
-lifetime = 0.37
+amount = 10
+lifetime = 0.3
 one_shot = true
-explosiveness = 0.58
+explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_pai51")
 draw_pass_1 = SubResource("QuadMesh_m2xm1")
 script = ExtResource("2_m8eba")

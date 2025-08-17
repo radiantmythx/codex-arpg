@@ -6,7 +6,7 @@ extends CharacterBody3D
 @export var wander_change_interval: float = 2.0
 @export var detection_range: float = 8.0
 @export var attack_range: float = 1.5
-@export var main_skill: Skill = preload("res://resources/skills/fireball.tres")
+@export var main_skill: Skill = preload("res://resources/skills/debug/fireball.tres")
 @export var healthbar_node_path: NodePath
 @export var animation_tree_path: NodePath
 @export var mesh: MeshInstance3D
@@ -104,26 +104,26 @@ func _ready() -> void:
 					_anim_state = _anim_tree.get("parameters/playback")
 	_mesh = mesh
 	if _mesh:
-			_original_material = _mesh.material_override
-			_mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
+		_original_material = _mesh.material_override
+		_mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
 						# Create a material using the hover outline shader.  It will be
 			# assigned to `material_overlay` when the mouse hovers this enemy
 			# so the original surface materials remain visible.
-        _hover_outline_material = ShaderMaterial.new()
-        _hover_outline_material.shader = HOVER_OUTLINE_SHADER
-        if healthbar_node_path != NodePath():
-                        _healthbar = get_node(healthbar_node_path)
-                        if(_healthbar):
-                                _healthbar.set_health(current_health, max_health)
-                                if(tier == Tier.BOSS):
-                                        $Sprite3D.position.y *= 3
+	_hover_outline_material = ShaderMaterial.new()
+	_hover_outline_material.shader = HOVER_OUTLINE_SHADER
+	if healthbar_node_path != NodePath():
+					_healthbar = get_node(healthbar_node_path)
+					if(_healthbar):
+							_healthbar.set_health(current_health, max_health)
+							if(tier == Tier.BOSS):
+									$Sprite3D.position.y *= 3
 
-        # Instantiate a culler so enemies outside the camera view are paused
-        # and hidden, allowing thousands of enemies without impacting the editor.
-        var _culler := OffscreenCuller.new()
-        if _mesh:
-                _culler.visual_path = _mesh.get_path()
-        add_child(_culler)
+	# Instantiate a culler so enemies outside the camera view are paused
+	# and hidden, allowing thousands of enemies without impacting the editor.
+	var _culler := OffscreenCuller.new()
+	if _mesh:
+			_culler.visual_path = _mesh.get_path()
+	add_child(_culler)
 
 func _physics_process(delta: float) -> void:
 				_process_regen(delta)

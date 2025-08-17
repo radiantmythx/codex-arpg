@@ -36,6 +36,7 @@ func perform(user):
 	projectile.body_entered.connect(_on_projectile_body_entered.bind(projectile))
 	user.get_parent().add_child(projectile)
 	projectile.global_transform.origin = user.global_transform.origin + direction
+	projectile.position.y += 2
 	var travel_time = range / speed
 	var tween = projectile.create_tween()
 	tween.tween_property(projectile, "global_transform:origin", user.global_transform.origin + direction * range, travel_time)
@@ -69,6 +70,8 @@ func _on_projectile_body_entered(body, projectile):
 							body.add_buff(buff_snapshot.duplicate(true))
 					if on_hit_effect:
 						var eff = on_hit_effect.instantiate()
+						eff.global_transform = body.global_transform
+						body.get_tree().current_scene.add_child(eff)
 						body.add_child(eff)
 	_explode(projectile)
 	projectile.queue_free()
@@ -108,7 +111,8 @@ func _explode(projectile):
 									body.add_buff(buff_snapshot.duplicate(true))
 							if on_hit_effect:
 									var eff = on_hit_effect.instantiate()
-									body.add_child(eff)
+									eff.global_transform = body.global_transform
+									body.get_tree().current_scene.add_child(eff)
 	if explosion_effect:
 			var e = explosion_effect.instantiate()
 			e.global_transform.origin = origin

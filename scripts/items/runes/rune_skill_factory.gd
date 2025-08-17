@@ -1,16 +1,16 @@
 class_name RuneSkillFactory
 
 # Preload base skill resources for rune combinations
-const STRIKE_SKILL = preload("res://resources/skills/rune_strike.tres")
-const BUFF_SKILL = preload("res://resources/skills/rune_buff.tres")
-const AREA_SKILL = preload("res://resources/skills/rune_area.tres")
-const TIME_SKILL = preload("res://resources/skills/rune_time.tres")
-const STRIKE_BUFF_SKILL = preload("res://resources/skills/rune_strike_buff.tres")
-const STRIKE_AREA_SKILL = preload("res://resources/skills/rune_strike_area.tres")
-const STRIKE_TIME_SKILL = preload("res://resources/skills/rune_strike_time.tres")
-const BUFF_AREA_SKILL = preload("res://resources/skills/rune_buff_area.tres")
-const BUFF_TIME_SKILL = preload("res://resources/skills/rune_buff_time.tres")
-const AREA_TIME_SKILL = preload("res://resources/skills/rune_area_time.tres")
+const STRIKE_SKILL = preload("res://resources/skills/rune_skills/rune_strike.tres")
+const BUFF_SKILL = preload("res://resources/skills/rune_skills/rune_buff.tres")
+const AREA_SKILL = preload("res://resources/skills/rune_skills/rune_area.tres")
+const TIME_SKILL = preload("res://resources/skills/rune_skills/rune_time.tres")
+const STRIKE_BUFF_SKILL = preload("res://resources/skills/rune_skills/rune_strike_buff.tres")
+const STRIKE_AREA_SKILL = preload("res://resources/skills/rune_skills/rune_strike_area.tres")
+const STRIKE_TIME_SKILL = preload("res://resources/skills/rune_skills/rune_strike_time.tres")
+const BUFF_AREA_SKILL = preload("res://resources/skills/rune_skills/rune_buff_area.tres")
+const BUFF_TIME_SKILL = preload("res://resources/skills/rune_skills/rune_buff_time.tres")
+const AREA_TIME_SKILL = preload("res://resources/skills/rune_skills/rune_area_time.tres")
 
 static func build_skill(runes: Array[Rune]) -> Skill:
 	if runes.is_empty():

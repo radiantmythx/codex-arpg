@@ -3,8 +3,8 @@ extends CharacterBody3D
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 15.0
 @export var base_attack_speed: float = 1.0
-@export var main_skill: Skill = preload("res://resources/skills/holy_smite.tres")
-@export var secondary_skill: Skill = preload("res://resources/skills/haste.tres")
+@export var main_skill: Skill = preload("res://resources/skills/debug/holy_smite.tres")
+@export var secondary_skill: Skill = preload("res://resources/skills/debug/haste.tres")
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
@@ -216,40 +216,41 @@ func _process_movement(delta: float) -> void:
 			if _anim_state:
 				_anim_state.travel("move")
 	else:
-               var input_dir = Vector3.ZERO
-               if Input.is_action_pressed("move_forward"):
-                       input_dir.z -= 1
-               if Input.is_action_pressed("move_back"):
-                       input_dir.z += 1
-               if Input.is_action_pressed("move_left"):
-                       input_dir.x -= 1
-               if Input.is_action_pressed("move_right"):
-                       input_dir.x += 1
-               input_dir = input_dir.normalized()
-               _last_local_input = input_dir
-               # Convert the local input into world space using the camera's
-               # orientation.  The magnitude is preserved so only the movement
-               # direction changes.
-               var move_dir := input_dir
-               var cam := get_viewport().get_camera_3d()
-               if cam:
-                       var cam_basis := cam.global_transform.basis
-                       var cam_forward := -cam_basis.z
-                       var cam_right := cam_basis.x
-                       move_dir = (cam_forward * input_dir.z + cam_right * input_dir.x)
-                       move_dir.y = 0.0
-                       move_dir = move_dir.normalized()
-               if move_dir != Vector3.ZERO:
-                       _last_move_input = move_dir
-               var look_dir = _get_click_direction()
-               var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
-               if(_attacking_timer <= 0.0):
-                       rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
-               var speed = stats.get_move_speed()
-               if _attacking_timer > 0.0:
-                       speed *= _current_move_multiplier
-               velocity.x = move_dir.x * speed
-               velocity.z = move_dir.z * speed
+		var input_dir = Vector3.ZERO
+		if Input.is_action_pressed("move_forward"):
+				input_dir.z += 1
+		if Input.is_action_pressed("move_back"):
+				input_dir.z -= 1
+		if Input.is_action_pressed("move_left"):
+				input_dir.x -= 1
+		if Input.is_action_pressed("move_right"):
+				input_dir.x += 1
+		input_dir = input_dir.normalized()
+		_last_local_input = input_dir
+		   # Convert the local input into world space using the camera's
+		   # orientation.  The magnitude is preserved so only the movement
+		   # direction changes.
+		var move_dir = input_dir
+		var cam := get_viewport().get_camera_3d()
+		if cam:
+				var cam_basis := cam.global_transform.basis
+				var cam_forward := -cam_basis.z
+				var cam_right := cam_basis.x
+				move_dir = (cam_forward * input_dir.z + cam_right * input_dir.x)
+				move_dir.y = 0.0
+				move_dir = move_dir.normalized()
+				#move_dir.z = -move_dir.z
+		if move_dir != Vector3.ZERO:
+			_last_move_input = move_dir
+		var look_dir = _get_click_direction()
+		var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
+		if(_attacking_timer <= 0.0):
+				rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
+		var speed = stats.get_move_speed()
+		if _attacking_timer > 0.0:
+				speed *= _current_move_multiplier
+		velocity.x = move_dir.x * speed
+		velocity.z = move_dir.z * speed
 		if Input.is_action_just_pressed("dodge") and _dodge_cooldown_timer <= 0.0 and not _is_dodging and _attacking_timer <= 0.0:
 			_start_dodge()
 	if _invincible_timer > 0.0:
@@ -505,14 +506,14 @@ func _start_dodge() -> void:
 		_dodge_timer = dodge_duration
 		_dodge_cooldown_timer = dodge_cooldown
 		_invincible_timer = dodge_invincibility_time
-               # Use the last camera-relative movement direction so the roll
-               # mirrors the player's recent movement.  If no movement was
-               # recorded, roll forward based on the current facing direction.
-               var dir := _last_move_input
-               if dir == Vector3.ZERO:
-                               dir = -global_transform.basis.z
-               _dodge_direction = dir.normalized()
-               _dodge_direction.y = 0.0
+			   # Use the last camera-relative movement direction so the roll
+			   # mirrors the player's recent movement.  If no movement was
+			   # recorded, roll forward based on the current facing direction.
+		var dir := _last_move_input
+		if dir == Vector3.ZERO:
+						dir = -global_transform.basis.z
+		_dodge_direction = dir.normalized()
+		_dodge_direction.y = 0.0
 		var target_y := Basis.looking_at(_dodge_direction, Vector3.UP).get_euler().y
 		rotation.y = target_y
 

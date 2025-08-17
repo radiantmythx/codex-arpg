@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BasicMeleeAttackSkill" load_steps=3 format=3 uid="uid://c6vfxp44eef8n"]
+
+[ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="1_kwj4y"]
+[ext_resource type="Script" uid="uid://b6mncmd6v4xbk" path="res://scripts/skills/basic_melee_attack_skill.gd" id="2_yf1hm"]
+
+[resource]
+script = ExtResource("2_yf1hm")
+range = 1.0
+angle = 45.0
+on_hit_effect = ExtResource("1_kwj4y")
+name = "Punch"
+description = ""
+mana_cost = 0.0
+cooldown = 1.0
+duration = 1.0
+move_multiplier = 0.2
+damage_type = 0
+base_damage_low = 1.0
+base_damage_high = 1.0
+tags = Array[String]([])
+animation_name = &"strike"
+attack_time = 0.3
+cancel_time = 1.0
+metadata/_custom_type_script = "uid://b6mncmd6v4xbk"
