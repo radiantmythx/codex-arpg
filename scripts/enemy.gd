@@ -36,6 +36,7 @@ enum Tier { PACK, LEADER, BOSS }
 const TIER_HEALTH_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.5, Tier.BOSS: 3.0}
 const TIER_DAMAGE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.25, Tier.BOSS: 2.0}
 const TIER_SIZE_MULT := {Tier.PACK: 1.0, Tier.LEADER: 1.25, Tier.BOSS: 1.75}
+const OffscreenCuller = preload("res://scripts/offscreen_culler.gd")
 
 ## Drop table is an array of dictionaries like:
 ## {"item": Item, "chance": 0.5, "amount": 1}
@@ -108,14 +109,21 @@ func _ready() -> void:
 						# Create a material using the hover outline shader.  It will be
 			# assigned to `material_overlay` when the mouse hovers this enemy
 			# so the original surface materials remain visible.
-	_hover_outline_material = ShaderMaterial.new()
-	_hover_outline_material.shader = HOVER_OUTLINE_SHADER
-	if healthbar_node_path != NodePath():
-			_healthbar = get_node(healthbar_node_path)
-			if(_healthbar):
-				_healthbar.set_health(current_health, max_health)
-				if(tier == Tier.BOSS):
-					$Sprite3D.position.y *= 3
+        _hover_outline_material = ShaderMaterial.new()
+        _hover_outline_material.shader = HOVER_OUTLINE_SHADER
+        if healthbar_node_path != NodePath():
+                        _healthbar = get_node(healthbar_node_path)
+                        if(_healthbar):
+                                _healthbar.set_health(current_health, max_health)
+                                if(tier == Tier.BOSS):
+                                        $Sprite3D.position.y *= 3
+
+        # Instantiate a culler so enemies outside the camera view are paused
+        # and hidden, allowing thousands of enemies without impacting the editor.
+        var _culler := OffscreenCuller.new()
+        if _mesh:
+                _culler.visual_path = _mesh.get_path()
+        add_child(_culler)
 
 func _physics_process(delta: float) -> void:
 				_process_regen(delta)
