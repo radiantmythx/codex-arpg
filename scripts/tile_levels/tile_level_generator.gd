@@ -3,58 +3,99 @@ extends RefCounted
 
 # Procedurally builds a scene composed of room tiles and connecting tunnels.
 # The generator operates purely in code so it can run at edit time or runtime.
+#
+# The generator now also places a `PlayerSpawn` marker in the first room,
+# optionally instantiates a boss in the farthest room and can populate any
+# interior tiles with enemies supplied via `TileLevelSettings`.
 
 const DIRS := [Vector2i.RIGHT, Vector2i.LEFT, Vector2i.DOWN, Vector2i.UP]
 
 func generate(settings: TileLevelSettings) -> Node3D:
-	print("generating")
-	var rng := RandomNumberGenerator.new()
-	if settings.seed != 0:
-		rng.seed = settings.seed
-	else:
-		rng.randomize()
+        """
+        Builds the level layout and populates it with optional spawn markers,
+        enemies and a boss. All coordinates are kept within
+        `settings.level_size`.
+        """
+        var rng := RandomNumberGenerator.new()
+        if settings.seed != 0:
+                rng.seed = settings.seed
+        else:
+                rng.randomize()
 
-	var tiles := {}
-	var rooms: Array[Rect2i] = []
-	for i in range(settings.room_count):
-		var size_x = rng.randi_range(settings.room_min_size.x, settings.room_max_size.x)
-		var size_y = rng.randi_range(settings.room_min_size.y, settings.room_max_size.y)
-		var pos_x
-		var pos_y
-		if i == 0 or _tunnel_width(settings.tunnel_size) > 0:
-			pos_x = rng.randi_range(-50, 50)
-			pos_y = rng.randi_range(-50, 50)
-		else:
-			var prev: Rect2i = rooms[i - 1]
-			pos_x = prev.position.x + prev.size.x
-			pos_y = prev.position.y
-		var rect := Rect2i(pos_x, pos_y, size_x, size_y)
-		rooms.append(rect)
-		_fill_rect(rect, tiles)
+        var tiles := {}
+        var rooms: Array[Rect2i] = []
+        for i in range(settings.room_count):
+                var size_x = rng.randi_range(settings.room_min_size.x, settings.room_max_size.x)
+                var size_y = rng.randi_range(settings.room_min_size.y, settings.room_max_size.y)
+                var pos_x = rng.randi_range(0, max(0, settings.level_size.x - size_x))
+                var pos_y = rng.randi_range(0, max(0, settings.level_size.y - size_y))
+                var rect := Rect2i(pos_x, pos_y, size_x, size_y)
+                rooms.append(rect)
+                _fill_rect(rect, tiles, settings.level_size)
 
-	var width := _tunnel_width(settings.tunnel_size)
-	for i in range(1, rooms.size()):
-		var a := _rect_center(rooms[i - 1])
-		var b := _rect_center(rooms[i])
-		_dig_corridor(a, b, width, tiles)
+        var width := _tunnel_width(settings.tunnel_size)
+        for i in range(1, rooms.size()):
+                var a := _rect_center(rooms[i - 1])
+                var b := _rect_center(rooms[i])
+                _dig_corridor(a, b, width, tiles, settings.level_size)
 
-	if settings.obstacle_chance > 0.0:
-		_add_obstacles(tiles, settings.obstacle_chance, rng)
-		_ensure_connected(tiles)
+        if settings.obstacle_chance > 0.0:
+                _add_obstacles(tiles, settings.obstacle_chance, rng)
+                _ensure_connected(tiles)
 
-	var root := Node3D.new()
-	for pos in tiles.keys():
-		var scene := _select_tile_scene(pos, tiles, settings.tiles)
-		if scene:
-			var inst = scene.instantiate()
-			inst.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
-			inst.name = "ground"+random_string(8)
-			root.add_child(inst)
+        var root := Node3D.new()
+        for pos in tiles.keys():
+                var scene := _select_tile_scene(pos, tiles, settings.tiles)
+                if scene:
+                        var inst = scene.instantiate()
+                        inst.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
+                        inst.name = "ground" + random_string(8)
+                        root.add_child(inst)
 
-	_spawn_decorations(root, tiles, settings.decorations, rng, settings.tile_size)
-	print(root)
-	print(root.get_child_count())
-	return root
+        _spawn_decorations(root, tiles, settings.decorations, rng, settings.tile_size)
+
+        # Determine spawn locations using room centers.
+        var start_room := rooms[0]
+        var player_pos := _rect_center(start_room)
+        var furthest_room := start_room
+        var max_dist := 0.0
+        for room in rooms:
+                var dist = player_pos.distance_to(_rect_center(room))
+                if dist > max_dist:
+                        max_dist = dist
+                        furthest_room = room
+        var boss_pos := _rect_center(furthest_room)
+
+        # Player spawn marker.
+        var player_spawn := Node3D.new()
+        player_spawn.name = "PlayerSpawn"
+        player_spawn.position = Vector3(player_pos.x * settings.tile_size, 0, player_pos.y * settings.tile_size)
+        root.add_child(player_spawn)
+
+        # Boss spawn or marker.
+        if settings.boss_scene:
+                var boss = settings.boss_scene.instantiate()
+                boss.position = Vector3(boss_pos.x * settings.tile_size, 0, boss_pos.y * settings.tile_size)
+                root.add_child(boss)
+        else:
+                var boss_spawn := Node3D.new()
+                boss_spawn.name = "BossSpawn"
+                boss_spawn.position = Vector3(boss_pos.x * settings.tile_size, 0, boss_pos.y * settings.tile_size)
+                root.add_child(boss_spawn)
+
+        # Enemy population. Only spawn on center tiles to keep within bounds.
+        if settings.enemy_density > 0.0 and not settings.enemy_scenes.is_empty():
+                for pos in tiles.keys():
+                        if pos == player_pos or pos == boss_pos:
+                                continue
+                        if _is_center_tile(pos, tiles) and rng.randf() < settings.enemy_density:
+                                var scene: PackedScene = settings.enemy_scenes[rng.randi_range(0, settings.enemy_scenes.size() - 1)]
+                                if scene:
+                                        var enemy = scene.instantiate()
+                                        enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
+                                        root.add_child(enemy)
+
+        return root
 
 func random_string(length: int = 8) -> String:
 	var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -63,10 +104,12 @@ func random_string(length: int = 8) -> String:
 		result += chars[randi() % chars.length()]
 	return result
 
-func _fill_rect(rect: Rect2i, tiles: Dictionary) -> void:
-	for x in range(rect.position.x, rect.position.x + rect.size.x):
-		for y in range(rect.position.y, rect.position.y + rect.size.y):
-			tiles[Vector2i(x, y)] = true
+func _fill_rect(rect: Rect2i, tiles: Dictionary, bounds: Vector2i) -> void:
+        for x in range(rect.position.x, rect.position.x + rect.size.x):
+                for y in range(rect.position.y, rect.position.y + rect.size.y):
+                        var p := Vector2i(x, y)
+                        if _in_bounds(p, bounds):
+                                tiles[p] = true
 
 func _rect_center(rect: Rect2i) -> Vector2i:
 	return Vector2i(rect.position.x + rect.size.x / 2, rect.position.y + rect.size.y / 2)
@@ -88,17 +131,21 @@ func _tunnel_width(size: int) -> int:
 		_:
 			return 0
 
-func _dig_corridor(a: Vector2i, b: Vector2i, width: int, tiles: Dictionary) -> void:
-	if width <= 0:
-		return
-	var dir_x = 1 if b.x > a.x else -1
-	for x in range(a.x, b.x + dir_x, dir_x):
-		for w in range(-width / 2, width / 2 + 1):
-			tiles[Vector2i(x, a.y + w)] = true
-	var dir_y = 1 if b.y > a.y else -1
-	for y in range(a.y, b.y + dir_y, dir_y):
-		for w in range(-width / 2, width / 2 + 1):
-			tiles[Vector2i(b.x + w, y)] = true
+func _dig_corridor(a: Vector2i, b: Vector2i, width: int, tiles: Dictionary, bounds: Vector2i) -> void:
+        if width <= 0:
+                return
+        var dir_x = 1 if b.x > a.x else -1
+        for x in range(a.x, b.x + dir_x, dir_x):
+                for w in range(-width / 2, width / 2 + 1):
+                        var p := Vector2i(x, a.y + w)
+                        if _in_bounds(p, bounds):
+                                tiles[p] = true
+        var dir_y = 1 if b.y > a.y else -1
+        for y in range(a.y, b.y + dir_y, dir_y):
+                for w in range(-width / 2, width / 2 + 1):
+                        var p2 := Vector2i(b.x + w, y)
+                        if _in_bounds(p2, bounds):
+                                tiles[p2] = true
 
 func _add_obstacles(tiles: Dictionary, chance: float, rng: RandomNumberGenerator) -> void:
 	var to_remove: Array[Vector2i] = []
@@ -151,9 +198,21 @@ func _select_tile_scene(pos: Vector2i, tiles: Dictionary, set: Tile9Set) -> Pack
 func _spawn_decorations(parent: Node3D, tiles: Dictionary, decos: Array[LevelDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
 	if decos.is_empty():
 		return
-	for pos in tiles.keys():
-		for deco in decos:
-			if deco.scene and rng.randf() < deco.frequency:
-				var inst = deco.scene.instantiate()
-				inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
-				parent.add_child(inst)
+        for pos in tiles.keys():
+                for deco in decos:
+                        if deco.scene and rng.randf() < deco.frequency:
+                                var inst = deco.scene.instantiate()
+                                inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
+                                parent.add_child(inst)
+
+# ---------------------------------------------------------------------------
+# Helper functions
+
+func _in_bounds(p: Vector2i, bounds: Vector2i) -> bool:
+        return p.x >= 0 and p.y >= 0 and p.x < bounds.x and p.y < bounds.y
+
+func _is_center_tile(pos: Vector2i, tiles: Dictionary) -> bool:
+        for d in DIRS:
+                if not tiles.has(pos + d):
+                        return false
+        return true

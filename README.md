@@ -8,6 +8,15 @@ This repository contains a simple Godot 4 project configured for a modular actio
 
 The `project.godot` file is configured to run `scenes/Main.tscn` by default and defines input actions for movement and attacking.
 
+## Tile Level Generation
+`scripts/tile_levels/tile_level_generator.gd` can procedurally assemble rooms and tunnels using data from a `TileLevelSettings`
+resource. The generator:
+- constrains rooms to `level_size` so everything fits within a defined rectangle.
+- places a `PlayerSpawn` marker in the first room and, if a boss scene is provided, instantiates it in the farthest room.
+- spawns random enemies from `enemy_scenes` on interior (center) tiles using `enemy_density` to control how crowded areas
+  become.
+All spawned nodes are positioned using the resource's `tile_size` so they line up with the generated tiles.
+
 ## Creating Additional Scenes
 1. Open the project in Godot.
 2. Add 3D nodes (enemies, environment, etc.) to `scenes/Main.tscn` or create new scenes that can be instanced into Main.
