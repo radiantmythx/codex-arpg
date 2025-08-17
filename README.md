@@ -23,7 +23,7 @@ All spawned nodes are positioned using the resource's `tile_size` so they line u
 3. Extend `player.gd` or create additional scripts for abilities, items, and other gameplay elements to keep things modular.
 
 ## Controls
-- **WASD** – Move the player.
+- **WASD** – Move the player relative to the camera's facing.
 - **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
 - **Q** – Activate the secondary skill (e.g., the Haste aura).
 - **Dodge action** – Perform a directional dodge roll with a short invincibility window. Configure the input mapping in Project Settings.
@@ -71,6 +71,12 @@ The main camera now tracks the player character. It preserves the original
 offset configured in the scene and lerps toward the player each frame. When the
 inventory is open the camera shifts sideways by `inventory_camera_shift` so the
 UI does not obscure the action.
+
+## Camera-Oriented Movement
+WASD input is interpreted in the camera's local space. Rotating the camera
+changes which world direction counts as "forward" so the player always moves in
+relation to the current view. Dodge rolls also reuse the last camera-relative
+direction.
 
 ## Mana System
 The player now uses mana to power abilities. Basic attacks consume mana and the
@@ -393,6 +399,13 @@ thin red shader while NPCs use a green outline.
    node.
 4. For each enemy or NPC set `enemy_name` and `enemy_level` on their scripts so
    the display can show them.
+
+## Enemy Culling
+Enemies automatically pause their processing and hide their meshes when they
+leave the camera's view. The `OffscreenCuller` script
+(`scripts/offscreen_culler.gd`) uses `VisibleOnScreenNotifier3D` to reactivate
+them once they are visible again, allowing large numbers of enemies without
+slowing the editor or game.
 
 ## NPCs
 NPCs are non-combat characters the player can interact with. Clicking an NPC
