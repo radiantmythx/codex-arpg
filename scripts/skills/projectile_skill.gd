@@ -120,8 +120,9 @@ func _explode(projectile):
 									var eff = on_hit_effect.instantiate()
 									var p = body.global_transform.origin
 									p.y = mid_y_of_body(body)
-									eff.global_transform.origin = p
 									body.get_tree().current_scene.add_child(eff)
+									eff.global_transform.origin = p
+									
 	if explosion_effect:
 			var e = explosion_effect.instantiate()
 			e.global_transform.origin = origin

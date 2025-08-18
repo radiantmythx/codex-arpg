@@ -26,20 +26,20 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	else:
 			rng.randomize()
 	print("Seed: ", rng)
-        var tiles := {}
-        var rooms: Array[Rect2i] = []
-        # Track specific tile categories for later decoration/enemy placement.
-        var room_tiles := {}
-        var tunnel_tiles := {}
+	var tiles := {}
+	var rooms: Array[Rect2i] = []
+	# Track specific tile categories for later decoration/enemy placement.
+	var room_tiles := {}
+	var tunnel_tiles := {}
 	for i in range(settings.room_count):
 			var size_x = rng.randi_range(settings.room_min_size.x, settings.room_max_size.x)
 			var size_y = rng.randi_range(settings.room_min_size.y, settings.room_max_size.y)
 			var pos_x = rng.randi_range(0, max(0, settings.level_size.x - size_x))
 			var pos_y = rng.randi_range(0, max(0, settings.level_size.y - size_y))
-                        var rect := Rect2i(pos_x, pos_y, size_x, size_y)
-                        rooms.append(rect)
-                        _fill_rect(rect, tiles, settings.level_size)
-                        _fill_rect(rect, room_tiles, settings.level_size)
+			var rect := Rect2i(pos_x, pos_y, size_x, size_y)
+			rooms.append(rect)
+			_fill_rect(rect, tiles, settings.level_size)
+			_fill_rect(rect, room_tiles, settings.level_size)
 	
 	print(settings.room_count, " rooms filled")
 	
@@ -47,7 +47,7 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	for i in range(1, rooms.size()):
 			var a := _rect_center(rooms[i - 1])
 			var b := _rect_center(rooms[i])
-                        _dig_corridor(a, b, width, tiles, settings.level_size, tunnel_tiles)
+			_dig_corridor(a, b, width, tiles, settings.level_size, tunnel_tiles)
 
 	print("Corridors created")
 
@@ -87,57 +87,57 @@ func generate(settings: TileLevelSettings) -> Node3D:
 			outside_rects = _spawn_outside_default_tiles(root, settings.default_tile, settings.level_size, settings.tile_size, settings.default_tile_outside_scale)
 	print("Spawning default decorations...")
 	_spawn_default_decorations(root, default_positions, outside_rects, settings.default_decorations, rng, settings.tile_size)
-        # Split room tiles into player/boss rooms and generic rooms.
-        var start_room := rooms[0]
-        var player_room_positions := _rect_positions(start_room)
-        var furthest_room := start_room
-        var max_dist := 0.0
-        for room in rooms:
-                        var dist = _rect_center(start_room).distance_to(_rect_center(room))
-                        if dist > max_dist:
-                                        max_dist = dist
-                                        furthest_room = room
-        var boss_room_positions := _rect_positions(furthest_room)
-        var generic_room_positions: Array[Vector2i] = []
-        for p in room_tiles.keys():
-                        if not start_room.has_point(p) and not furthest_room.has_point(p):
-                                        generic_room_positions.append(p)
+		# Split room tiles into player/boss rooms and generic rooms.
+	var start_room := rooms[0]
+	var player_room_positions := _rect_positions(start_room)
+	var furthest_room := start_room
+	var max_dist := 0.0
+	for room in rooms:
+					var dist = _rect_center(start_room).distance_to(_rect_center(room))
+					if dist > max_dist:
+									max_dist = dist
+									furthest_room = room
+	var boss_room_positions := _rect_positions(furthest_room)
+	var generic_room_positions: Array[Vector2i] = []
+	for p in room_tiles.keys():
+					if not start_room.has_point(p) and not furthest_room.has_point(p):
+									generic_room_positions.append(p)
 
-        print("Spawning room decorations...")
-        _spawn_decorations(root, generic_room_positions, settings.room_decorations, rng, settings.tile_size)
-        _spawn_multimesh_decorations(root, generic_room_positions, settings.room_multimesh_decorations, rng, settings.tile_size)
+	print("Spawning room decorations...")
+	_spawn_decorations(root, generic_room_positions, settings.room_decorations, rng, settings.tile_size)
+	_spawn_multimesh_decorations(root, generic_room_positions, settings.room_multimesh_decorations, rng, settings.tile_size)
 
-        print("Spawning tunnel decorations...")
-        _spawn_decorations(root, tunnel_tiles.keys(), settings.tunnel_decorations, rng, settings.tile_size)
-        _spawn_multimesh_decorations(root, tunnel_tiles.keys(), settings.tunnel_multimesh_decorations, rng, settings.tile_size)
+	print("Spawning tunnel decorations...")
+	_spawn_decorations(root, tunnel_tiles.keys(), settings.tunnel_decorations, rng, settings.tile_size)
+	_spawn_multimesh_decorations(root, tunnel_tiles.keys(), settings.tunnel_multimesh_decorations, rng, settings.tile_size)
 
-        print("Spawning player room decorations...")
-        var player_scene_decos: Array[LevelDecoration] = []
-        player_scene_decos.append_array(settings.player_room_decorations)
-        if settings.player_inherit_room_decorations:
-                        player_scene_decos.append_array(settings.room_decorations)
-        _spawn_decorations(root, player_room_positions, player_scene_decos, rng, settings.tile_size)
-        var player_mm_decos: Array[DefaultTileDecoration] = []
-        player_mm_decos.append_array(settings.player_room_multimesh_decorations)
-        if settings.player_inherit_room_multimesh:
-                        player_mm_decos.append_array(settings.room_multimesh_decorations)
-        _spawn_multimesh_decorations(root, player_room_positions, player_mm_decos, rng, settings.tile_size)
+	print("Spawning player room decorations...")
+	var player_scene_decos: Array[LevelDecoration] = []
+	player_scene_decos.append_array(settings.player_room_decorations)
+	if settings.player_inherit_room_decorations:
+					player_scene_decos.append_array(settings.room_decorations)
+	_spawn_decorations(root, player_room_positions, player_scene_decos, rng, settings.tile_size)
+	var player_mm_decos: Array[DefaultTileDecoration] = []
+	player_mm_decos.append_array(settings.player_room_multimesh_decorations)
+	if settings.player_inherit_room_multimesh:
+					player_mm_decos.append_array(settings.room_multimesh_decorations)
+	_spawn_multimesh_decorations(root, player_room_positions, player_mm_decos, rng, settings.tile_size)
 
-        print("Spawning boss room decorations...")
-        var boss_scene_decos: Array[LevelDecoration] = []
-        boss_scene_decos.append_array(settings.boss_room_decorations)
-        if settings.boss_inherit_room_decorations:
-                        boss_scene_decos.append_array(settings.room_decorations)
-        _spawn_decorations(root, boss_room_positions, boss_scene_decos, rng, settings.tile_size)
-        var boss_mm_decos: Array[DefaultTileDecoration] = []
-        boss_mm_decos.append_array(settings.boss_room_multimesh_decorations)
-        if settings.boss_inherit_room_multimesh:
-                        boss_mm_decos.append_array(settings.room_multimesh_decorations)
-        _spawn_multimesh_decorations(root, boss_room_positions, boss_mm_decos, rng, settings.tile_size)
+	print("Spawning boss room decorations...")
+	var boss_scene_decos: Array[LevelDecoration] = []
+	boss_scene_decos.append_array(settings.boss_room_decorations)
+	if settings.boss_inherit_room_decorations:
+					boss_scene_decos.append_array(settings.room_decorations)
+	_spawn_decorations(root, boss_room_positions, boss_scene_decos, rng, settings.tile_size)
+	var boss_mm_decos: Array[DefaultTileDecoration] = []
+	boss_mm_decos.append_array(settings.boss_room_multimesh_decorations)
+	if settings.boss_inherit_room_multimesh:
+					boss_mm_decos.append_array(settings.room_multimesh_decorations)
+	_spawn_multimesh_decorations(root, boss_room_positions, boss_mm_decos, rng, settings.tile_size)
 
-        # Determine spawn locations using room centers.
-        var player_pos := _rect_center(start_room)
-        var boss_pos := _rect_center(furthest_room)
+	# Determine spawn locations using room centers.
+	var player_pos := _rect_center(start_room)
+	var boss_pos := _rect_center(furthest_room)
 	
 	print("Added player and boss spawn positions...")
 
@@ -168,47 +168,47 @@ func generate(settings: TileLevelSettings) -> Node3D:
 		boss_spawn.owner = root
 	
 	# Enemy population. Only spawn on center tiles to keep within bounds.
-        if settings.enemy_density > 0.0:
-                        print("Spawning enemies")
-                        var player_boss := {player_pos: true, boss_pos: true}
-                        # Room enemies
-                        if not settings.room_enemy_scenes.is_empty():
-                                        for pos in room_tiles.keys():
-                                                        if player_boss.has(pos):
-                                                                        continue
-                                                        if _is_center_tile(pos, tiles) and rng.randf() < settings.enemy_density:
-                                                                        var scene: PackedScene = settings.room_enemy_scenes[rng.randi_range(0, settings.room_enemy_scenes.size() - 1)]
-                                                                        if scene:
-                                                                                        var enemy = scene.instantiate()
-                                                                                        enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
-                                                                                        enemy.name = "Enemy" + random_string(8)
-                                                                                        _make_children_unique(enemy)
-                                                                                        root.add_child(enemy)
-                                                                                        if enemy.scene_file_path == "":
-                                                                                                        _set_owner_recursive(enemy, root)
-                                                                                        else:
-                                                                                                        enemy.owner = root
-                        # Tunnel enemies
-                        var tunnel_scenes: Array[PackedScene] = []
-                        tunnel_scenes.append_array(settings.tunnel_enemy_scenes)
-                        if settings.tunnels_use_room_enemies:
-                                        tunnel_scenes.append_array(settings.room_enemy_scenes)
-                        if not tunnel_scenes.is_empty():
-                                        for pos in tunnel_tiles.keys():
-                                                        if player_boss.has(pos):
-                                                                        continue
-                                                        if _is_center_tile(pos, tiles) and rng.randf() < settings.enemy_density:
-                                                                        var scene: PackedScene = tunnel_scenes[rng.randi_range(0, tunnel_scenes.size() - 1)]
-                                                                        if scene:
-                                                                                        var enemy = scene.instantiate()
-                                                                                        enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
-                                                                                        enemy.name = "Enemy" + random_string(8)
-                                                                                        _make_children_unique(enemy)
-                                                                                        root.add_child(enemy)
-                                                                                        if enemy.scene_file_path == "":
-                                                                                                        _set_owner_recursive(enemy, root)
-                                                                                        else:
-                                                                                                        enemy.owner = root
+	if settings.enemy_density > 0.0:
+					print("Spawning enemies")
+					var player_boss := {player_pos: true, boss_pos: true}
+					# Room enemies
+					if not settings.room_enemy_scenes.is_empty():
+									for pos in room_tiles.keys():
+													if player_boss.has(pos):
+																	continue
+													if _is_center_tile(pos, tiles) and rng.randf() < settings.enemy_density:
+																	var scene: PackedScene = settings.room_enemy_scenes[rng.randi_range(0, settings.room_enemy_scenes.size() - 1)]
+																	if scene:
+																					var enemy = scene.instantiate()
+																					enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
+																					enemy.name = "Enemy" + random_string(8)
+																					_make_children_unique(enemy)
+																					root.add_child(enemy)
+																					if enemy.scene_file_path == "":
+																									_set_owner_recursive(enemy, root)
+																					else:
+																									enemy.owner = root
+					# Tunnel enemies
+					var tunnel_scenes: Array[PackedScene] = []
+					tunnel_scenes.append_array(settings.tunnel_enemy_scenes)
+					if settings.tunnels_use_room_enemies:
+									tunnel_scenes.append_array(settings.room_enemy_scenes)
+					if not tunnel_scenes.is_empty():
+									for pos in tunnel_tiles.keys():
+													if player_boss.has(pos):
+																	continue
+													if _is_center_tile(pos, tiles) and rng.randf() < settings.enemy_density:
+																	var scene: PackedScene = tunnel_scenes[rng.randi_range(0, tunnel_scenes.size() - 1)]
+																	if scene:
+																					var enemy = scene.instantiate()
+																					enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
+																					enemy.name = "Enemy" + random_string(8)
+																					_make_children_unique(enemy)
+																					root.add_child(enemy)
+																					if enemy.scene_file_path == "":
+																									_set_owner_recursive(enemy, root)
+																					else:
+																									enemy.owner = root
 
 	return root
 
@@ -238,14 +238,14 @@ func _fill_rect(rect: Rect2i, tiles: Dictionary, bounds: Vector2i) -> void:
 								tiles[p] = true
 
 func _rect_center(rect: Rect2i) -> Vector2i:
-        return Vector2i(rect.position.x + rect.size.x / 2, rect.position.y + rect.size.y / 2)
+		return Vector2i(rect.position.x + rect.size.x / 2, rect.position.y + rect.size.y / 2)
 
 func _rect_positions(rect: Rect2i) -> Array[Vector2i]:
-        var pts: Array[Vector2i] = []
-        for x in range(rect.position.x, rect.position.x + rect.size.x):
-                for y in range(rect.position.y, rect.position.y + rect.size.y):
-                        pts.append(Vector2i(x, y))
-        return pts
+		var pts: Array[Vector2i] = []
+		for x in range(rect.position.x, rect.position.x + rect.size.x):
+				for y in range(rect.position.y, rect.position.y + rect.size.y):
+						pts.append(Vector2i(x, y))
+		return pts
 
 func _tunnel_width(size: int) -> int:
 	match size:
@@ -265,22 +265,22 @@ func _tunnel_width(size: int) -> int:
 			return 0
 
 func _dig_corridor(a: Vector2i, b: Vector2i, width: int, tiles: Dictionary, bounds: Vector2i, tunnel_tiles: Dictionary) -> void:
-                if width <= 0:
-                                return
-                var dir_x = 1 if b.x > a.x else -1
-                for x in range(a.x, b.x + dir_x, dir_x):
-                                for w in range(-width / 2, width / 2 + 1):
-                                                var p := Vector2i(x, a.y + w)
-                                                if _in_bounds(p, bounds):
-                                                                tiles[p] = true
-                                                                tunnel_tiles[p] = true
-                var dir_y = 1 if b.y > a.y else -1
-                for y in range(a.y, b.y + dir_y, dir_y):
-                                for w in range(-width / 2, width / 2 + 1):
-                                                var p2 := Vector2i(b.x + w, y)
-                                                if _in_bounds(p2, bounds):
-                                                                tiles[p2] = true
-                                                                tunnel_tiles[p2] = true
+				if width <= 0:
+								return
+				var dir_x = 1 if b.x > a.x else -1
+				for x in range(a.x, b.x + dir_x, dir_x):
+								for w in range(-width / 2, width / 2 + 1):
+												var p := Vector2i(x, a.y + w)
+												if _in_bounds(p, bounds):
+																tiles[p] = true
+																tunnel_tiles[p] = true
+				var dir_y = 1 if b.y > a.y else -1
+				for y in range(a.y, b.y + dir_y, dir_y):
+								for w in range(-width / 2, width / 2 + 1):
+												var p2 := Vector2i(b.x + w, y)
+												if _in_bounds(p2, bounds):
+																tiles[p2] = true
+																tunnel_tiles[p2] = true
 
 func _add_obstacles(tiles: Dictionary, chance: float, rng: RandomNumberGenerator) -> void:
 	var to_remove: Array[Vector2i] = []
@@ -330,47 +330,47 @@ func _select_tile_scene(pos: Vector2i, tiles: Dictionary, set: Tile9Set) -> Pack
 		return set.edge_w
 	return set.center
 
-func _spawn_decorations(parent: Node3D, tile_positions: Array[Vector2i], decos: Array[LevelDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
-                if decos.is_empty():
-                                return
-                for pos in tile_positions:
-                                for deco in decos:
-                                        if deco.scene and rng.randf() < deco.frequency:
-                                                var inst = deco.scene.instantiate()
-                                                inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
-                                                # Decorations can appear many times; give each a unique name so siblings
-                                                # do not clash when the scene is saved.
-                                                inst.name = "deco" + random_string(8)
-                                                _make_children_unique(inst)
-                                                #_set_owner_recursive(inst, parent)
-                                                parent.add_child(inst, true)
-                                                inst.owner = parent
+func _spawn_decorations(parent: Node3D, tile_positions: Array, decos: Array[LevelDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
+				if decos.is_empty():
+								return
+				for pos in tile_positions:
+								for deco in decos:
+										if deco.scene and rng.randf() < deco.frequency:
+												var inst = deco.scene.instantiate()
+												inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
+												# Decorations can appear many times; give each a unique name so siblings
+												# do not clash when the scene is saved.
+												inst.name = "deco" + random_string(8)
+												_make_children_unique(inst)
+												#_set_owner_recursive(inst, parent)
+												parent.add_child(inst, true)
+												inst.owner = parent
 
-func _spawn_multimesh_decorations(parent: Node3D, tile_positions: Array[Vector2i], decos: Array[DefaultTileDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
-                if decos.is_empty():
-                                return
-                for deco in decos:
-                                if deco.mesh == null or deco.frequency <= 0.0:
-                                                continue
-                                var transforms: Array[Transform3D] = []
-                                for p in tile_positions:
-                                                if rng.randf() < deco.frequency:
-                                                                var offset = Vector3((p.x + rng.randf()) * tile_size, 0, (p.y + rng.randf()) * tile_size)
-                                                                transforms.append(Transform3D(Basis(), offset))
-                                if transforms.size() == 0:
-                                                continue
-                                var mm = MultiMesh.new()
-                                mm.mesh = deco.mesh
-                                mm.transform_format = MultiMesh.TRANSFORM_3D
-                                mm.instance_count = transforms.size()
-                                for i in range(transforms.size()):
-                                                mm.set_instance_transform(i, transforms[i])
-                                var mmi = MultiMeshInstance3D.new()
-                                mmi.multimesh = mm
-                                mmi.name = "deco_mm" + random_string(8)
-                                mmi.owner = parent
-                                parent.add_child(mmi, true)
-                                mmi.owner = parent
+func _spawn_multimesh_decorations(parent: Node3D, tile_positions: Array, decos: Array[DefaultTileDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
+				if decos.is_empty():
+								return
+				for deco in decos:
+								if deco.mesh == null or deco.frequency <= 0.0:
+												continue
+								var transforms: Array[Transform3D] = []
+								for p in tile_positions:
+												if rng.randf() < deco.frequency:
+																var offset = Vector3((p.x + rng.randf()) * tile_size, 0, (p.y + rng.randf()) * tile_size)
+																transforms.append(Transform3D(Basis(), offset))
+								if transforms.size() == 0:
+												continue
+								var mm = MultiMesh.new()
+								mm.mesh = deco.mesh
+								mm.transform_format = MultiMesh.TRANSFORM_3D
+								mm.instance_count = transforms.size()
+								for i in range(transforms.size()):
+												mm.set_instance_transform(i, transforms[i])
+								var mmi = MultiMeshInstance3D.new()
+								mmi.multimesh = mm
+								mmi.name = "deco_mm" + random_string(8)
+								mmi.owner = parent
+								parent.add_child(mmi, true)
+								mmi.owner = parent
 
 
 func _spawn_default_tiles(parent: Node3D, tiles: Dictionary, scene: PackedScene, level_size: Vector2i, tile_size: float) -> Array[Vector2i]:
