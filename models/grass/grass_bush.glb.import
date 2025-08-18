@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cakkfrs8xek5t"
-path="res://.godot/imported/grass.glb-0677667a30aa1da2b81de15b955ba6b3.scn"
+uid="uid://c5bo2vhxc3no5"
+path="res://.godot/imported/grass_bush.glb-670af24f9aaafcef993b2de985a5ae6e.scn"
 
 [deps]
 
-source_file="res://models/grass/grass.glb"
-dest_files=["res://.godot/imported/grass.glb-0677667a30aa1da2b81de15b955ba6b3.scn"]
+source_file="res://models/grass/grass_bush.glb"
+dest_files=["res://.godot/imported/grass_bush.glb-670af24f9aaafcef993b2de985a5ae6e.scn"]
 
 [params]
 
@@ -32,17 +32,6 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"meshes": {
-"grass_Plane": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://models/grass/grass.res"
-}
-}
-}
+_subresources={}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

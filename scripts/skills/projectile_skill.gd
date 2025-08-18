@@ -37,6 +37,8 @@ func perform(user):
 	user.get_parent().add_child(projectile)
 	projectile.global_transform.origin = user.global_transform.origin + direction
 	projectile.position.y += 2
+	var look_target = projectile.global_transform.origin + direction
+	projectile.look_at(look_target, Vector3.UP)
 	var travel_time = range / speed
 	var tween = projectile.create_tween()
 	tween.tween_property(projectile, "global_transform:origin", user.global_transform.origin + direction * range, travel_time)
@@ -57,8 +59,9 @@ func _create_projectile():
 	return p
 
 func _on_projectile_body_entered(body, projectile):
+	var is_player = projectile.get_meta("is_player")
 	if body and body.has_method("take_damage"):
-			var is_player = projectile.get_meta("is_player")
+			
 			if (is_player and body.is_in_group("enemy")) or (not is_player and body.is_in_group("player")):
 					var dmg_map = projectile.get_meta("dmg_map")
 					for dt in dmg_map.keys():
@@ -70,9 +73,12 @@ func _on_projectile_body_entered(body, projectile):
 							body.add_buff(buff_snapshot.duplicate(true))
 					if on_hit_effect:
 						var eff = on_hit_effect.instantiate()
-						eff.global_transform = body.global_transform
+						var p = body.global_transform.origin
+						p.y = mid_y_of_body(body)
+						eff.global_transform.origin = p
 						body.get_tree().current_scene.add_child(eff)
-						body.add_child(eff)
+	if(is_player and body.is_in_group("player")):
+		return
 	_explode(projectile)
 	projectile.queue_free()
 
@@ -81,6 +87,7 @@ func _on_projectile_finished(projectile):
 	projectile.queue_free()
 
 func _explode(projectile):
+	print("BOOM!")
 	var origin = projectile.global_transform.origin
 	if explosion_radius <= 0.0:
 			if explosion_effect:
@@ -111,10 +118,90 @@ func _explode(projectile):
 									body.add_buff(buff_snapshot.duplicate(true))
 							if on_hit_effect:
 									var eff = on_hit_effect.instantiate()
-									eff.global_transform = body.global_transform
+									var p = body.global_transform.origin
+									p.y = mid_y_of_body(body)
+									eff.global_transform.origin = p
 									body.get_tree().current_scene.add_child(eff)
 	if explosion_effect:
 			var e = explosion_effect.instantiate()
 			e.global_transform.origin = origin
 			e.scale = Vector3.ONE * explosion_radius * mult
 			projectile.get_parent().add_child(e)
+			
+# --- Bounds helpers (Godot 4) ---
+
+func _world_y_bounds(root: Node3D) -> Vector2:
+	var min_y := INF
+	var max_y := -INF
+	var stack: Array[Node3D] = [root]
+
+	while stack.size() > 0:
+		var n: Node3D = stack.pop_back()
+
+		# Meshes (most accurate visually)
+		if n is MeshInstance3D and n.mesh:
+			var aabb: AABB = n.mesh.get_aabb() # local space
+			# Transform AABB corners to world space and track y-extents
+			var xform := n.global_transform
+			var p := aabb.position
+			var s := aabb.size
+			var corners := [
+				p,
+				p + Vector3(s.x, 0, 0),
+				p + Vector3(0, s.y, 0),
+				p + Vector3(0, 0, s.z),
+				p + Vector3(s.x, s.y, 0),
+				p + Vector3(s.x, 0, s.z),
+				p + Vector3(0, s.y, s.z),
+				p + s
+			]
+			for c in corners:
+				var wc = xform * c
+				min_y = min(min_y, wc.y)
+				max_y = max(max_y, wc.y)
+
+		# Collision shapes (approximate fallback)
+		elif n is CollisionShape3D and n.shape:
+			var gt := n.global_transform
+			var sc := gt.basis.get_scale().abs()
+			var oy := gt.origin.y
+
+			match n.shape:
+				BoxShape3D:
+					var half = (n.shape.size * sc) * 0.5
+					min_y = min(min_y, oy - half.y)
+					max_y = max(max_y, oy + half.y)
+
+				SphereShape3D:
+					var r = n.shape.radius * max(sc.x, max(sc.y, sc.z))
+					min_y = min(min_y, oy - r)
+					max_y = max(max_y, oy + r)
+
+				CapsuleShape3D:
+					# Capsule aligned to Y in Godot
+					var r = n.shape.radius * max(sc.x, sc.z)
+					var h_cyl = n.shape.height * sc.y
+					var h_total = h_cyl + 2.0 * r
+					min_y = min(min_y, oy - h_total * 0.5)
+					max_y = max(max_y, oy + h_total * 0.5)
+
+				CylinderShape3D:
+					var r = n.shape.radius * max(sc.x, sc.z)
+					var h = n.shape.height * sc.y
+					min_y = min(min_y, oy - h * 0.5)
+					max_y = max(max_y, oy + h * 0.5)
+
+		# Traverse
+		for c in n.get_children():
+			if c is Node3D:
+				stack.push_back(c)
+
+	# If nothing was found, default to root's Y
+	if min_y == INF:
+		var y := root.global_transform.origin.y
+		return Vector2(y, y)
+	return Vector2(min_y, max_y)
+
+func mid_y_of_body(root: Node3D) -> float:
+	var b := _world_y_bounds(root)
+	return 0.5 * (b.x + b.y)
