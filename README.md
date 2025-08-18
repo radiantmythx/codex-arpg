@@ -17,6 +17,13 @@ resource. The generator:
   become.
 All spawned nodes are positioned using the resource's `tile_size` so they line up with the generated tiles.
 
+### Unique node names
+Godot 4.4 requires that each sibling node have a unique `name` (see the
+[Node](https://docs.godotengine.org/en/latest/classes/class_node.html#class-node-property-name)
+documentation). The generator appends a random suffix to every tile,
+decoration, and spawned enemy so saved levels load cleanly without warnings like
+"An incoming node's name clashes with ...".
+
 ### Default tiles and ambient decoration
 Tile levels can optionally fill empty grid spaces with a `default_tile`.
 `draw_default_tiles` places this tile anywhere no normal level tile was generated.

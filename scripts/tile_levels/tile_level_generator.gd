@@ -7,6 +7,9 @@ extends RefCounted
 # The generator now also places a `PlayerSpawn` marker in the first room,
 # optionally instantiates a boss in the farthest room and can populate any
 # interior tiles with enemies supplied via `TileLevelSettings`.
+# All generated instances receive unique names to satisfy the Godot 4.4
+# requirement that sibling nodes have distinct names, preventing editor warnings
+# like "An incoming node's name clashes with..." when saving or loading scenes.
 
 const DIRS := [Vector2i.RIGHT, Vector2i.LEFT, Vector2i.DOWN, Vector2i.UP]
 
@@ -59,10 +62,13 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	for pos in tiles.keys():
 		var scene := _select_tile_scene(pos, tiles, settings.tiles)
 		if scene:
-				var inst = scene.instantiate()
-				inst.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
-				inst.name = "ground" + random_string(8)
-				root.add_child(inst, true)
+                                var inst = scene.instantiate()
+                                inst.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
+                                # Godot requires unique names for sibling nodes (see Node.name in the 4.4 docs).
+                                # Using a random suffix keeps each tile distinct so saved scenes do not warn about
+                                # "An incoming node's name clashes with..." on load.
+                                inst.name = "ground" + random_string(8)
+                                root.add_child(inst, true)
 
 	if settings.draw_default_tiles and settings.default_tile:
 			print("Spawning default tiles...")
@@ -90,22 +96,24 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	print("Added player and boss spawn positions...")
 
 	# Player spawn marker.
-	var player_spawn := Node3D.new()
-	player_spawn.name = "PlayerSpawn"
-	player_spawn.position = Vector3(player_pos.x * settings.tile_size, 0, player_pos.y * settings.tile_size)
-	root.add_child(player_spawn)
+        var player_spawn := Node3D.new()
+        player_spawn.name = "PlayerSpawn"
+        player_spawn.position = Vector3(player_pos.x * settings.tile_size, 0, player_pos.y * settings.tile_size)
+        root.add_child(player_spawn)
 
 	# Boss spawn or marker.
 	if settings.boss_scene:
-			var boss = settings.boss_scene.instantiate()
-			boss.position = Vector3(boss_pos.x * settings.tile_size, 0, boss_pos.y * settings.tile_size)
-			root.add_child(boss)
-			print("Added boss scene")
+                        var boss = settings.boss_scene.instantiate()
+                        boss.position = Vector3(boss_pos.x * settings.tile_size, 0, boss_pos.y * settings.tile_size)
+                        # A unique name avoids clashes if multiple bosses are ever spawned.
+                        boss.name = "Boss" + random_string(8)
+                        root.add_child(boss, true)
+                        print("Added boss scene")
 	else:
-			var boss_spawn := Node3D.new()
-			boss_spawn.name = "BossSpawn"
-			boss_spawn.position = Vector3(boss_pos.x * settings.tile_size, 0, boss_pos.y * settings.tile_size)
-			root.add_child(boss_spawn)
+                        var boss_spawn := Node3D.new()
+                        boss_spawn.name = "BossSpawn"
+                        boss_spawn.position = Vector3(boss_pos.x * settings.tile_size, 0, boss_pos.y * settings.tile_size)
+                        root.add_child(boss_spawn)
 	
 	# Enemy population. Only spawn on center tiles to keep within bounds.
 	if settings.enemy_density > 0.0 and not settings.enemy_scenes.is_empty():
@@ -116,9 +124,12 @@ func generate(settings: TileLevelSettings) -> Node3D:
 					if _is_center_tile(pos, tiles) and rng.randf() < settings.enemy_density:
 							var scene: PackedScene = settings.enemy_scenes[rng.randi_range(0, settings.enemy_scenes.size() - 1)]
 							if scene:
-									var enemy = scene.instantiate()
-									enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
-									root.add_child(enemy, true)
+                                                                        var enemy = scene.instantiate()
+                                                                        enemy.position = Vector3(pos.x * settings.tile_size, 0, pos.y * settings.tile_size)
+                                                                        # Each enemy must be uniquely named to prevent the editor from
+                                                                        # renaming them when saving the generated scene.
+                                                                        enemy.name = "Enemy" + random_string(8)
+                                                                        root.add_child(enemy, true)
 
 	return root
 
@@ -221,14 +232,17 @@ func _select_tile_scene(pos: Vector2i, tiles: Dictionary, set: Tile9Set) -> Pack
 	return set.center
 
 func _spawn_decorations(parent: Node3D, tiles: Dictionary, decos: Array[LevelDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
-	if decos.is_empty():
-		return
-	for pos in tiles.keys():
-			for deco in decos:
-					if deco.scene and rng.randf() < deco.frequency:
-							var inst = deco.scene.instantiate()
-							inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
-							parent.add_child(inst)
+        if decos.is_empty():
+                return
+        for pos in tiles.keys():
+                        for deco in decos:
+                                        if deco.scene and rng.randf() < deco.frequency:
+                                                        var inst = deco.scene.instantiate()
+                                                        inst.position = Vector3(pos.x * tile_size, 0, pos.y * tile_size)
+                                                        # Decorations can appear many times; give each a unique name so siblings
+                                                        # do not clash when the scene is saved.
+                                                        inst.name = "deco" + random_string(8)
+                                                        parent.add_child(inst, true)
 
 
 func _spawn_default_tiles(parent: Node3D, tiles: Dictionary, scene: PackedScene, level_size: Vector2i, tile_size: float) -> Array[Vector2i]:
@@ -238,10 +252,12 @@ func _spawn_default_tiles(parent: Node3D, tiles: Dictionary, scene: PackedScene,
 						var p := Vector2i(x, y)
 						if tiles.has(p):
 								continue
-						var inst = scene.instantiate()
-						inst.position = Vector3(x * tile_size, 0, y * tile_size)
-						parent.add_child(inst, true)
-						positions.append(p)
+                                                var inst = scene.instantiate()
+                                                inst.position = Vector3(x * tile_size, 0, y * tile_size)
+                                                # Default filler tiles also need unique names to avoid load-time warnings.
+                                                inst.name = "default_tile" + random_string(8)
+                                                parent.add_child(inst, true)
+                                                positions.append(p)
 		return positions
 
 func _spawn_outside_default_tiles(parent: Node3D, scene: PackedScene, level_size: Vector2i, tile_size: float, scale_factor: float) -> Array[Rect2]:
@@ -265,11 +281,13 @@ func _spawn_outside_default_tiles(parent: Node3D, scene: PackedScene, level_size
 				Vector3(w + half_w_scaled + half_w, 0, h + half_h_scaled + half_h)
 		]
 		for c in centers:
-				var inst = scene.instantiate()
-				inst.position = c
-				inst.scale = Vector3(sx, 1, sz)
-				parent.add_child(inst, true)
-				rects.append(Rect2(c.x - half_w_scaled, c.z - half_h_scaled, sx * tile_size, sz * tile_size))
+                                var inst = scene.instantiate()
+                                inst.position = c
+                                inst.scale = Vector3(sx, 1, sz)
+                                # Outside tiles are huge; name them uniquely like the others.
+                                inst.name = "outside_default_tile" + random_string(8)
+                                parent.add_child(inst, true)
+                                rects.append(Rect2(c.x - half_w_scaled, c.z - half_h_scaled, sx * tile_size, sz * tile_size))
 		return rects
 
 func _spawn_default_decorations(parent: Node3D, tile_positions: Array[Vector2i], outside_rects: Array[Rect2], decos: Array[DefaultTileDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
@@ -299,9 +317,12 @@ func _spawn_default_decorations(parent: Node3D, tile_positions: Array[Vector2i],
 				mm.instance_count = transforms.size()
 				for i in range(transforms.size()):
 						mm.set_instance_transform(i, transforms[i])
-				var mmi = MultiMeshInstance3D.new()
-				mmi.multimesh = mm
-				parent.add_child(mmi, true)
+                                var mmi = MultiMeshInstance3D.new()
+                                mmi.multimesh = mm
+                                # MultiMeshInstance3D inherits the default name for each decoration type; append a
+                                # random suffix so multiple instances can coexist without conflicts.
+                                mmi.name = "default_deco" + random_string(8)
+                                parent.add_child(mmi, true)
 # ---------------------------------------------------------------------------
 # Helper functions
 
