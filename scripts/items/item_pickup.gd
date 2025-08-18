@@ -20,16 +20,17 @@ func _ready() -> void:
 
 		_layer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
 
-		_tag = ItemTag.new()
-		_tag.target = self
-		_tag.set_item(item)
-		if _layer:
-						_layer.add_tag(_tag)
-						_tag_visible = true
-		else:
-						add_child(_tag) # fallback so tag still appears during testing
-						_tag_visible = true
-		_tag.connect("pressed", Callable(self, "_collect"))
+	_tag = ItemTag.new()
+	_tag.target = self
+	_tag.set_item(item)
+	await get_tree().process_frame
+	if _layer:
+		_layer.add_tag(_tag)
+		_tag_visible = true
+	else:
+		add_child(_tag) # fallback so tag still appears during testing
+		_tag_visible = true
+	_tag.connect("pressed", Callable(self, "_collect"))
 
 		_notifier = VisibleOnScreenNotifier3D.new()
 		add_child(_notifier)

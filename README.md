@@ -371,13 +371,14 @@ item's affixes in its tooltip.
 
 ### Optimized Item Tags
 Item nameplates used to adjust their positions every frame to avoid overlapping
-with neighbouring tags.  This approach became expensive with many dropped items
-because each tag checked every other tag on the screen.  The `ItemTagLayer`
-now groups tags by the world position of their items and assigns each a stack
-index.  Individual `ItemTag` nodes simply project their item into screen space
-and apply this fixed offset.  Stacks are recalculated only when tags are added
-or removed, dramatically reducing per‑frame work while still presenting a
-readable column of names like in classic ARPGs.
+with neighbouring tags. This approach became expensive with many dropped items
+because each tag checked every other tag on the screen. The `ItemTagLayer`
+now groups tags by proximity and assigns each a stack position. Individual
+`ItemTag` nodes project their item into screen space and apply the precomputed
+offset. Stacks are recalculated only when tags are added or removed, and large
+stacks automatically spill into up to three columns when they would extend
+off screen. This keeps the system fast while presenting readable clusters of
+names like in classic ARPGs.
 
 ## Enemy Behavior
 Enemies now wander around randomly until the player gets close. When the player
@@ -443,16 +444,16 @@ slowing the editor or game.
 
 ## Item Tag System
 Dropped items display a nameplate that is projected from the active camera.
-Tags are managed by `ItemTagLayer`, which groups them by world position and
-assigns a stack index so overlapping items form a readable column. The layer
-only recalculates stacks when tags are added or removed and cleans up any
-freed tags to avoid crashes when items are picked up.
+Tags are managed by `ItemTagLayer`, which clusters nearby items into shared
+groups and assigns each tag a stack position. The layer only recalculates
+stacks when tags are added or removed and can distribute very large groups into
+multiple columns so labels remain visible.
 
 Each `ItemPickup` adds a `VisibleOnScreenNotifier3D` that hides its tag while
 offscreen and restores it when the item returns to view. Showing the tag again
-causes the layer to re-stack the group so the label stays aligned with the
-item even after moving offscreen. This approach keeps per-frame work minimal
-while ensuring tags restack when items are collected or reappear.
+re-registers it with the layer so the stack is recomputed and nearby groups are
+merged. This approach keeps per-frame work minimal while ensuring tags restack
+when items are collected or reappear.
 
 ## NPCs
 NPCs are non-combat characters the player can interact with. Clicking an NPC
