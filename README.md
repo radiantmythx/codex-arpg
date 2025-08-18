@@ -13,8 +13,8 @@ The `project.godot` file is configured to run `scenes/Main.tscn` by default and 
 resource. The generator:
 - constrains rooms to `level_size` so everything fits within a defined rectangle.
 - places a `PlayerSpawn` marker in the first room and, if a boss scene is provided, instantiates it in the farthest room.
-- spawns random enemies from `enemy_scenes` on interior (center) tiles using `enemy_density` to control how crowded areas
-  become.
+- spawns random enemies from `room_enemy_scenes` and `tunnel_enemy_scenes` on interior (center) tiles using `enemy_density` to
+  control how crowded areas become.
 All spawned nodes are positioned using the resource's `tile_size` so they line up with the generated tiles.
 
 ### Unique node names
@@ -31,6 +31,15 @@ Tile levels can optionally fill empty grid spaces with a `default_tile`.
 Enabling `draw_default_tiles_outside_level` surrounds the level with a ring of the default tile scaled up so the border extends beyond the play area.
 `default_decorations` lets you scatter meshes such as trees or rocks across these default tiles using efficient `MultiMeshInstance3D` nodes.
 Decoration density is calculated per tile-sized area so it remains consistent even when outside tiles are enlarged.
+
+In addition to the default decorations, `TileLevelSettings` now separates décor for rooms and tunnels. Use
+`room_decorations`/`tunnel_decorations` for normal `PackedScene` instances and
+`room_multimesh_decorations`/`tunnel_multimesh_decorations` for high-volume meshes. The player spawn room and boss room may
+define their own decoration arrays and can optionally inherit the standard room decorations via
+`player_inherit_room_decorations` and `boss_inherit_room_decorations` (plus matching options for multimeshes).
+
+Enemy scenes are also split between rooms and tunnels through `room_enemy_scenes` and
+`tunnel_enemy_scenes`. When `tunnels_use_room_enemies` is enabled, room enemies automatically populate corridors as well.
 
 ## Creating Additional Scenes
 1. Open the project in Godot.
