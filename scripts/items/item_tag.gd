@@ -22,12 +22,12 @@ var _stack_index: int = 0
 var _stack_spacing: float = 0.0
 
 func _ready() -> void:
-        _camera = get_viewport().get_camera_3d()
-        focus_mode = FOCUS_NONE
-        mouse_filter = Control.MOUSE_FILTER_STOP
-        size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-        size_flags_vertical = Control.SIZE_SHRINK_CENTER
-        clip_text = false
+		_camera = get_viewport().get_camera_3d()
+		focus_mode = FOCUS_NONE
+		mouse_filter = Control.MOUSE_FILTER_STOP
+		size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		clip_text = false
 
 func set_item(it: Item) -> void:
 		item = it
@@ -40,36 +40,36 @@ func set_item(it: Item) -> void:
 		_apply_style()
 
 func _apply_style() -> void:
-                var layer := get_parent()
-                if layer and layer.has_method("apply_style"):
-                                layer.apply_style(self)
+				var layer := get_parent()
+				if layer and layer.has_method("apply_style"):
+								layer.apply_style(self)
 
 ## Called by `ItemTagLayer` whenever the tag's stack position changes.
 func set_stack_index(idx: int, spacing: float) -> void:
-        _stack_index = idx
-        _stack_spacing = spacing
+		_stack_index = idx
+		_stack_spacing = spacing
 
 func _process(_delta: float) -> void:
-        if not target or not is_instance_valid(target):
-                queue_free()
-                return
-        if not _camera:
-                _camera = get_viewport().get_camera_3d()
-                if not _camera:
-                        return
+		if not target or not is_instance_valid(target):
+				queue_free()
+				return
+		if not _camera:
+				_camera = get_viewport().get_camera_3d()
+				if not _camera:
+						return
 
-        # Project the target's 3D position into 2D screen space.
-        var pos := target.global_transform.origin
-        pos.y += vertical_offset
-        var screen_point: Vector2 = _camera.unproject_position(pos)
+		# Project the target's 3D position into 2D screen space.
+		var pos := target.global_transform.origin
+		pos.y += vertical_offset
+		var screen_point: Vector2 = _camera.unproject_position(pos)
 
-        # Base position of the tag before applying the stack offset.
-        var base_pos := screen_point - size * 0.5
+		# Base position of the tag before applying the stack offset.
+		var base_pos := screen_point - size * 0.5
 
-        # Apply the vertical stack offset.  The layer provides the spacing in
-        # pixels so tags from the same world position form a readable column.
-        base_pos.y -= _stack_index * (size.y + _stack_spacing)
-        position = base_pos
+		# Apply the vertical stack offset.  The layer provides the spacing in
+		# pixels so tags from the same world position form a readable column.
+		base_pos.y -= _stack_index * (size.y + _stack_spacing)
+		position = base_pos
 
-        # Tags are always visible; camera culling is handled elsewhere.
-        visible = true
+		# Tags are always visible; camera culling is handled elsewhere.
+		visible = true
