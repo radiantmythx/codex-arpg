@@ -19,9 +19,7 @@ func _run() -> void:
 		return
 	var generator := TileLevelGenerator.new()
 	var root := generator.generate(settings)
-	print("Assigning owners recursive...")
-	_assign_owners_recursive(root, root)
-	print("Owners assigned!")
+
 	print("Attempting to pack scene...")
 	var t0 := Time.get_ticks_msec()
 	var packed := PackedScene.new()
@@ -38,8 +36,3 @@ func _run() -> void:
 		print("Saved generated level to %s" % output_path)
 	else:
 		push_error("Could not save generated level: %s" % err)
-
-func _assign_owners_recursive(node: Node, owner: Node) -> void:
-	for child in node.get_children():
-		child.owner = owner
-		_assign_owners_recursive(child, owner)
