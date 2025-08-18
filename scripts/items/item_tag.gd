@@ -50,13 +50,14 @@ func set_stack_index(idx: int, spacing: float) -> void:
 		_stack_spacing = spacing
 
 func _process(_delta: float) -> void:
-		if not target or not is_instance_valid(target):
-				queue_free()
-				return
-		if not _camera:
-				_camera = get_viewport().get_camera_3d()
-				if not _camera:
-						return
+                if not target or not is_instance_valid(target):
+                                queue_free()
+                                return
+                var current_camera := get_viewport().get_camera_3d()
+                if not _camera or not is_instance_valid(_camera) or _camera != current_camera:
+                                _camera = current_camera
+                                if not _camera:
+                                                return
 
 		# Project the target's 3D position into 2D screen space.
 		var pos := target.global_transform.origin
