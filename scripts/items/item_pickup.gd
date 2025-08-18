@@ -12,13 +12,13 @@ var _notifier: VisibleOnScreenNotifier3D
 var _tag_visible: bool = false
 
 func _ready() -> void:
-		connect("body_entered", _on_body_entered)
-		connect("body_exited", _on_body_exited)
-		connect("mouse_entered", _on_mouse_entered)
-		connect("mouse_exited", _on_mouse_exited)
-		connect("input_event", _on_input_event)
+	connect("body_entered", _on_body_entered)
+	connect("body_exited", _on_body_exited)
+	connect("mouse_entered", _on_mouse_entered)
+	connect("mouse_exited", _on_mouse_exited)
+	connect("input_event", _on_input_event)
 
-		_layer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
+	_layer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
 
 	_tag = ItemTag.new()
 	_tag.target = self
@@ -32,10 +32,10 @@ func _ready() -> void:
 		_tag_visible = true
 	_tag.connect("pressed", Callable(self, "_collect"))
 
-		_notifier = VisibleOnScreenNotifier3D.new()
-		add_child(_notifier)
-		_notifier.connect("screen_exited", Callable(self, "_on_screen_exited"))
-		_notifier.connect("screen_entered", Callable(self, "_on_screen_entered"))
+	_notifier = VisibleOnScreenNotifier3D.new()
+	add_child(_notifier)
+	_notifier.connect("screen_exited", Callable(self, "_on_screen_exited"))
+	_notifier.connect("screen_entered", Callable(self, "_on_screen_entered"))
 
 func _on_body_entered(body: Node) -> void:
 	if body.has_method("add_item"):

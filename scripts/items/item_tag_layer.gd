@@ -112,15 +112,15 @@ func _restack_group(group: Dictionary) -> void:
 		max_w = 64.0
 	if max_h <= 0.0:
 		max_h = 16.0
-	var viewport_height := get_viewport().size.y
+	var viewport_height = get_viewport().size.y
 	var row_height := max_h + vertical_spacing
-	var rows_per_col := max(1, int(floor(viewport_height / row_height)))
+	var rows_per_col = max(1, int(floor(viewport_height / row_height)))
 	var columns := 1
 	if tags.size() > rows_per_col:
 		columns = min(3, int(ceil(float(tags.size()) / rows_per_col)))
 	for i in range(tags.size()):
-		var row := i % rows_per_col
-		var col := i / rows_per_col
+		var row = i % rows_per_col
+		var col = i / rows_per_col
 		var tag: ItemTag = tags[i]
 		tag.set_stack_coords(row, col, columns, max_w, max_h, vertical_spacing, horizontal_spacing)
 
