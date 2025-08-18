@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=9 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://cvs25xrct0lba" path="res://generated_level.tscn" id="6_tefeu"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 
@@ -56,6 +55,3 @@ camera_path = NodePath("../Camera3D")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("9_85g3d")]
-
-[node name="Node3D" parent="." instance=ExtResource("6_tefeu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.0468, 0, -116.057)
