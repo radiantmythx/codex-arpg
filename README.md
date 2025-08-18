@@ -441,6 +441,19 @@ leave the camera's view. The `OffscreenCuller` script
 them once they are visible again, allowing large numbers of enemies without
 slowing the editor or game.
 
+## Item Tag System
+Dropped items display a nameplate that is projected from the active camera.
+Tags are managed by `ItemTagLayer`, which groups them by world position and
+assigns a stack index so overlapping items form a readable column. The layer
+only recalculates stacks when tags are added or removed and cleans up any
+freed tags to avoid crashes when items are picked up.
+
+Each `ItemPickup` adds a `VisibleOnScreenNotifier3D` that hides its tag while
+offscreen and restores it when the item returns to view. Showing the tag again
+causes the layer to re-stack the group so the label stays aligned with the
+item even after moving offscreen. This approach keeps per-frame work minimal
+while ensuring tags restack when items are collected or reappear.
+
 ## NPCs
 NPCs are non-combat characters the player can interact with. Clicking an NPC
 within range pauses the game, centers the camera on both characters and opens a
