@@ -1,21 +1,33 @@
-extends Button
 class_name ItemTag
+extends Button
 
-var target: Node3D
+## Node in charge of displaying a pickup's name above the item.
+##
+## Historically each tag tried to resolve overlaps with every other tag every
+## frame.  That resulted in an \(N^2\) cost as the number of dropped items
+## increased.  The new system stores a "stack index" computed by
+## `ItemTagLayer` when a tag is created or removed.  During `_process` we simply
+## project the target into screen space and apply the precomputed offset.  This
+## keeps the tags in a stable vertical stack while only performing the expensive
+## grouping logic when absolutely necessary.
+
 @export var vertical_offset: float = 1.5
-var _camera: Camera3D
 var item: Item
-var move_step = 2.5
-# Additional offset applied when resolving overlap. This is recomputed every
-# frame so the tag can react to movement of its target.
-var _offset: Vector2 = Vector2.ZERO
+var target: Node3D
+var _camera: Camera3D
+
+# Index within a stack of tags that occupy the same world position.
+var _stack_index: int = 0
+# Cached spacing between stacked tags provided by the layer.
+var _stack_spacing: float = 0.0
 
 func _ready() -> void:
-	_camera = get_viewport().get_camera_3d()
-	focus_mode = FOCUS_NONE
-	size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	clip_text = false
+        _camera = get_viewport().get_camera_3d()
+        focus_mode = FOCUS_NONE
+        mouse_filter = Control.MOUSE_FILTER_STOP
+        size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+        size_flags_vertical = Control.SIZE_SHRINK_CENTER
+        clip_text = false
 
 func set_item(it: Item) -> void:
 		item = it
@@ -28,59 +40,36 @@ func set_item(it: Item) -> void:
 		_apply_style()
 
 func _apply_style() -> void:
-		var layer := get_parent()
-		if layer and layer.has_method("apply_style"):
-				layer.apply_style(self)
+                var layer := get_parent()
+                if layer and layer.has_method("apply_style"):
+                                layer.apply_style(self)
 
-func _process(delta: float) -> void:
-	if not target or not is_instance_valid(target):
-		queue_free()
-		return
-	if not _camera:
-		_camera = get_viewport().get_camera_3d()
-		if not _camera:
-			return
-		# Project the target's 3D position into 2D screen space.
-	var pos := target.global_transform.origin
-	pos.y += vertical_offset
-	var screen_point: Vector2 = _camera.unproject_position(pos)
+## Called by `ItemTagLayer` whenever the tag's stack position changes.
+func set_stack_index(idx: int, spacing: float) -> void:
+        _stack_index = idx
+        _stack_spacing = spacing
 
-	# Base position of the tag before applying any overlap resolution.
-	var base_pos := screen_point - size * 0.5
-	position = base_pos
+func _process(_delta: float) -> void:
+        if not target or not is_instance_valid(target):
+                queue_free()
+                return
+        if not _camera:
+                _camera = get_viewport().get_camera_3d()
+                if not _camera:
+                        return
 
-	# Item tags are always visible; camera culling is handled elsewhere.
-	visible = true
+        # Project the target's 3D position into 2D screen space.
+        var pos := target.global_transform.origin
+        pos.y += vertical_offset
+        var screen_point: Vector2 = _camera.unproject_position(pos)
 
-	# Adjust position if this tag overlaps any siblings.
-	resolve_overlap(base_pos)
-			
-## Resolve 2D rectangle collisions against other tags in the same layer.
-## A small vertical offset is applied until no overlaps remain.
-func resolve_overlap(base_pos: Vector2) -> void:
-		var parent := get_parent()
-		if not parent:
-				return
+        # Base position of the tag before applying the stack offset.
+        var base_pos := screen_point - size * 0.5
 
-		var siblings = parent.get_children()
-		var moved := true
-		var iterations := 0
-		_offset = Vector2.ZERO
-		var my_rect := Rect2(base_pos, size)
+        # Apply the vertical stack offset.  The layer provides the spacing in
+        # pixels so tags from the same world position form a readable column.
+        base_pos.y -= _stack_index * (size.y + _stack_spacing)
+        position = base_pos
 
-		# Keep trying to move until no collisions remain or a safety cap is hit.
-		while moved and iterations < 16:
-				moved = false
-				for other in siblings:
-						if other == self:
-								continue
-						var other_rect = Rect2(other.position, other.size)
-						if my_rect.intersects(other_rect):
-								var overlap = (my_rect.position.y + my_rect.size.y) - other_rect.position.y
-								_offset.y -= overlap + move_step
-								my_rect.position.y -= overlap + move_step
-								moved = true
-								break # restart loop after adjusting
-				iterations += 1
-
-		position = base_pos + _offset
+        # Tags are always visible; camera culling is handled elsewhere.
+        visible = true

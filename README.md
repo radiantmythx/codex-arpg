@@ -369,6 +369,16 @@ Icons can be assigned like the existing `chaos_orb.tres` under
 Hovering over an item tag in the world or over an inventory slot now shows the
 item's affixes in its tooltip.
 
+### Optimized Item Tags
+Item nameplates used to adjust their positions every frame to avoid overlapping
+with neighbouring tags.  This approach became expensive with many dropped items
+because each tag checked every other tag on the screen.  The `ItemTagLayer`
+now groups tags by the world position of their items and assigns each a stack
+index.  Individual `ItemTag` nodes simply project their item into screen space
+and apply this fixed offset.  Stacks are recalculated only when tags are added
+or removed, dramatically reducing per‑frame work while still presenting a
+readable column of names like in classic ARPGs.
+
 ## Enemy Behavior
 Enemies now wander around randomly until the player gets close. When the player
 enters the `detection_range` exported on `enemy.gd`, the enemy will chase the
