@@ -1,18 +1,20 @@
 extends Interactable
 class_name Portal
-## Example interactable that teleports the player after confirming via UI.
+## Interactable portal that generates a new procedural level when used.
 ##
 ## The portal displays a UI when interacted with. The tree is paused while
-## the UI is visible and resumes once the UI emits its `closed` signal.
-## When the player confirms travel the portal moves them to
-## `destination_path`.
+## the UI is visible and resumes once the UI emits its `closed` signal. When
+## the player confirms travel the current level (node named "GeneratedLevel")
+## is removed, a new one is generated from `level_settings_path` and the
+## player/camera are moved to the `PlayerSpawn` marker.
 ##
-## This script relies solely on NodePaths so the `Portal.tscn` scene does not
-## need to be edited. Attach this script to the existing portal scene and set
-## the paths in the inspector.
+## The portal hides itself until the boss in the generated level is killed.
+## When the boss emits its `died` signal the portal reappears at the boss's
+## last position, allowing the player to generate the next level.
 
-@export var destination_path: NodePath ## Node3D the player should be moved to.
+@export var destination_path: NodePath ## Unused legacy export retained for compatibility.
 @export var ui_path: NodePath ## Control that handles portal interaction.
+@export_file("*.tres") var level_settings_path: String = "res://resources/level_gen/floating_islands.tres"
 
 var _destination: Node3D
 var _ui: Node
@@ -49,13 +51,58 @@ func _on_ui_closed() -> void:
 	_close_ui()
 
 func _close_ui() -> void:
-	if _ui and _ui is CanvasItem:
-		_ui.hide()
-	get_tree().paused = false
-	_current_player = null
+        if _ui and _ui is CanvasItem:
+                _ui.hide()
+        get_tree().paused = false
+        _current_player = null
 
 func _teleport() -> void:
-	if _current_player and _destination:
-		_current_player.global_transform.origin = _destination.global_transform.origin
-		_current_player.position.y = 0
+        if not _current_player:
+                return
+        var scene_root := get_tree().current_scene
+
+        # Remove any previously generated level.
+        var existing := scene_root.get_node_or_null("GeneratedLevel")
+        if existing:
+                existing.queue_free()
+
+        # Generate the new level using the runtime helper.
+        var runtime := TileLevelRuntime.new()
+        runtime.settings_path = level_settings_path
+        var level := runtime.generate()
+        if level:
+                scene_root.add_child(level)
+
+                # Move the player and camera to the PlayerSpawn marker.
+                var spawn := level.get_node_or_null("PlayerSpawn")
+                if spawn and _current_player is Node3D:
+                        var player_3d: Node3D = _current_player
+                        var cam := get_viewport().get_camera_3d()
+                        var offset := Vector3.ZERO
+                        if cam:
+                                offset = cam.global_position - player_3d.global_position
+                        player_3d.global_position = spawn.global_position
+                        player_3d.position.y = 0
+                        if cam:
+                                cam.global_position = player_3d.global_position + offset
+
+                # Hide the portal until the boss is defeated.
+                visible = false
+                remove_from_group("interactable")
+
+                # Find the boss and respawn the portal when it dies.
+                for child in level.get_children():
+                        if child.is_in_group("enemy") and child.has_variable("tier") and child.tier == child.Tier.BOSS:
+                                child.connect("died", Callable(self, "_on_boss_died").bind(child), CONNECT_ONE_SHOT)
+                                break
+
+## Called when the boss dies. Repositions and re-enables the portal so the
+## player can generate another level.
+func _on_boss_died(boss: Node) -> void:
+        if not boss or not (boss is Node3D):
+                return
+        global_transform.origin = (boss as Node3D).global_transform.origin
+        global_transform.origin.y = 0
+        visible = true
+        add_to_group("interactable")
 		
