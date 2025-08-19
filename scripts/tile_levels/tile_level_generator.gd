@@ -7,6 +7,8 @@ extends RefCounted
 # The generator now also places a `PlayerSpawn` marker in the first room,
 # optionally instantiates a boss in the farthest room and can populate any
 # interior tiles with enemies supplied via `TileLevelSettings`.
+# The returned root node is named `GeneratedLevel` so gameplay code can locate
+# and replace the existing level at runtime.
 # All generated instances receive unique names to satisfy the Godot 4.4
 # requirement that sibling nodes have distinct names, preventing editor warnings
 # like "An incoming node's name clashes with..." when saving or loading scenes.
@@ -57,9 +59,13 @@ func generate(settings: TileLevelSettings) -> Node3D:
 
 	print("Obstacles added, connections ensured")
 
-	var root := Node3D.new()
-		# Set the owner so every spawned node belongs to this scene when packed.
-	#root.owner = root
+        # Top-level node containing the entire generated level. Naming it
+        # `GeneratedLevel` allows gameplay code to easily find and replace the
+        # current level at runtime.
+        var root := Node3D.new()
+        root.name = "GeneratedLevel"
+                # Set the owner so every spawned node belongs to this scene when packed.
+        #root.owner = root
 	var default_positions: Array[Vector2i] = []
 	var outside_rects: Array[Rect2] = []
 	

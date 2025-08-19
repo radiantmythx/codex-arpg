@@ -484,18 +484,26 @@ enable the hover outline and distance checking. The node automatically joins the
 `interactable` group and exposes an **interaction_range** property similar to NPCs.
 
 ### Portal Example
-`scripts/portal.gd` implements a simple portal using this system:
+`scripts/portal.gd` now drives procedural level generation:
 
-1. Attach the script to `scenes/environment/special/portal.tscn`.
-2. Set **destination_path** to a `Node3D` where the player should be moved.
-3. Set **ui_path** to the Control handling portal choices. It should emit a
-   `closed` signal when dismissed and optionally `travel_requested` to trigger
-   teleportation.
-4. When the player presses **interact** near the portal the UI is shown and the
-   game is paused. Closing the UI hides it and unpauses the game.
+1. Attach the script to `scenes/environment/special/portal.tscn` and set
+   **ui_path** to the Control that displays the portal options.
+2. Optionally adjust **level_settings_path** to point at a different
+   `TileLevelSettings` resource. By default it uses
+   `resources/level_gen/floating_islands.tres`.
+3. When the player interacts and confirms travel the portal performs several
+   steps:
+   - Any existing node named `GeneratedLevel` in the current scene is freed.
+   - A new level is generated at runtime via `TileLevelRuntime` and added to the
+     scene tree.
+   - The player and active camera are moved to the level's `PlayerSpawn`
+     marker.
+   - The portal hides itself until the boss in the new level dies. The boss's
+     `died` signal causes the portal to reappear at the boss's position so the
+     player can trigger another generation cycle.
 
-All interactables rely on exported `NodePath`s so no `.tscn` files need to be
-modified.
+This approach keeps the main scene active while swapping out procedurally
+generated levels on demand.
 
 ## Zone Shards and Level Generation
 Zone Shards are consumable items that open a temporary zone. They reuse the existing affix framework so shards can roll modifiers that influence the generated level.
@@ -554,6 +562,12 @@ var settings: TileLevelSettings = load("res://path/to/settings.tres")
 var level_scene := TileLevelGenerator.new().generate(settings)
 add_child(level_scene)
 ```
+
+`TileLevelGenerator` names the returned root node `GeneratedLevel`. Runtime
+systems such as the portal can look for this node and replace it to swap levels
+without reloading the main scene. For convenience `scripts/tile_levels/
+tile_level_runtime.gd` wraps this logic and exposes an exportable
+`settings_path` so levels can be generated directly in game.
 
 ### Editor Preview
 `scripts/tile_levels/tile_level_preview.gd` is an `EditorScript` that can generate a `.tscn` from a settings resource. Open the script in Godot, set `settings_path` and `output_path`, then run it from the editor to inspect a sample generation.
