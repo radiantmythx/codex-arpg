@@ -477,6 +477,26 @@ To enable conversations add a `Control` with `scripts/ui/dialogue_box.gd` to a
 empty the Player will automatically create a `DialogueBox` under a sibling
 `CanvasLayer` at runtime.
 
+## Interactables
+Interactables are non-NPC objects the player can hover and activate, such as portals or chests.
+Attach `scripts/interactable.gd` to any `Node3D` with a `CollisionShape3D` to
+enable the hover outline and distance checking. The node automatically joins the
+`interactable` group and exposes an **interaction_range** property similar to NPCs.
+
+### Portal Example
+`scripts/portal.gd` implements a simple portal using this system:
+
+1. Attach the script to `scenes/environment/special/portal.tscn`.
+2. Set **destination_path** to a `Node3D` where the player should be moved.
+3. Set **ui_path** to the Control handling portal choices. It should emit a
+   `closed` signal when dismissed and optionally `travel_requested` to trigger
+   teleportation.
+4. When the player presses **interact** near the portal the UI is shown and the
+   game is paused. Closing the UI hides it and unpauses the game.
+
+All interactables rely on exported `NodePath`s so no `.tscn` files need to be
+modified.
+
 ## Zone Shards and Level Generation
 Zone Shards are consumable items that open a temporary zone. They reuse the existing affix framework so shards can roll modifiers that influence the generated level.
 
