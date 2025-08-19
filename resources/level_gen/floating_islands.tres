@@ -1,20 +1,21 @@
-[gd_resource type="Resource" script_class="TileLevelSettings" load_steps=21 format=3 uid="uid://bdmknthkdkvu4"]
+[gd_resource type="Resource" script_class="TileLevelSettings" load_steps=22 format=3 uid="uid://bdmknthkdkvu4"]
 
 [ext_resource type="Script" uid="uid://2p6ddtwx1rs7" path="res://scripts/tile_levels/level_decoration.gd" id="1_matm0"]
 [ext_resource type="Script" uid="uid://dpqu30glu37m" path="res://scripts/tile_levels/tile_level_settings.gd" id="2_xdu3f"]
 [ext_resource type="PackedScene" uid="uid://bp1n088ig3xf6" path="res://scenes/tiles/floating_islands/center_tile.tscn" id="3_sieb2"]
+[ext_resource type="PackedScene" uid="uid://duwdxcbr6u8wn" path="res://scenes/enemy/undead/undead_walker_boss.tscn" id="3_sqcl2"]
 [ext_resource type="Script" uid="uid://c73kghteohvdy" path="res://scripts/tile_levels/tile9_set.gd" id="3_xdu3f"]
 [ext_resource type="PackedScene" uid="uid://parrs2wlbftg" path="res://scenes/tiles/floating_islands/northeast_tile.tscn" id="4_tyq37"]
 [ext_resource type="PackedScene" uid="uid://cjd7m3ebr8q5x" path="res://scenes/tiles/floating_islands/northwest_tile.tscn" id="5_rqdll"]
 [ext_resource type="PackedScene" uid="uid://cbx7locqf4jmh" path="res://scenes/tiles/floating_islands/southeast_tile.tscn" id="6_ufcej"]
 [ext_resource type="PackedScene" uid="uid://7qoead5w2fwv" path="res://scenes/tiles/floating_islands/southwest_tile.tscn" id="7_3nyuq"]
 [ext_resource type="Script" uid="uid://dt8rewgoljepn" path="res://scripts/tile_levels/default_tile_decoration.gd" id="7_8qhee"]
+[ext_resource type="PackedScene" uid="uid://df6cnus8lydc2" path="res://scenes/enemy/undead/undead_walker.tscn" id="7_ksrbg"]
 [ext_resource type="ArrayMesh" uid="uid://bkvoa4lc61crv" path="res://meshes/environ/trees/pine_01.mesh" id="8_8qhee"]
 [ext_resource type="PackedScene" uid="uid://bb5s2a2iok27x" path="res://scenes/tiles/floating_islands/east_tile.tscn" id="8_sqcl2"]
 [ext_resource type="PackedScene" uid="uid://dktja5kkjo3sq" path="res://scenes/tiles/floating_islands/north_tile.tscn" id="9_ksrbg"]
 [ext_resource type="ArrayMesh" uid="uid://cq013g4gvfgu0" path="res://meshes/environ/grass/grass_bush.mesh" id="9_yea8u"]
 [ext_resource type="PackedScene" uid="uid://c8fci54esu2gx" path="res://scenes/tiles/floating_islands/south_tile.tscn" id="10_8qhee"]
-[ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="10_qjmfd"]
 [ext_resource type="PackedScene" uid="uid://bukw3isei4cfs" path="res://scenes/tiles/floating_islands/west_tile.tscn" id="11_qjmfd"]
 
 [sub_resource type="Resource" id="Resource_qjmfd"]
@@ -51,9 +52,9 @@ metadata/_custom_type_script = "uid://c73kghteohvdy"
 [resource]
 script = ExtResource("2_xdu3f")
 tiles = SubResource("Resource_hh22a")
-room_count = 4
-room_min_size = Vector2i(15, 15)
-room_max_size = Vector2i(25, 25)
+room_count = 2
+room_min_size = Vector2i(8, 8)
+room_max_size = Vector2i(12, 12)
 tunnel_size = 6
 obstacle_chance = 0.0
 tile_size = 2.0
@@ -76,9 +77,9 @@ boss_inherit_room_decorations = true
 boss_inherit_room_multimesh = true
 seed = 0
 level_size = Vector2i(60, 60)
-room_enemy_scenes = Array[PackedScene]([ExtResource("10_qjmfd")])
+room_enemy_scenes = Array[PackedScene]([ExtResource("7_ksrbg")])
 tunnel_enemy_scenes = Array[PackedScene]([])
-tunnels_use_room_enemies = true
-enemy_density = 0.081
-boss_scene = ExtResource("10_qjmfd")
+tunnels_use_room_enemies = false
+enemy_density = 0.057
+boss_scene = ExtResource("3_sqcl2")
 metadata/_custom_type_script = "uid://dpqu30glu37m"

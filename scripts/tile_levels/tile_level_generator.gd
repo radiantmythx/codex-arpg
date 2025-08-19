@@ -59,13 +59,13 @@ func generate(settings: TileLevelSettings) -> Node3D:
 
 	print("Obstacles added, connections ensured")
 
-        # Top-level node containing the entire generated level. Naming it
-        # `GeneratedLevel` allows gameplay code to easily find and replace the
-        # current level at runtime.
-        var root := Node3D.new()
-        root.name = "GeneratedLevel"
-                # Set the owner so every spawned node belongs to this scene when packed.
-        #root.owner = root
+		# Top-level node containing the entire generated level. Naming it
+		# `GeneratedLevel` allows gameplay code to easily find and replace the
+		# current level at runtime.
+	var root := Node3D.new()
+	root.name = "GeneratedLevel"
+				# Set the owner so every spawned node belongs to this scene when packed.
+		#root.owner = root
 	var default_positions: Array[Vector2i] = []
 	var outside_rects: Array[Rect2] = []
 	

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://dqt40e75y6d5r"]
 
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_clj57"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_clj57"]
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_xrkgp"]
 [ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="2_xrkgp"]
 [ext_resource type="Resource" uid="uid://bgvlwtf7ig8rh" path="res://resources/affixes/soul_inc.tres" id="3_gnnxd"]

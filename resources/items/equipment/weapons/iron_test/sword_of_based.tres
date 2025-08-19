@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://jpdhdcxly3x4"]
 
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="1_1ay02"]
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_c58uo"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_c58uo"]
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_wq8vy"]
 [ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="2_66ulg"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/items/equipment/sword_of_based.png" id="2_bken0"]

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Rune" load_steps=12 format=3 uid="uid://n2ij1ckq3plx"]
 
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="1_m6ocu"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_m6ocu"]
 [ext_resource type="Resource" path="res://resources/affixes/aoe_inc.tres" id="2_k7inm"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="2_sjlme"]
 [ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="3_jem6n"]

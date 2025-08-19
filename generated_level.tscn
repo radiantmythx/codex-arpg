@@ -11,7 +11,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cq013g4gvfgu0" path="res://meshes/environ/grass/grass_bush.mesh" id="11_fne1l"]
 [ext_resource type="PackedScene" uid="uid://7qoead5w2fwv" path="res://scenes/tiles/floating_islands/southwest_tile.tscn" id="11_w5hvb"]
 [ext_resource type="ArrayMesh" uid="uid://bkvoa4lc61crv" path="res://meshes/environ/trees/pine_01.mesh" id="12_s8rma"]
-[ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy.tscn" id="15_lgmwc"]
+[ext_resource type="PackedScene" uid="uid://d3epfdpy5wkx5" path="res://scenes/enemy/enemy.tscn" id="15_lgmwc"]
 
 [sub_resource type="MultiMesh" id="MultiMesh_fne1l"]
 transform_format = 1
