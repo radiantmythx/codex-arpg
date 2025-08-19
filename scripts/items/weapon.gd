@@ -1,5 +1,5 @@
 class_name Weapon
-extends Item
+extends Equipment
 
 enum WeaponType { MELEE, PROJECTILE, SPELL }
 

@@ -53,6 +53,10 @@ var base_health_regen: float = 0.0
 var base_mana_regen: float = 0.0
 var base_armor: float = 0.0
 var base_evasion: float = 0.0
+var base_block: float = 0.0
+var base_max_evasion: float = 75.0
+var base_max_block: float = 75.0
+var base_damage_reduction: float = 0.0
 var base_aoe: float = 1.0
 var base_resistance: Dictionary = {
 	DamageType.PHYSICAL: 0.0,
@@ -221,10 +225,26 @@ func get_resistance(damage_type: DamageType) -> float:
 	return _compute_stat(base_resistance.get(damage_type, 0.0), key)
 
 func get_armor() -> float:
-	return _compute_stat(base_armor, "armor")
+        return _compute_stat(base_armor, "armor")
 
 func get_evasion() -> float:
-	return _compute_stat(base_evasion, "evasion")
+        return min(_compute_stat(base_evasion, "evasion"), get_max_evasion())
+
+## Returns the block chance after applying affixes, clamped by the maximum block rating.
+func get_block() -> float:
+        return min(_compute_stat(base_block, "block"), get_max_block())
+
+## Retrieves the maximum evasion chance allowed for this entity.
+func get_max_evasion() -> float:
+        return _compute_stat(base_max_evasion, "max_evasion")
+
+## Retrieves the maximum block chance allowed for this entity.
+func get_max_block() -> float:
+        return _compute_stat(base_max_block, "max_block")
+
+## Percentage-based damage reduction applied after resistances.
+func get_damage_reduction() -> float:
+        return _compute_stat(base_damage_reduction, "damage_reduction")
 
 func get_aoe_multiplier() -> float:
 	return _compute_stat(base_aoe, "aoe")

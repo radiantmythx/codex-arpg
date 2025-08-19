@@ -90,6 +90,31 @@ The player can perform a quick dodge roll to evade danger.
 
 During a roll the player moves in their last movement direction, passes through enemies but still collides with the environment and ignores incoming damage for a brief window.
 
+## Block and Evasion
+Players and enemies now roll **evasion** then **block** when taking damage. Each stat is a percentage chance out of 100 to avoid the hit. Both start at 5 and are capped at 75 by default. Caps can be raised with affixes that grant `max_evasion` or `max_block`.
+
+After evasion and block checks succeed or fail, physical damage is reduced by armor. All damage types then apply resistances, percentage `damage_reduction`, and flat `defense` before energy shield and health are deducted. Enemies have a built-in 10% damage reduction.
+
+### Equipment base stats
+Items that extend `Equipment` (`scripts/items/equipment.gd`) can define base values for:
+
+- `base_evasion`
+- `base_block`
+- `base_damage_reduction`
+- `base_energy_shield`
+
+When equipped these values are added to the wearer's `Stats` alongside any affixes.
+
+### Creating affixes
+To craft affixes that modify these stats, create an `AffixDefinition` resource with `stat_bonuses` entries such as:
+
+- `{ "block": 12 }` – adds 12% block chance.
+- `{ "max_block": 5 }` – raises the block cap by 5.
+- `{ "evasion": 20 }` – adds 20% evasion.
+- `{ "damage_reduction": 10 }` – reduces incoming damage by 10%.
+
+Affixes are processed by `Stats` dynamically so additional defensive modifiers can be added without code changes. Refer to the [Godot 4.4 `Resource` documentation](https://docs.godotengine.org/en/latest/classes/class_resource.html) for details on creating these resources.
+
 ## Camera
 The main camera now tracks the player character. It preserves the original
 offset configured in the scene and lerps toward the player each frame. When the

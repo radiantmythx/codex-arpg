@@ -11,7 +11,11 @@ extends CharacterBody3D
 @export var animation_tree_path: NodePath
 @export var mesh: MeshInstance3D
 @export var base_armor: float = 0.0
-@export var base_evasion: float = 0.0
+@export var base_evasion: float = 5.0 ## % chance to avoid incoming damage.
+@export var base_block: float = 5.0 ## % chance to block after evasion.
+@export var base_max_evasion: float = 75.0 ## Default evasion cap.
+@export var base_max_block: float = 75.0 ## Default block cap.
+@export var base_damage_reduction: float = 10.0 ## % reduction applied after resistances.
 @export var base_max_energy_shield: float = 0.0
 @export var base_energy_shield_regen: float = 0.0
 @export var base_energy_shield_recharge_delay: float = 2.0
@@ -84,11 +88,15 @@ func _ready() -> void:
 		# `get_base_damage_dict` instead, so set all base damages to zero.
 	for dt in Stats.DAMAGE_TYPES:
 		stats.base_damage[dt] = 0.0
-	stats.base_armor = base_armor
-	stats.base_evasion = base_evasion
-	stats.base_max_energy_shield = base_max_energy_shield
-	stats.base_energy_shield_regen = base_energy_shield_regen
-	stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
+        stats.base_armor = base_armor
+        stats.base_evasion = base_evasion
+        stats.base_block = base_block
+        stats.base_max_evasion = base_max_evasion
+        stats.base_max_block = base_max_block
+        stats.base_damage_reduction = base_damage_reduction
+        stats.base_max_energy_shield = base_max_energy_shield
+        stats.base_energy_shield_regen = base_energy_shield_regen
+        stats.base_energy_shield_recharge_delay = base_energy_shield_recharge_delay
 	stats.base_attack_speed = base_attack_speed
 	max_health = float(stats.get_max_health())
 	current_health = max_health
@@ -257,18 +265,20 @@ func get_base_damage_dict(_tags := []) -> Dictionary:
 		return dict
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-	#print("AAA I AM TAKING ", amount, " ", damage_type, " DAMAGE")
-	if damage_type == Stats.DamageType.PHYSICAL:
-		if randf() < stats.get_evasion() / 100.0:
-			return
-		amount = max(0.0, amount - stats.get_armor())
-	var resist = stats.get_resistance(damage_type)
-	amount = amount * (1.0 - resist / 100.0)
-	amount = max(0.0, amount - stats.get_defense())
-	if damage_type != Stats.DamageType.HOLY and damage_type != Stats.DamageType.UNHOLY and energy_shield > 0.0:
-		var absorbed = min(energy_shield, amount)
-		energy_shield -= absorbed
-		amount -= absorbed
+        if randf() * 100.0 < stats.get_evasion():
+                return
+        if randf() * 100.0 < stats.get_block():
+                return
+        if damage_type == Stats.DamageType.PHYSICAL:
+                amount = max(0.0, amount - stats.get_armor())
+        var resist = stats.get_resistance(damage_type)
+        amount = amount * (1.0 - resist / 100.0)
+        amount = amount * (1.0 - stats.get_damage_reduction() / 100.0)
+        amount = max(0.0, amount - stats.get_defense())
+        if damage_type != Stats.DamageType.HOLY and damage_type != Stats.DamageType.UNHOLY and energy_shield > 0.0:
+                var absorbed = min(energy_shield, amount)
+                energy_shield -= absorbed
+                amount -= absorbed
 	_es_recharge_timer = stats.get_energy_shield_recharge_delay()
 	current_health -= amount
 	if _healthbar:
