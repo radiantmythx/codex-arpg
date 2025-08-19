@@ -24,35 +24,7 @@ var _rune_manager: RuneManager
 
 
 func _ready() -> void:
-	if slots_parent_path != NodePath():
-		var parent = get_node(slots_parent_path)
-		_slots = parent.get_children()
-		for i in range(_slots.size()):
-			var slot = _slots[i]
-			if slot.has_method("set_item"):
-				slot.index = i
-				if slot.has_signal("pressed"):
-					slot.connect("pressed", Callable(self, "_on_slot_pressed"))
-				if slot.has_signal("right_clicked"):
-					slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
-		if equip_slots_parent_path != NodePath():
-			var eparent = get_node(equip_slots_parent_path)
-			_equip_slots = eparent.get_children()
-			for slot in _equip_slots:
-				if slot.has_signal("pressed"):
-					slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
-				if slot.has_signal("right_clicked"):
-					slot.connect(
-						"right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot)
-					)
-		if rune_slots_parent_path != NodePath():
-			var rparent = get_node(rune_slots_parent_path)
-			_rune_slots = rparent.get_children()
-			for rslot in _rune_slots:
-				if rslot.has_signal("pressed"):
-					rslot.connect("pressed", Callable(self, "_on_rune_slot_pressed").bind(rslot))
-				if rslot.has_signal("right_clicked"):
-					rslot.connect("right_clicked", Callable(self, "_on_rune_slot_right_clicked").bind(rslot))
+	_collect_slots()
 #	if camera_path != NodePath():
 #		_camera = get_node(camera_path)
 #		if _camera:
@@ -348,4 +320,36 @@ func _update_cursor() -> void:
 
 
 func _update_cursor_visibility() -> void:
-	_cursor_icon.visible = _cursor_item != null and _open
+    _cursor_icon.visible = _cursor_item != null and _open
+
+func _collect_slots() -> void:
+    _slots.clear()
+    _equip_slots.clear()
+    _rune_slots.clear()
+    var inv_slots: Array = find_children("*", "InventorySlot", true)
+    var inv_index := 0
+    for slot in inv_slots:
+        if slot.is_equipment:
+            _equip_slots.append(slot)
+            if slot.has_signal("pressed"):
+                slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
+            if slot.has_signal("right_clicked"):
+                slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
+        else:
+            slot.index = inv_index
+            inv_index += 1
+            _slots.append(slot)
+            if slot.has_signal("pressed"):
+                slot.connect("pressed", Callable(self, "_on_slot_pressed"))
+            if slot.has_signal("right_clicked"):
+                slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
+
+    var rslots: Array = find_children("*", "RuneSlot", true)
+    for rslot in rslots:
+        _rune_slots.append(rslot)
+        if rslot.has_signal("pressed"):
+            rslot.connect("pressed", Callable(self, "_on_rune_slot_pressed").bind(rslot))
+        if rslot.has_signal("right_clicked"):
+            rslot.connect("right_clicked", Callable(self, "_on_rune_slot_right_clicked"))
+
+
