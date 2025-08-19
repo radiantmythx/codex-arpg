@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="AffixGroup" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="AffixGroup" load_steps=6 format=3 uid="uid://ci4rw5dhgg83j"]
 
-[ext_resource type="Script" path="res://scripts/items/affix_group.gd" id="1"]
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_ixwht"]
 [ext_resource type="Resource" path="res://resources/affixes/move_speed_inc.tres" id="2"]
 [ext_resource type="Resource" path="res://resources/affixes/evasion_inc.tres" id="3"]
 [ext_resource type="Resource" path="res://resources/affixes/max_health_add.tres" id="4"]
 
 [resource]
 script = ExtResource("1")
-affixes = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
+affixes = Array[ExtResource("1_ixwht")]([ExtResource("2"), ExtResource("3"), ExtResource("4")])

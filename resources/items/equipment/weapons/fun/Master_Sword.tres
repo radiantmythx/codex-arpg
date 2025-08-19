@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=10 format=3 uid="uid://gb3olejfaqh7"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=12 format=3 uid="uid://gb3olejfaqh7"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_jexwy"]
+[ext_resource type="Resource" path="res://resources/affix_groups/boots.tres" id="2_6q6wb"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_jwcw5"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_6q6wb"]
+[ext_resource type="Resource" uid="uid://dlkbvo4xa0non" path="res://resources/affixes/holy_damage_melee_inc.tres" id="3_jwcw5"]
 [ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="4_k17q1"]
 [ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="5_6xkgh"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/items/equipment/sword_of_based.png" id="6_2jyia"]
@@ -44,8 +46,8 @@ max_stack = 1
 item_type = ""
 equip_slot = "weapon"
 hide_hair = false
-affix_pool = Array[ExtResource("2_jwcw5")]([])
-affix_groups = Array[ExtResource("1_jexwy")]([])
+affix_pool = Array[ExtResource("2_jwcw5")]([ExtResource("3_jwcw5")])
+affix_groups = Array[ExtResource("1_jexwy")]([ExtResource("2_6q6wb")])
 affixes = Array[ExtResource("3_6q6wb")]([])
 model = ExtResource("7_jexwy")
 equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="AffixDefinition" load_steps=2 format=3 uid="uid://dlkbvo4xa0non"]
 
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1"]
 
@@ -7,4 +7,6 @@ script = ExtResource("1")
 name = "Holy Damage % (Melee)"
 description = "{value}% increased holy damage with melee skills"
 stat_key = "holy_damage_melee_inc"
-tiers = [Vector2(10,20), Vector2(20,30), Vector2(30,40)]
+main_stat = -1
+tiers = Array[Vector2]([Vector2(10, 20), Vector2(20, 30), Vector2(30, 40)])
+flags = Array[String]([])

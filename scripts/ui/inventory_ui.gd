@@ -175,49 +175,53 @@ func _on_slot_pressed(index: int) -> void:
 
 
 func _on_slot_right_clicked(index: int) -> void:
+	print("right clicked index ", index)
 	if not _inventory:
 		return
 
-		var data = _inventory.get_slot(index)
-		var item: Item = data["item"]
-		if _cursor_item and item:
-				var success := false
-				match _cursor_item.item_name:
-						"Chaos Orb":
-								success = item.reroll_affixes()
-						"Temper Jewel":
-								success = item.temper_random_affix()
-						"Culling Jewel":
-								success = item.remove_random_affix()
-						"Elevating Jewel":
-								success = item.add_random_affix()
-						"Cleansing Jewel":
-								success = item.clear_affixes()
-						_:
-								pass
-				if _cursor_item.item_name in ["Chaos Orb", "Temper Jewel", "Culling Jewel", "Elevating Jewel", "Cleansing Jewel"]:
-						if success:
-								_cursor_amount -= 1
-								if _cursor_amount <= 0:
-										_cursor_item = null
-										_cursor_amount = 0
-								_inventory.clear_slot(index)
-								_inventory.place_item(index, item, data["amount"])
-								_update_slots()
-						_update_cursor()
-						return
-		if not _equipment:
-				return
-		if item and item.equip_slot != "":
-				_inventory.clear_slot(index)
-				var swapped = _equipment.equip(item)
-				if swapped:
-					var leftover = _inventory.place_item(index, swapped, 1)
-					if leftover:
-						_inventory.add_item(leftover["item"], leftover["amount"])
-						_update_slots()
-						_update_equip_slots()
-						_update_rune_slots()
+	var data = _inventory.get_slot(index)
+	var item: Item = data["item"]
+	if _cursor_item and item:
+			print("Cursor item is", _cursor_item.item_name)
+			var success := false
+			match _cursor_item.item_name:
+					"Chaos Orb":
+							success = item.reroll_affixes()
+					"Temper Jewel":
+							print("Trying to apply temper jewel")
+							success = item.temper_random_affix()
+					"Culling Jewel":
+							success = item.remove_random_affix()
+					"Elevating Jewel":
+							success = item.add_random_affix()
+					"Cleansing Jewel":
+							success = item.clear_affixes()
+					_:
+							pass
+			if _cursor_item.item_name in ["Chaos Orb", "Temper Jewel", "Culling Jewel", "Elevating Jewel", "Cleansing Jewel"]:
+					
+					if success:
+							_cursor_amount -= 1
+							if _cursor_amount <= 0:
+									_cursor_item = null
+									_cursor_amount = 0
+							_inventory.clear_slot(index)
+							_inventory.place_item(index, item, data["amount"])
+							_update_slots()
+					_update_cursor()
+					return
+	if not _equipment:
+			return
+	if item and item.equip_slot != "":
+			_inventory.clear_slot(index)
+			var swapped = _equipment.equip(item)
+			if swapped:
+				var leftover = _inventory.place_item(index, swapped, 1)
+				if leftover:
+					_inventory.add_item(leftover["item"], leftover["amount"])
+					_update_slots()
+					_update_equip_slots()
+					_update_rune_slots()
 
 
 func _on_equip_slot_pressed(_index: int, slot: InventorySlot) -> void:

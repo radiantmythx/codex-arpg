@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=17 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://b2w03t6cybdu1" path="res://scripts/items/item_pickup.gd" id="7_tipki"]
 [ext_resource type="Resource" uid="uid://gb3olejfaqh7" path="res://resources/items/equipment/weapons/fun/Master_Sword.tres" id="8_85g3d"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
+[ext_resource type="Resource" uid="uid://du6v6hhtgimgw" path="res://resources/items/currency/elevating_jewel.tres" id="9_choun"]
+[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_orb.tres" id="10_choun"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_choun"]
 sky_top_color = Color(0.253654, 0.42179, 0.817933, 1)
@@ -88,19 +90,52 @@ item = ExtResource("8_85g3d")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
 shape = SubResource("SphereShape3D_ai4ee")
 
-[node name="Control" type="Control" parent="GeneratedLevel"]
+[node name="ItemDrop2" type="Node3D" parent="GeneratedLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, -12.2001)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop2"]
+script = ExtResource("7_tipki")
+item = ExtResource("9_choun")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop2/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
+
+[node name="ItemDrop3" type="Node3D" parent="GeneratedLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, -16.8043)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop3"]
+script = ExtResource("7_tipki")
+item = ExtResource("10_choun")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop3/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
+
+[node name="To The User" type="Control" parent="GeneratedLevel"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Panel" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_right = 594.0
 offset_bottom = 40.0
 text = "welcome to h3ll, click portal when redy"
 
-[node name="Panel10" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel10" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 67.0
@@ -108,7 +143,7 @@ offset_right = 600.0
 offset_bottom = 107.0
 text = "dont worry these messages will go away after the portal"
 
-[node name="Panel2" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel2" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 156.0
 offset_top = 135.0
@@ -116,7 +151,7 @@ offset_right = 750.0
 offset_bottom = 175.0
 text = "heckin wasd to move, right click to attack, left click to interact"
 
-[node name="Panel4" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel4" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 157.0
 offset_top = 182.0
@@ -124,7 +159,7 @@ offset_right = 751.0
 offset_bottom = 222.0
 text = "e for inventor\"e\" :^)"
 
-[node name="Panel5" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel5" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 922.0
 offset_top = 34.0
@@ -136,7 +171,7 @@ its
 sword body shield
          boots"
 
-[node name="Panel8" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel8" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 486.0
 offset_top = 748.0
@@ -144,7 +179,7 @@ offset_right = 1080.0
 offset_bottom = 788.0
 text = "click da portal and then the travel button ^ right there that shows up"
 
-[node name="Panel3" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel3" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 250.0
 offset_top = 349.0
@@ -152,7 +187,7 @@ offset_right = 844.0
 offset_bottom = 389.0
 text = "click da portal and then the travel button ^ right there that shows up"
 
-[node name="Panel9" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel9" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 250.0
 offset_top = 395.0
@@ -160,7 +195,7 @@ offset_right = 844.0
 offset_bottom = 435.0
 text = "gotta kill da boss (big guy) in the level for the next portal"
 
-[node name="Panel11" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel11" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 252.0
 offset_top = 442.0
@@ -168,7 +203,7 @@ offset_right = 846.0
 offset_bottom = 482.0
 text = "click on item tags while standing next to item to pick it up"
 
-[node name="Panel6" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel6" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 23.0
 offset_top = 553.0
@@ -176,7 +211,7 @@ offset_right = 575.0
 offset_bottom = 593.0
 text = "generate map doesnt do anything"
 
-[node name="Panel7" type="TextEdit" parent="GeneratedLevel/Control"]
+[node name="Panel7" type="TextEdit" parent="GeneratedLevel/To The User"]
 layout_mode = 0
 offset_left = 202.0
 offset_top = 600.0
