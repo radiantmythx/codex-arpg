@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://vkgtj0g65t8w"]
+[gd_scene load_steps=16 format=3 uid="uid://vkgtj0g65t8w"]
 
-[ext_resource type="Script" uid="uid://b4bx46jbe57im" path="res://scripts/npc.gd" id="1_3cqk8"]
+[ext_resource type="Script" uid="uid://in6w0cndbqsl" path="res://scripts/portal.gd" id="1_3cqk8"]
 [ext_resource type="Shader" uid="uid://ddpmqocxck50v" path="res://shaders/visual/portal_shader.tres" id="1_lynu7"]
 [ext_resource type="Texture2D" uid="uid://c411isx1ptumo" path="res://images/shaders/portal_overlay.png" id="2_0x0xe"]
 [ext_resource type="Texture2D" uid="uid://bbw53vxy4oba6" path="res://images/shaders/flare.png" id="3_3cqk8"]
+[ext_resource type="PackedScene" uid="uid://inyqjdajftyy" path="res://scenes/ui/portal_ui.tscn" id="5_dp16a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u3n0w"]
 render_priority = 0
@@ -65,8 +66,9 @@ radius = 1.13
 
 [node name="Portal" type="CharacterBody3D"]
 script = ExtResource("1_3cqk8")
-enemy_name = "Portal"
-enemy_level = 0
+destination_path = NodePath("MeshInstance3D")
+ui_path = NodePath("PortalUI")
+outline_color = Color(0.974492, 0.885983, 0.296516, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
@@ -83,3 +85,6 @@ draw_pass_1 = SubResource("RibbonTrailMesh_voki5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_3cqk8")
+
+[node name="PortalUI" parent="." instance=ExtResource("5_dp16a")]
+process_mode = 2

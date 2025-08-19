@@ -20,20 +20,22 @@ var _hover_outline_material: ShaderMaterial
 const HOVER_OUTLINE_SHADER := preload("res://resources/enemy_hover_outline.gdshader")
 
 func _ready() -> void:
-    add_to_group("interactable")
-    _mesh = get_node_or_null("MeshInstance3D")
-    if _mesh:
-        _hover_outline_material = ShaderMaterial.new()
-        _hover_outline_material.shader = HOVER_OUTLINE_SHADER
-        _hover_outline_material.set_shader_parameter("outline_color", outline_color)
+	add_to_group("interactable")
+	_mesh = get_node_or_null("MeshInstance3D")
+	print("interactable ready!")
+	if _mesh:
+		print("found mesh for interactable")
+		_hover_outline_material = ShaderMaterial.new()
+		_hover_outline_material.shader = HOVER_OUTLINE_SHADER
+		_hover_outline_material.set_shader_parameter("outline_color", outline_color)
 
 func set_hovered(hovered: bool) -> void:
-    ## Toggle the outline when the cursor hovers this interactable.
-    if not _mesh:
-        return
-    _mesh.material_overlay = _hover_outline_material if hovered else null
+	## Toggle the outline when the cursor hovers this interactable.
+	if not _mesh:
+		return
+	_mesh.material_overlay = _hover_outline_material if hovered else null
 
 func interact(player: Node) -> void:
-    ## Called by the Player when the **interact** action is pressed
-    ## while this object is hovered and within range.
-    pass
+	## Called by the Player when the **interact** action is pressed
+	## while this object is hovered and within range.
+	pass
