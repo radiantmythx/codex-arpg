@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://c0n8red0j2huk"]
+[gd_resource type="Resource" script_class="Equipment" load_steps=12 format=3 uid="uid://c0n8red0j2huk"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_bqph7"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_bxu0j"]
@@ -8,15 +8,19 @@
 [ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="6_ljk2x"]
 [ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="7_mstbw"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="8_8x7n4"]
-[ext_resource type="Texture2D" uid="uid://boy03glsiyfgl" path="res://images/items/equipment/axe_of_based.png" id="9_w1ghj"]
+[ext_resource type="Texture2D" uid="uid://xrkhjl3ivofw" path="res://images/items/equipment/iron_helm.png" id="9_fvm0h"]
+[ext_resource type="Script" uid="uid://d378xadv2olhs" path="res://scripts/items/equipment.gd" id="9_vnfqs"]
 [ext_resource type="PackedScene" uid="uid://0ssw2ee00e0i" path="res://scenes/items/equipment/armor/iron_test/plate_helm.tscn" id="10_fvm0h"]
-[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="11_0osv1"]
 
 [resource]
-script = ExtResource("11_0osv1")
+script = ExtResource("9_vnfqs")
+base_evasion = 0.0
+base_block = 1.0
+base_damage_reduction = 1.0
+base_energy_shield = 0.0
 item_name = "Iron Helmet"
 description = "Helmet made of Iron"
-icon = ExtResource("9_w1ghj")
+icon = ExtResource("9_fvm0h")
 max_stack = 1
 item_type = ""
 equip_slot = "helmet"

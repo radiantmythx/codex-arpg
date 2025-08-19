@@ -52,19 +52,19 @@ func unequip(slot: String) -> Item:
 # -- Internal helpers -------------------------------------------------------
 
 func _apply_item(item: Item) -> void:
-        for affix in item.affixes:
-                stats.apply_affix(affix)
-        if item is Equipment:
-                stats.base_evasion += item.base_evasion
-                stats.base_block += item.base_block
-                stats.base_damage_reduction += item.base_damage_reduction
-                stats.base_max_energy_shield += item.base_energy_shield
+		for affix in item.affixes:
+				stats.apply_affix(affix)
+		if item is Equipment:
+				stats.base_evasion += item.base_evasion
+				stats.base_block += item.base_block
+				stats.base_damage_reduction += item.base_damage_reduction
+				stats.base_max_energy_shield += item.base_energy_shield
 
 func _remove_item(item: Item) -> void:
-        for affix in item.affixes:
-                stats.remove_affix(affix)
-        if item is Equipment:
-                stats.base_evasion -= item.base_evasion
-                stats.base_block -= item.base_block
-                stats.base_damage_reduction -= item.base_damage_reduction
-                stats.base_max_energy_shield -= item.base_energy_shield
+		for affix in item.affixes:
+				stats.remove_affix(affix)
+		if item is Equipment:
+				stats.base_evasion -= item.base_evasion
+				stats.base_block -= item.base_block
+				stats.base_damage_reduction -= item.base_damage_reduction
+				stats.base_max_energy_shield -= item.base_energy_shield

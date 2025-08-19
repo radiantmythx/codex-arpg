@@ -1,14 +1,19 @@
-[gd_scene load_steps=17 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=32 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
+[ext_resource type="Script" uid="uid://in6w0cndbqsl" path="res://scripts/portal.gd" id="6_jkv2x"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
-[ext_resource type="PackedScene" uid="uid://vkgtj0g65t8w" path="res://scenes/environment/special/portal.tscn" id="7_o6xl0"]
+[ext_resource type="Shader" uid="uid://ddpmqocxck50v" path="res://shaders/visual/portal_shader.tres" id="7_jbj1t"]
 [ext_resource type="Script" uid="uid://b2w03t6cybdu1" path="res://scripts/items/item_pickup.gd" id="7_tipki"]
 [ext_resource type="Resource" uid="uid://gb3olejfaqh7" path="res://resources/items/equipment/weapons/fun/Master_Sword.tres" id="8_85g3d"]
+[ext_resource type="Texture2D" uid="uid://c411isx1ptumo" path="res://images/shaders/portal_overlay.png" id="8_muem4"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 [ext_resource type="Resource" uid="uid://du6v6hhtgimgw" path="res://resources/items/currency/elevating_jewel.tres" id="9_choun"]
+[ext_resource type="Texture2D" uid="uid://bbw53vxy4oba6" path="res://images/shaders/flare.png" id="9_dp3eg"]
+[ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/Iron_Helmet.tres" id="9_ya4ey"]
+[ext_resource type="PackedScene" uid="uid://inyqjdajftyy" path="res://scenes/ui/portal_ui.tscn" id="10_0ld40"]
 [ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_orb.tres" id="10_choun"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_choun"]
@@ -26,6 +31,64 @@ background_mode = 2
 sky = SubResource("Sky_ya4ey")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3n0w"]
+render_priority = 0
+shader = ExtResource("7_jbj1t")
+shader_parameter/Intensity = 10.0
+shader_parameter/Portal_Color = Color(0.361109, 0.773052, 1, 1)
+shader_parameter/Speed_XY = Vector2(0.2, 0.2)
+shader_parameter/Texture2DParameter = ExtResource("8_muem4")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0x0xe"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dp16a"]
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(2, 3, 3, 1)
+albedo_texture = ExtResource("9_dp3eg")
+use_particle_trails = true
+
+[sub_resource type="Curve" id="Curve_rsyjv"]
+_limits = [-2.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1e-05, -0.004673), 0.0, 0.0, 0, 0, Vector2(1, -0.0654206), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_3byf6"]
+_limits = [-2.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0.116822), 0.0, 0.0, 0, 0, Vector2(1, 0.0257008), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_kfbhf"]
+_limits = [-2.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_2qnhg"]
+curve_x = SubResource("Curve_rsyjv")
+curve_y = SubResource("Curve_3byf6")
+curve_z = SubResource("Curve_kfbhf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lgari"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 1.1
+emission_ring_inner_radius = 1.1
+emission_ring_cone_angle = 90.0
+orbit_velocity_min = 0.2
+orbit_velocity_max = 0.2
+orbit_velocity_curve = SubResource("CurveXYZTexture_2qnhg")
+radial_velocity_min = 0.199978
+radial_velocity_max = 0.499978
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_voki5"]
+size = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3cqk8"]
+radius = 1.13
 
 [sub_resource type="SphereMesh" id="SphereMesh_06m3a"]
 
@@ -58,19 +121,48 @@ near = 0.005
 far = 3779.05
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
+visible = false
 script = ExtResource("7_choun")
 
 [node name="InventoryUI" parent="." instance=ExtResource("4_jyhfs")]
 camera_path = NodePath("../Camera3D")
 
 [node name="SkillsUI" parent="." instance=ExtResource("4_tbgi4")]
+visible = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("9_85g3d")]
 
-[node name="Portal" parent="." instance=ExtResource("7_o6xl0")]
+[node name="PlayerUI" type="CanvasLayer" parent="."]
+
+[node name="Portal" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.371992, 3.5, -6.7006)
+script = ExtResource("6_jkv2x")
+destination_path = NodePath("MeshInstance3D")
+ui_path = NodePath("PortalUI")
+outline_color = Color(0.974492, 0.885983, 0.296516, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Portal"]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_u3n0w")
+mesh = SubResource("QuadMesh_0x0xe")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Portal"]
+material_override = SubResource("StandardMaterial3D_dp16a")
+amount = 50
+trail_enabled = true
+trail_lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_lgari")
+draw_pass_1 = SubResource("RibbonTrailMesh_voki5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Portal"]
+shape = SubResource("SphereShape3D_3cqk8")
+
+[node name="PortalUI" parent="Portal" instance=ExtResource("10_0ld40")]
+process_mode = 2
+visible = false
 
 [node name="GeneratedLevel" type="Node3D" parent="."]
 
@@ -85,8 +177,26 @@ surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
 [node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop"]
 script = ExtResource("7_tipki")
 item = ExtResource("8_85g3d")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
+
+[node name="ItemDrop4" type="Node3D" parent="GeneratedLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, -0.287262)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop4"]
+script = ExtResource("7_tipki")
+item = ExtResource("9_ya4ey")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop4/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
 shape = SubResource("SphereShape3D_ai4ee")
 
@@ -101,6 +211,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
 [node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop2"]
 script = ExtResource("7_tipki")
 item = ExtResource("9_choun")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop2/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
@@ -117,6 +228,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
 [node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop3"]
 script = ExtResource("7_tipki")
 item = ExtResource("10_choun")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop3/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)

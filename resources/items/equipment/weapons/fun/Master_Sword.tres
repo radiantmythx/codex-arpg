@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Weapon" load_steps=12 format=3 uid="uid://gb3olejfaqh7"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_jexwy"]
-[ext_resource type="Resource" path="res://resources/affix_groups/boots.tres" id="2_6q6wb"]
+[ext_resource type="Resource" uid="uid://ci4rw5dhgg83j" path="res://resources/affix_groups/boots.tres" id="2_6q6wb"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_jwcw5"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_6q6wb"]
 [ext_resource type="Resource" uid="uid://dlkbvo4xa0non" path="res://resources/affixes/holy_damage_melee_inc.tres" id="3_jwcw5"]
@@ -39,6 +39,10 @@ damage_type = 4
 speed = 2.0
 weapon_type = 0
 default_skill = SubResource("Resource_ggk64")
+base_evasion = 0.0
+base_block = 0.0
+base_damage_reduction = 0.0
+base_energy_shield = 0.0
 item_name = "Master Sword"
 description = "Blade of Time"
 icon = ExtResource("6_2jyia")
