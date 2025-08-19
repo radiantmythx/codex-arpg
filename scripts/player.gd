@@ -200,8 +200,8 @@ func _physics_process(delta: float) -> void:
 				_process_movement(delta)
 				_update_animation()
 				_process_regen(delta)
-				_update_target_hover()
-				_process_npc_interact()
+                                _update_target_hover()
+                                _process_interactables()
 				_update_camera()
 
 func _process_movement(delta: float) -> void:
@@ -550,8 +550,8 @@ func _update_target_hover() -> void:
 		var query := PhysicsRayQueryParameters3D.create(origin, origin + dir * 1000)
 		var result := get_world_3d().direct_space_state.intersect_ray(query)
 		var target: Node = null
-		if result and result.collider and (result.collider.is_in_group("enemy") or result.collider.is_in_group("npc")):
-				target = result.collider
+                if result and result.collider and (result.collider.is_in_group("enemy") or result.collider.is_in_group("npc") or result.collider.is_in_group("interactable")):
+                                target = result.collider
 		elif result:
 				# If the ray hit something else, check a small sphere around the point
 				# of impact so near misses still select the target.
@@ -561,26 +561,33 @@ func _update_target_hover() -> void:
 				shape_query.shape = sphere
 				shape_query.transform = Transform3D(Basis(), result.position)
 				var hits := get_world_3d().direct_space_state.intersect_shape(shape_query)
-				for h in hits:
-						var c = h.collider
-						if c.is_in_group("enemy") or c.is_in_group("npc"):
-								target = c
-								break
-		if target != _hovered_target:
-				if _hovered_target and _hovered_target.has_method("set_hovered"):
-						_hovered_target.set_hovered(false)
-				_hovered_target = target
-				if _hovered_target and _hovered_target.has_method("set_hovered"):
-						_hovered_target.set_hovered(true)
-		_target_display.update_target(target)
+                                for h in hits:
+                                                var c = h.collider
+                                                if c.is_in_group("enemy") or c.is_in_group("npc") or c.is_in_group("interactable"):
+                                                                target = c
+                                                                break
+                if target != _hovered_target:
+                                if _hovered_target and _hovered_target.has_method("set_hovered"):
+                                                _hovered_target.set_hovered(false)
+                                _hovered_target = target
+                                if _hovered_target and _hovered_target.has_method("set_hovered"):
+                                                _hovered_target.set_hovered(true)
+                if target and (target.is_in_group("enemy") or target.is_in_group("npc")):
+                                _target_display.update_target(target)
+                else:
+                                _target_display.update_target(null)
 
-func _process_npc_interact() -> void:
-		## Handle left-click interactions with friendly NPCs.
-		if not _hovered_target or not _hovered_target.is_in_group("npc"):
-				return
-		if not Input.is_action_just_pressed("interact"):
-				return
-		if global_transform.origin.distance_to(_hovered_target.global_transform.origin) > _hovered_target.interaction_range:
-				return
-		if _dialogue_ui and _camera:
-				_dialogue_ui.start_conversation(_hovered_target, self, _camera)
+func _process_interactables() -> void:
+                ## Handle left-click interactions with NPCs and other interactables.
+                if not _hovered_target:
+                                return
+                if not Input.is_action_just_pressed("interact"):
+                                return
+                if global_transform.origin.distance_to(_hovered_target.global_transform.origin) > _hovered_target.interaction_range:
+                                return
+                if _hovered_target.is_in_group("npc"):
+                                if _dialogue_ui and _camera:
+                                                _dialogue_ui.start_conversation(_hovered_target, self, _camera)
+                elif _hovered_target.is_in_group("interactable"):
+                                if _hovered_target.has_method("interact"):
+                                                _hovered_target.interact(self)
