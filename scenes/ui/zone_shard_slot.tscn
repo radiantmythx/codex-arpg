@@ -15,3 +15,5 @@ zone_generator = ExtResource("2_yi2vv")
 
 [node name="ShardSlot" parent="." instance=ExtResource("2_20gb6")]
 layout_mode = 0
+is_equipment = true
+slot_type = "zShard"

@@ -320,36 +320,34 @@ func _update_cursor() -> void:
 
 
 func _update_cursor_visibility() -> void:
-    _cursor_icon.visible = _cursor_item != null and _open
+	_cursor_icon.visible = _cursor_item != null and _open
 
 func _collect_slots() -> void:
-    _slots.clear()
-    _equip_slots.clear()
-    _rune_slots.clear()
-    var inv_slots: Array = find_children("*", "InventorySlot", true)
-    var inv_index := 0
-    for slot in inv_slots:
-        if slot.is_equipment:
-            _equip_slots.append(slot)
-            if slot.has_signal("pressed"):
-                slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
-            if slot.has_signal("right_clicked"):
-                slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
-        else:
-            slot.index = inv_index
-            inv_index += 1
-            _slots.append(slot)
-            if slot.has_signal("pressed"):
-                slot.connect("pressed", Callable(self, "_on_slot_pressed"))
-            if slot.has_signal("right_clicked"):
-                slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
+	_slots.clear()
+	_equip_slots.clear()
+	_rune_slots.clear()
+	var inv_slots: Array = find_children("*", "InventorySlot", true)
+	var inv_index := 0
+	for slot in inv_slots:
+		if slot.is_equipment:
+			_equip_slots.append(slot)
+			if slot.has_signal("pressed"):
+				slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
+			if slot.has_signal("right_clicked"):
+				slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
+		else:
+			slot.index = inv_index
+			inv_index += 1
+			_slots.append(slot)
+			if slot.has_signal("pressed"):
+				slot.connect("pressed", Callable(self, "_on_slot_pressed"))
+			if slot.has_signal("right_clicked"):
+				slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
 
-    var rslots: Array = find_children("*", "RuneSlot", true)
-    for rslot in rslots:
-        _rune_slots.append(rslot)
-        if rslot.has_signal("pressed"):
-            rslot.connect("pressed", Callable(self, "_on_rune_slot_pressed").bind(rslot))
-        if rslot.has_signal("right_clicked"):
-            rslot.connect("right_clicked", Callable(self, "_on_rune_slot_right_clicked"))
-
-
+	var rslots: Array = find_children("*", "RuneSlot", true)
+	for rslot in rslots:
+		_rune_slots.append(rslot)
+		if rslot.has_signal("pressed"):
+			rslot.connect("pressed", Callable(self, "_on_rune_slot_pressed").bind(rslot))
+		if rslot.has_signal("right_clicked"):
+			rslot.connect("right_clicked", Callable(self, "_on_rune_slot_right_clicked"))

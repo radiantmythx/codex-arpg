@@ -600,5 +600,7 @@ func _process_interactables() -> void:
 								if _dialogue_ui and _camera:
 												_dialogue_ui.start_conversation(_hovered_target, self, _camera)
 				elif _hovered_target.is_in_group("interactable"):
+								if _inventory_open:
+									close_inventory()
 								if _hovered_target.has_method("interact"):
 												_hovered_target.interact(self)

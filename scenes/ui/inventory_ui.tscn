@@ -1,102 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://dccbytm6erevq"]
+[gd_scene load_steps=7 format=3 uid="uid://dccbytm6erevq"]
 
 [ext_resource type="Script" uid="uid://dg08l7weib1fu" path="res://scripts/ui/inventory_ui.gd" id="1_4ycse"]
 [ext_resource type="PackedScene" uid="uid://dkwfqusg1xv8n" path="res://scenes/ui/inventory_slot.tscn" id="2_drsq2"]
 [ext_resource type="PackedScene" uid="uid://b5dwqrndlimvv" path="res://scenes/ui/rune_slot.tscn" id="3_drsq2"]
 [ext_resource type="PackedScene" uid="uid://ctc83vehvya02" path="res://scenes/ui/zone_shard_slot.tscn" id="4_nuief"]
+[ext_resource type="Texture2D" uid="uid://d3qqq5bklstnt" path="res://images/items/UI/panel/panel_style_01.png" id="5_bsps8"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ldtye"]
+texture = ExtResource("5_bsps8")
+texture_margin_left = 30.0
+texture_margin_top = 30.0
+texture_margin_right = 30.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [node name="InventoryUI" type="CanvasLayer"]
 script = ExtResource("1_4ycse")
-slots_parent_path = NodePath("SlotContainer")
-equip_slots_parent_path = NodePath("Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/EquipSlotContainer")
+slots_parent_path = NodePath("Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer")
 rune_slots_parent_path = NodePath("RuneSlotContainer")
-
-[node name="SlotContainer" type="FlowContainer" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -259.0
-offset_top = -155.0
-grow_horizontal = 0
-grow_vertical = 0
-alignment = 2
-
-[node name="InventorySlot" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot2" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot3" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot4" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot5" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot6" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot7" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot8" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot9" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot10" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot11" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot12" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot13" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot14" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="InventorySlot15" parent="SlotContainer" instance=ExtResource("2_drsq2")]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_vertical = 0
 
 [node name="RuneSlotContainer" type="FlowContainer" parent="."]
 offset_right = 223.71
@@ -146,6 +68,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Container"]
 layout_mode = 1
@@ -169,6 +92,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_ldtye")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Container/HBoxContainer/PanelContainer2"]
 layout_mode = 2
@@ -178,22 +102,65 @@ layout_mode = 2
 text = "Equipment"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="EquipmentContainer" type="PanelContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="EquipSlotContainer" type="HFlowContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 82.97)
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="WeaponSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/EquipSlotContainer" instance=ExtResource("2_drsq2")]
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HelmetSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "helmet"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CloakSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "cloak"
+
+[node name="AmuletSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "amulet"
+
+[node name="QuiverSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "quiver"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="WeaponSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer3" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 0
 is_equipment = true
 slot_type = "weapon"
 
-[node name="BodySlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/EquipSlotContainer" instance=ExtResource("2_drsq2")]
+[node name="BodySlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer3" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -201,23 +168,174 @@ size_flags_vertical = 0
 is_equipment = true
 slot_type = "body"
 
-[node name="HelmetSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/EquipSlotContainer" instance=ExtResource("2_drsq2")]
+[node name="OffhandSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer3" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 0
 is_equipment = true
-slot_type = "helmet"
+slot_type = "offhand"
 
-[node name="LegsSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/EquipSlotContainer" instance=ExtResource("2_drsq2")]
+[node name="HBoxContainer4" type="HBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="RingSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer4" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "ring"
+
+[node name="LegsSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer4" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 0
 is_equipment = true
 slot_type = "legs"
 
-[node name="OffhandSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/EquipSlotContainer" instance=ExtResource("2_drsq2")]
+[node name="RingSlot2" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer4" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "ring"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BootsSlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/EquipmentContainer/VBoxContainer/HBoxContainer5" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+is_equipment = true
+slot_type = "boots"
+
+[node name="SlotContainer" type="FlowContainer" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="InventorySlot" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_vertical = 0
-is_equipment = true
-slot_type = "offhand"
+
+[node name="InventorySlot2" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot3" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot4" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot5" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot6" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot7" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot8" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot9" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot10" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot11" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot12" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot13" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot14" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot15" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot16" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot17" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot18" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot19" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot20" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot21" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot22" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot23" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="InventorySlot24" parent="Container/HBoxContainer/PanelContainer2/VBoxContainer/SlotContainer" instance=ExtResource("2_drsq2")]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 0

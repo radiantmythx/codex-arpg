@@ -12,11 +12,11 @@
 script = ExtResource("1")
 entries = Array[Dictionary]([{
 "amount": 1,
-"chance": 0.01,
+"chance": 1.0,
 "item": ExtResource("3")
 }, {
 "amount": 1,
-"chance": 0.01,
+"chance": 1.0,
 "item": ExtResource("2_qpwau")
 }, {
 "amount": 1,
