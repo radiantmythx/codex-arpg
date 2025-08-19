@@ -18,27 +18,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hn25v")
-healthbar_path = NodePath("HealthBar")
+healthbar_path = NodePath("VBoxContainer/HealthBar")
 name_label_path = NodePath("VBoxContainer/NameLabel")
 level_label_path = NodePath("VBoxContainer/LevelLabel")
-
-[node name="HealthBar" type="Control" parent="."]
-layout_mode = 2
-anchors_preset = 0
-offset_right = 1152.0
-size_flags_horizontal = 3
-script = ExtResource("2_otnhr")
-
-[node name="ProgressBar" type="ProgressBar" parent="HealthBar"]
-custom_minimum_size = Vector2(600, 0)
-layout_mode = 2
-offset_left = 278.0
-offset_right = 878.0
-offset_bottom = 27.0
-size_flags_horizontal = 6
-theme_override_styles/background = SubResource("StyleBoxFlat_otnhr")
-theme_override_styles/fill = SubResource("StyleBoxFlat_1xk5u")
-show_percentage = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -50,6 +32,34 @@ offset_right = 29.5
 offset_bottom = 50.0
 grow_horizontal = 2
 mouse_filter = 2
+
+[node name="PanelContainer" type="Container" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 30.785)
+layout_mode = 2
+
+[node name="HealthBar" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_otnhr")
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/HealthBar"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -0.5
+offset_right = 300.0
+offset_bottom = 29.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+theme_override_styles/background = SubResource("StyleBoxFlat_otnhr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1xk5u")
+show_percentage = false
 
 [node name="NameLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2

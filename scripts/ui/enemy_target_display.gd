@@ -41,13 +41,15 @@ func _set_new_target(target: Node) -> void:
 		if _target and _target.has_signal("died") and _target.is_connected("died", Callable(self, "_on_target_died")):
 				_target.disconnect("died", Callable(self, "_on_target_died"))
 		_target = target
-		if _target:
+		if _target and is_instance_valid(_target):
 				# Forward name and level to any connected labels or the healthbar scene.
 				_update_labels()
 				_update_health()
 				if _target.has_signal("died"):
 						_target.connect("died", Callable(self, "_on_target_died"))
 				visible = true
+				if(_target.current_health <= 0):
+					visible = false
 		else:
 				visible = false
 
@@ -59,7 +61,10 @@ func _update_health() -> void:
 		# pass those values along so you can display them.
 		if _healthbar.has_method("set_enemy_info"):
 			_healthbar.call("set_enemy_info", _target.enemy_name, _target.enemy_level)
-
+		if(_target.current_health <= 0):
+			visible = false
+			print("target has 0 health")
+			
 func _update_labels() -> void:
 	if not _target:
 		return

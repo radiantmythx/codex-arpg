@@ -1,17 +1,37 @@
-[gd_resource type="Resource" script_class="DropTable" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="DropTable" load_steps=8 format=3 uid="uid://b20hhmr07q8nx"]
 
 [ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/drop_table.gd" id="1"]
-[ext_resource type="Resource" uid="uid://bmmrsmwx0wtwj" path="res://resources/items/test_item.tres" id="2"]
+[ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/Iron_Helmet.tres" id="2_qpwau"]
 [ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_orb.tres" id="3"]
+[ext_resource type="Resource" uid="uid://cwwkpoowfo5u6" path="res://resources/items/equipment/armor/iron_test/Iron_Platebody.tres" id="3_8q48i"]
+[ext_resource type="Resource" uid="uid://dqt40e75y6d5r" path="res://resources/items/equipment/armor/iron_test/Iron_Platelegs.tres" id="4_lqisg"]
+[ext_resource type="Resource" uid="uid://2m88kj64161u" path="res://resources/items/equipment/armor/iron_test/Iron_Shield.tres" id="5_dvq6i"]
+[ext_resource type="Resource" uid="uid://dosbesunnt4ky" path="res://resources/items/equipment/weapons/iron_test/Iron_Sword.tres" id="6_8q48i"]
 
 [resource]
 script = ExtResource("1")
-entries = [{
-"item": ExtResource("2"),
-"chance": 0.5,
-"amount": 1
+entries = Array[Dictionary]([{
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("3")
 }, {
-"item": ExtResource("3"),
-"chance": 0.8,
-"amount": 5
-}]
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("2_qpwau")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("3_8q48i")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("4_lqisg")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("5_dvq6i")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("6_8q48i")
+}])
