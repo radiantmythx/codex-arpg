@@ -34,14 +34,10 @@ func _ready() -> void:
 	clip_text = false
 
 func set_item(it: Item) -> void:
-	item = it
-	text = it.item_name
-	var tip := "%s\n%s" % [it.item_name, it.description]
-	var aff_text := it.get_affix_text()
-	if aff_text != "":
-		tip += "\n" + aff_text
-	tooltip_text = tip
-	_apply_style()
+        item = it
+        text = it.item_name
+        tooltip_text = it.get_display_text()
+        _apply_style()
 
 func _apply_style() -> void:
 	var layer := get_parent()

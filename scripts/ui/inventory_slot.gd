@@ -18,6 +18,9 @@ var amount: int = 0
 
 @onready var icon := $Icon if has_node("Icon") else null
 @onready var quantity_label := $Amount if has_node("Amount") else null
+@onready var requirement_overlay := $RequirementOverlay if has_node("RequirementOverlay") else null
+
+var _stats: Stats
 
 
 func _ready() -> void:
@@ -38,21 +41,24 @@ func set_item(value: Item) -> void:
 
 
 func set_amount(value: int) -> void:
-	amount = value
-	update_display()
+        amount = value
+        update_display()
+
+
+func set_stats(s: Stats) -> void:
+        _stats = s
+        update_display()
 
 
 func update_display() -> void:
-	#print("updating display")
-	if icon:
-		icon.texture = item.icon if item else null
-	if quantity_label:
-		quantity_label.text = str(amount) if amount > 1 else ""
-	if item:
-		var tip := "%s\n%s" % [item.item_name, item.description]
-		var aff_text := item.get_affix_text()
-		if aff_text != "":
-			tip += "\n" + aff_text
-		tooltip_text = tip
-	else:
-		tooltip_text = ""
+        #print("updating display")
+        if icon:
+                icon.texture = item.icon if item else null
+        if quantity_label:
+                quantity_label.text = str(amount) if amount > 1 else ""
+        if item:
+                tooltip_text = item.get_display_text()
+        else:
+                tooltip_text = ""
+        if requirement_overlay:
+                requirement_overlay.visible = item and _stats and not item.requirements_met(_stats)
