@@ -302,8 +302,14 @@ func _drop_loot() -> void:
 				if randf() <= float(entry.get("chance", 1.0)):
 						var drop := drop_scene.instantiate()
 						var area := drop.get_node_or_null("Area3D")
-						if area and entry.has("item"):
-								area.item = entry["item"]
+                                                if area and entry.has("item"):
+                                                                var it: Item = entry["item"]
+                                                                # Duplicate non-stackable items so affix crafting on one drop
+                                                                # doesn't modify other instances.
+                                                                if it and it.max_stack <= 1:
+                                                                        area.item = it.duplicate(true)
+                                                                else:
+                                                                        area.item = it
 						if area and entry.has("amount"):
 								area.amount = entry["amount"]
 						get_parent().add_child(drop)

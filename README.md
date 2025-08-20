@@ -390,6 +390,20 @@ To create a jewel in Godot 4.4, make a new `.tres` Resource using
 Icons can be assigned like the existing `chaos_orb.tres` under
 `resources/items/currency/`.
 
+### Item Instances and Equipment Slots
+Items picked up from the world are now duplicated so their affixes are unique
+per instance. This prevents crafting on one item from modifying every copy of
+the same resource. When placing `ItemPickup` scenes manually, mark the exported
+`item` resource as **Local To Scene (Unique)** in the inspector to avoid shared
+references.
+
+`EquipmentManager` supports multiple slots of the same type. Calling
+`set_slots(["weapon", "offhand", "armor", "helmet", "ring", "ring"])` creates two
+independent ring slots. Inventory equipment slots automatically receive an
+index, but it can be overridden in the editor if a specific ordering is
+required. Ensure ring slot `InventorySlot` nodes have `is_equipment` checked and
+`slot_type` set to `"ring"`.
+
 ### Displaying Affixes
 Hovering over an item tag in the world or over an inventory slot now shows the
 item's affixes in its tooltip.
