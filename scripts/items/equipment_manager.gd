@@ -40,27 +40,30 @@ func get_all_items() -> Array:
 				return result
 
 func equip(item: Item, index: int = -1) -> Item:
-		# Equips the given item and returns any item that was previously in the
-		# slot. When `index` is -1 the first free slot of the matching type is
-		# used.
-		if not item or item.equip_slot == "":
-				return null
-		var slot := item.equip_slot
-		var arr: Array = _slots.get(slot, [])
-		if arr.is_empty():
-				return null
-		var slot_index := index
-		if slot_index < 0 or slot_index >= arr.size():
-				slot_index = arr.find(null)
-				if slot_index == -1:
-						slot_index = 0
-		var previous: Item = arr[slot_index]
-		if previous:
-				_remove_item(previous)
-		arr[slot_index] = item
-		_apply_item(item)
-		emit_signal("slot_changed", slot, slot_index, item)
-		return previous
+                # Equips the given item and returns any item that was previously in the
+                # slot. When `index` is -1 the first free slot of the matching type is
+                # used. If the wearer's stats do not meet the item's requirements the
+                # equip attempt fails and the item is returned unchanged.
+                if not item or item.equip_slot == "":
+                                return null
+                if stats and not item.requirements_met(stats):
+                                return item
+                var slot := item.equip_slot
+                var arr: Array = _slots.get(slot, [])
+                if arr.is_empty():
+                                return item
+                var slot_index := index
+                if slot_index < 0 or slot_index >= arr.size():
+                                slot_index = arr.find(null)
+                                if slot_index == -1:
+                                                slot_index = 0
+                var previous: Item = arr[slot_index]
+                if previous:
+                                _remove_item(previous)
+                arr[slot_index] = item
+                _apply_item(item)
+                emit_signal("slot_changed", slot, slot_index, item)
+                return previous
 
 func unequip(slot: String, index: int = 0) -> Item:
 		# Removes the item from the slot and returns it.

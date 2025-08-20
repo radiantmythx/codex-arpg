@@ -156,10 +156,11 @@ func _ready() -> void:
 					_anim_state = _anim_tree.get("parameters/playback")
 	if inventory_ui_path != NodePath():
 		_inventory_ui = get_node(inventory_ui_path)
-		if _inventory_ui:
-			_inventory_ui.bind_inventory(inventory)
-			_inventory_ui.bind_equipment(equipment)
-			_inventory_ui.bind_rune_manager(rune_manager)
+                if _inventory_ui:
+                        _inventory_ui.bind_inventory(inventory)
+                        _inventory_ui.bind_equipment(equipment)
+                        _inventory_ui.bind_rune_manager(rune_manager)
+                        _inventory_ui.bind_stats(stats)
 		if inventory_camera_path != NodePath():
 			_camera = get_node(inventory_camera_path)
 			if _camera:
