@@ -123,14 +123,14 @@ func _ready() -> void:
 	stats.base_mana_regen = base_mana_regen
 	stats.base_attack_speed = base_attack_speed
 
-        equipment = EquipmentManager.new()
-        equipment.stats = stats
-        # Create equipment slots.  Rings use the same "ring" slot type but
-        # appear twice so the player can wear one on each hand.
-        # `EquipmentManager` will treat duplicate entries as separate slots.
-        equipment.set_slots(["weapon", "offhand", "armor", "helmet", "ring", "ring"])
-        equipment.connect("slot_changed", Callable(self, "_on_equipment_slot_changed"))
-        add_child(equipment)
+	equipment = EquipmentManager.new()
+	equipment.stats = stats
+	# Create equipment slots.  Rings use the same "ring" slot type but
+	# appear twice so the player can wear one on each hand.
+	# `EquipmentManager` will treat duplicate entries as separate slots.
+	equipment.set_slots(["weapon", "offhand", "armor", "helmet", "ring", "ring"])
+	equipment.connect("slot_changed", Callable(self, "_on_equipment_slot_changed"))
+	add_child(equipment)
 
 	# Visual manager displays meshes for equipped items.
 	var skeleton: Skeleton3D = get_node_or_null(skeleton_path)
@@ -425,11 +425,11 @@ func set_skill_slot(_index: int, _skill: Skill) -> void:
 
 ## Equip slot callback. When a weapon is equipped, apply its default skill if provided.
 func _on_equipment_slot_changed(slot: String, index: int, item: Item) -> void:
-                # Only react when the primary weapon slot changes.
-                if slot != "weapon":
-                                return
-                if item is Weapon and item.default_skill:
-                                main_skill = item.default_skill
+				# Only react when the primary weapon slot changes.
+				if slot != "weapon":
+								return
+				if item is Weapon and item.default_skill:
+								main_skill = item.default_skill
 
 ## Returns a dictionary of base damage contributed by the equipped weapon for
 ## skills with the given tags.
@@ -467,16 +467,16 @@ func get_attack_speed(tags: Array[String] = []) -> float:
 		return speed
 
 func add_item(item: Item, amount: int = 1) -> void:
-        # When picking up equipment we duplicate the resource so currency
-        # crafting only affects this instance. Stackable items like currency
-        # keep their original resource so they can merge in the inventory.
-        var inst := item
-        if inst and inst.max_stack <= 1:
-                inst = inst.duplicate(true)
-        if _inventory_open and _inventory_ui:
-                _inventory_ui.pickup_to_cursor(inst, amount)
-        else:
-                inventory.add_item(inst, amount)
+		# When picking up equipment we duplicate the resource so currency
+		# crafting only affects this instance. Stackable items like currency
+		# keep their original resource so they can merge in the inventory.
+		var inst := item
+		if inst and inst.max_stack <= 1:
+				inst = inst.duplicate(true)
+		if _inventory_open and _inventory_ui:
+				_inventory_ui.pickup_to_cursor(inst, amount)
+		else:
+				inventory.add_item(inst, amount)
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
 	if _invincible_timer > 0.0:

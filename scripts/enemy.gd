@@ -56,6 +56,7 @@ var max_energy_shield: float = 0.0
 var _es_recharge_timer: float = 0.0
 
 signal died
+var is_dead:bool = false
 
 var _player: Node3D
 var _wander_timer: float = 0.0
@@ -283,10 +284,11 @@ func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType
 	current_health -= amount
 	if _healthbar:
 		_healthbar.set_health(current_health, max_health)
-	if current_health <= 0:
+	if current_health <= 0 and not is_dead:
 		die()
 
 func die() -> void:
+	is_dead = true
 	_drop_loot()
 	emit_signal("died")
 	queue_free()
@@ -302,14 +304,14 @@ func _drop_loot() -> void:
 				if randf() <= float(entry.get("chance", 1.0)):
 						var drop := drop_scene.instantiate()
 						var area := drop.get_node_or_null("Area3D")
-                                                if area and entry.has("item"):
-                                                                var it: Item = entry["item"]
-                                                                # Duplicate non-stackable items so affix crafting on one drop
-                                                                # doesn't modify other instances.
-                                                                if it and it.max_stack <= 1:
-                                                                        area.item = it.duplicate(true)
-                                                                else:
-                                                                        area.item = it
+						if area and entry.has("item"):
+										var it: Item = entry["item"]
+										# Duplicate non-stackable items so affix crafting on one drop
+										# doesn't modify other instances.
+										if it and it.max_stack <= 1:
+												area.item = it.duplicate(true)
+										else:
+												area.item = it
 						if area and entry.has("amount"):
 								area.amount = entry["amount"]
 						get_parent().add_child(drop)

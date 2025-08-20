@@ -119,7 +119,7 @@ func _on_slot_changed(index: int, item: Item, amount: int) -> void:
 
 
 func _on_equip_slot_changed(_slot: String, _index: int, _item: Item) -> void:
-        _update_equip_slots()
+		_update_equip_slots()
 
 func _on_rune_slot_changed(_slot_index: int, _rune_index: int, _rune: Rune) -> void:
 	_update_rune_slots()
@@ -197,39 +197,39 @@ func _on_slot_right_clicked(index: int) -> void:
 
 
 func _on_equip_slot_pressed(_index: int, slot: InventorySlot) -> void:
-        if not _equipment:
-                return
-        if _cursor_item:
-                if _cursor_item.equip_slot == slot.slot_type:
-                        # Pass the slot index so duplicate slot types (e.g. rings)
-                        # equip correctly.
-                        var swapped = _equipment.equip(_cursor_item, slot.index)
-                        _cursor_item = null
-                        _cursor_amount = 0
-                        if swapped:
-                                _cursor_item = swapped
-                                _cursor_amount = 1
-                        _update_cursor()
-                        _update_equip_slots()
-                        _update_rune_slots()
-        else:
-                var item = _equipment.unequip(slot.slot_type, slot.index)
-                if item:
-                        _cursor_item = item
-                        _cursor_amount = 1
-                _update_cursor()
-                _update_equip_slots()
+		if not _equipment:
+				return
+		if _cursor_item:
+				if _cursor_item.equip_slot == slot.slot_type:
+						# Pass the slot index so duplicate slot types (e.g. rings)
+						# equip correctly.
+						var swapped = _equipment.equip(_cursor_item, slot.index)
+						_cursor_item = null
+						_cursor_amount = 0
+						if swapped:
+								_cursor_item = swapped
+								_cursor_amount = 1
+						_update_cursor()
+						_update_equip_slots()
+						_update_rune_slots()
+		else:
+				var item = _equipment.unequip(slot.slot_type, slot.index)
+				if item:
+						_cursor_item = item
+						_cursor_amount = 1
+				_update_cursor()
+				_update_equip_slots()
 
 
 func _on_equip_slot_right_clicked(_index: int, slot: InventorySlot) -> void:
-        if not _equipment or not _inventory:
-                return
-        var item = _equipment.unequip(slot.slot_type, slot.index)
-        if item:
-                _inventory.add_item(item)
-                _update_slots()
-                _update_equip_slots()
-                _update_rune_slots()
+		if not _equipment or not _inventory:
+				return
+		var item = _equipment.unequip(slot.slot_type, slot.index)
+		if item:
+				_inventory.add_item(item)
+				_update_slots()
+				_update_equip_slots()
+				_update_rune_slots()
 
 func _on_rune_slot_pressed(slot: RuneSlot) -> void:
 	if not _rune_manager:
@@ -275,15 +275,15 @@ func _update_slots() -> void:
 
 
 func _update_equip_slots() -> void:
-        if not _equipment:
-                return
-        for slot in _equip_slots:
-                # Fetch item using slot index so duplicate slot types work.
-                var item = _equipment.get_item(slot.slot_type, slot.index)
-                if slot.has_method("set_item"):
-                        slot.set_item(item)
-                if slot.has_method("set_amount"):
-                        slot.set_amount(1 if item else 0)
+		if not _equipment:
+				return
+		for slot in _equip_slots:
+				# Fetch item using slot index so duplicate slot types work.
+				var item = _equipment.get_item(slot.slot_type, slot.index)
+				if slot.has_method("set_item"):
+						slot.set_item(item)
+				if slot.has_method("set_amount"):
+						slot.set_amount(1 if item else 0)
 
 func _update_rune_slots() -> void:
 	if not _rune_manager:
@@ -326,34 +326,34 @@ func _update_cursor_visibility() -> void:
 	_cursor_icon.visible = _cursor_item != null and _open
 
 func _collect_slots() -> void:
-        _slots.clear()
-        _equip_slots.clear()
-        _rune_slots.clear()
-        var inv_slots: Array = find_children("*", "InventorySlot", true)
-        var inv_index := 0
-        var equip_counts := {}
-        for slot in inv_slots:
-                if slot.is_equipment:
-                        # Automatically assign an index to equipment slots if one
-                        # isn't provided so multiple slots of the same type (like
-                        # rings) can be distinguished.
-                        if slot.index < 0:
-                                var count := equip_counts.get(slot.slot_type, 0)
-                                slot.index = count
-                                equip_counts[slot.slot_type] = count + 1
-                        _equip_slots.append(slot)
-                        if slot.has_signal("pressed"):
-                                slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
-                        if slot.has_signal("right_clicked"):
-                                slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
-                else:
-                        slot.index = inv_index
-                        inv_index += 1
-                        _slots.append(slot)
-                        if slot.has_signal("pressed"):
-                                slot.connect("pressed", Callable(self, "_on_slot_pressed"))
-                        if slot.has_signal("right_clicked"):
-                                slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
+	_slots.clear()
+	_equip_slots.clear()
+	_rune_slots.clear()
+	var inv_slots: Array = find_children("*", "InventorySlot", true)
+	var inv_index := 0
+	var equip_counts := {}
+	for slot in inv_slots:
+			if slot.is_equipment:
+					# Automatically assign an index to equipment slots if one
+					# isn't provided so multiple slots of the same type (like
+					# rings) can be distinguished.
+					if slot.index < 0:
+							var count = equip_counts.get(slot.slot_type, 0)
+							slot.index = count
+							equip_counts[slot.slot_type] = count + 1
+					_equip_slots.append(slot)
+					if slot.has_signal("pressed"):
+							slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
+					if slot.has_signal("right_clicked"):
+							slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
+			else:
+					slot.index = inv_index
+					inv_index += 1
+					_slots.append(slot)
+					if slot.has_signal("pressed"):
+							slot.connect("pressed", Callable(self, "_on_slot_pressed"))
+					if slot.has_signal("right_clicked"):
+							slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
 
 	var rslots: Array = find_children("*", "RuneSlot", true)
 	for rslot in rslots:
