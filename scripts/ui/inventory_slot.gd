@@ -10,6 +10,8 @@ signal right_clicked(index: int)
 @export var is_equipment: bool = false
 @export var slot_type: String = ""
 
+# Index distinguishes multiple equipment slots of the same type (e.g. ring 0
+# and ring 1). InventoryUI will auto-assign if left at the default value.
 @export var index: int = -1
 var item: Item = null
 var amount: int = 0
