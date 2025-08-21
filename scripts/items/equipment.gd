@@ -13,13 +13,13 @@ extends Item
 ## piece of equipment provides. Stats with values of ``0`` are omitted so only
 ## meaningful information is displayed in tooltips.
 func get_base_stat_text() -> String:
-        var lines: Array[String] = []
-        if base_block > 0:
-                lines.append("Base Block: %d%%" % int(base_block))
-        if base_evasion > 0:
-                lines.append("Base Evasion: %d%%" % int(base_evasion))
-        if base_energy_shield > 0:
-                lines.append("Base Energy Shield: %d" % int(base_energy_shield))
-        if base_damage_reduction > 0:
-                lines.append("Base Damage Reduction: %d%%" % int(base_damage_reduction))
-        return "\n".join(lines)
+		var lines: Array[String] = []
+		if base_block > 0:
+				lines.append("Base Block: %d%%" % int(base_block))
+		if base_evasion > 0:
+				lines.append("Base Evasion: %d%%" % int(base_evasion))
+		if base_energy_shield > 0:
+				lines.append("Base Energy Shield: %d" % int(base_energy_shield))
+		if base_damage_reduction > 0:
+				lines.append("Base Damage Reduction: %d%%" % int(base_damage_reduction))
+		return "\n".join(lines)

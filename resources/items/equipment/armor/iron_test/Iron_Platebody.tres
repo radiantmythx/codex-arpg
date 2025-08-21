@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://cwwkpoowfo5u6"]
+[gd_resource type="Resource" script_class="Equipment" load_steps=12 format=3 uid="uid://cwwkpoowfo5u6"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_bqph7"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_bxu0j"]
@@ -10,16 +10,24 @@
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="8_8x7n4"]
 [ext_resource type="Texture2D" uid="uid://1epbx58l6rtn" path="res://images/items/equipment/armor_of_based.png" id="9_fvm0h"]
 [ext_resource type="PackedScene" uid="uid://cddo4oego8nf8" path="res://scenes/items/equipment/armor/iron_test/armor.tscn" id="10_u8ay4"]
-[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="11_0osv1"]
+[ext_resource type="Script" uid="uid://d378xadv2olhs" path="res://scripts/items/equipment.gd" id="11_6rpj5"]
 
 [resource]
-script = ExtResource("11_0osv1")
+script = ExtResource("11_6rpj5")
+base_evasion = 0.0
+base_block = 2.0
+base_damage_reduction = 3.0
+base_energy_shield = 0.0
 item_name = "Iron Armor"
 description = "Armor made of Iron"
 icon = ExtResource("9_fvm0h")
 max_stack = 1
 item_type = ""
 equip_slot = "body"
+req_body = 3
+req_mind = 0
+req_soul = 0
+req_luck = 0
 hide_hair = false
 affix_pool = Array[ExtResource("2_bxu0j")]([ExtResource("3_82cos"), ExtResource("4_wq8yy"), ExtResource("5_msbht"), ExtResource("6_ljk2x"), ExtResource("7_mstbw")])
 affix_groups = Array[ExtResource("1_bqph7")]([])

@@ -145,7 +145,7 @@ func get_affix_text() -> String:
 	var lines: Array[String] = []
 	for a in affixes:
 			lines.append(a.get_description())
-        return "\n".join(lines)
+	return "\n".join(lines)
 
 
 # -- Requirement helpers -----------------------------------------------------
@@ -153,52 +153,52 @@ func get_affix_text() -> String:
 ## Returns a multi-line string describing any attribute requirements.
 ## Stats with a ``0`` requirement are omitted.
 func get_requirement_text() -> String:
-        var req_lines: Array[String] = []
-        if req_body > 0:
-                req_lines.append("Requires Body: %d" % req_body)
-        if req_mind > 0:
-                req_lines.append("Requires Mind: %d" % req_mind)
-        if req_soul > 0:
-                req_lines.append("Requires Soul: %d" % req_soul)
-        if req_luck > 0:
-                req_lines.append("Requires Luck: %d" % req_luck)
-        return "\n".join(req_lines)
+		var req_lines: Array[String] = []
+		if req_body > 0:
+				req_lines.append("Requires Body: %d" % req_body)
+		if req_mind > 0:
+				req_lines.append("Requires Mind: %d" % req_mind)
+		if req_soul > 0:
+				req_lines.append("Requires Soul: %d" % req_soul)
+		if req_luck > 0:
+				req_lines.append("Requires Luck: %d" % req_luck)
+		return "\n".join(req_lines)
 
 
 ## Returns ``true`` if the provided `Stats` meets this item's requirements.
 func requirements_met(stats: Stats) -> bool:
-        if not stats:
-                return true
-        if stats.get_main(Stats.MainStat.BODY) < req_body:
-                return false
-        if stats.get_main(Stats.MainStat.MIND) < req_mind:
-                return false
-        if stats.get_main(Stats.MainStat.SOUL) < req_soul:
-                return false
-        if stats.get_main(Stats.MainStat.LUCK) < req_luck:
-                return false
-        return true
+		if not stats:
+				return true
+		if stats.get_main(Stats.MainStat.BODY) < req_body:
+				return false
+		if stats.get_main(Stats.MainStat.MIND) < req_mind:
+				return false
+		if stats.get_main(Stats.MainStat.SOUL) < req_soul:
+				return false
+		if stats.get_main(Stats.MainStat.LUCK) < req_luck:
+				return false
+		return true
 
 
 ## Builds the complete tooltip text including description, base stats,
 ## requirements, and affixes.  This keeps tooltip formatting consistent across
 ## inventory slots and world item tags.
 func get_display_text() -> String:
-        var lines: Array[String] = []
-        lines.append(item_name)
-        if description != "":
-                lines.append(description)
-        if self is Equipment:
-                var equip_text := (self as Equipment).get_base_stat_text()
-                if equip_text != "":
-                        lines.append(equip_text)
-        var req_text := get_requirement_text()
-        if req_text != "":
-                lines.append(req_text)
-        var aff_text := get_affix_text()
-        if aff_text != "":
-                lines.append(aff_text)
-        return "\n".join(lines)
+		var lines: Array[String] = []
+		lines.append(item_name)
+		if description != "":
+				lines.append(description)
+		if self is Equipment:
+				var equip_text := (self as Equipment).get_base_stat_text()
+				if equip_text != "":
+						lines.append(equip_text)
+		var req_text := get_requirement_text()
+		if req_text != "":
+				lines.append(req_text)
+		var aff_text := get_affix_text()
+		if aff_text != "":
+				lines.append(aff_text)
+		return "\n".join(lines)
 
 
 func _get_all_affix_definitions() -> Array[AffixDefinition]:

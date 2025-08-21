@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="DropTable" load_steps=7 format=3 uid="uid://dhh0cdqjbaudf"]
+
+[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_jewel.tres" id="1_6xgbr"]
+[ext_resource type="Resource" uid="uid://j7hg6462gkt1" path="res://resources/items/currency/cleansing_jewel.tres" id="2_e6j3a"]
+[ext_resource type="Resource" uid="uid://by2r3chpnqgnh" path="res://resources/items/currency/culling_jewel.tres" id="3_bhce0"]
+[ext_resource type="Resource" uid="uid://du6v6hhtgimgw" path="res://resources/items/currency/elevating_jewel.tres" id="4_sen6g"]
+[ext_resource type="Resource" uid="uid://b82ml78f12266" path="res://resources/items/currency/tempering_jewel.tres" id="5_kxo36"]
+[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/drop_table.gd" id="6_kh700"]
+
+[resource]
+script = ExtResource("6_kh700")
+entries = Array[Dictionary]([{
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("1_6xgbr")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("2_e6j3a")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("3_bhce0")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("4_sen6g")
+}, {
+"amount": 1,
+"chance": 0.01,
+"item": ExtResource("5_kxo36")
+}])

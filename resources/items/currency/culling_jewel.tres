@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://by2r3chpnqgnh"]
+
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_k7cvp"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_0v62y"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_reehp"]
+[ext_resource type="Texture2D" uid="uid://bo72e6uwavnos" path="res://images/items/currency/culling_jewel.png" id="4_k7cvp"]
+[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="5_2nxlw"]
+
+[resource]
+script = ExtResource("5_2nxlw")
+item_name = "Culling Jewel"
+description = "Removes a random affix from an item"
+icon = ExtResource("4_k7cvp")
+max_stack = 20
+item_type = "craft"
+equip_slot = ""
+req_body = 0
+req_mind = 0
+req_soul = 0
+req_luck = 0
+hide_hair = false
+affix_pool = Array[ExtResource("2_0v62y")]([])
+affix_groups = Array[ExtResource("1_k7cvp")]([])
+affixes = Array[ExtResource("3_reehp")]([])
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(0, 0, 0)
+equip_rotation_rads = Vector3(0, 0, 0)

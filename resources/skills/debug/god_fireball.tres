@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="FireballSkill" load_steps=5 format=3 uid="uid://0a3166e21fbf"]
+
+[ext_resource type="PackedScene" uid="uid://d1nhemyl30k8h" path="res://scenes/effects/explosions/fire_sparks.tscn" id="1_4efqj"]
+[ext_resource type="Texture2D" uid="uid://bfdqueo0frg3n" path="res://images/skills/fireball.png" id="1_gmt24"]
+[ext_resource type="PackedScene" uid="uid://bx7spltxkpm6s" path="res://scenes/projectiles/skills/fireball.tscn" id="2_gmt24"]
+[ext_resource type="Script" uid="uid://cndualm0ptvrs" path="res://scripts/skills/fireball_skill.gd" id="3_vwc5w"]
+
+[resource]
+script = ExtResource("3_vwc5w")
+speed = 25.0
+range = 25.0
+explosion_radius = 100.0
+projectile_scene = ExtResource("2_gmt24")
+on_hit_effect = ExtResource("1_4efqj")
+name = "Fireball"
+description = "Shoot da fuckin fireball"
+icon = ExtResource("1_gmt24")
+mana_cost = 1.0
+cooldown = 1.0
+duration = 1.0
+move_multiplier = 0.2
+damage_type = 1
+base_damage_low = 20.0
+base_damage_high = 25.0
+tags = Array[String](["Spell", "Projectile", "AoE"])
+animation_name = &"strike"
+attack_time = 0.3
+cancel_time = 1.0

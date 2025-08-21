@@ -15,6 +15,10 @@ run/main_scene="uid://dduutvhpgaapk"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[gui]
+
+timers/tooltip_delay_sec=0.0
+
 [input]
 
 move_forward={

@@ -30,6 +30,7 @@ func _ready() -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
+			print("I have been clicked! I am index ", index, " and slot type ", slot_type)
 			emit_signal("pressed", index)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			emit_signal("right_clicked", index)
@@ -41,24 +42,24 @@ func set_item(value: Item) -> void:
 
 
 func set_amount(value: int) -> void:
-        amount = value
-        update_display()
+		amount = value
+		update_display()
 
 
 func set_stats(s: Stats) -> void:
-        _stats = s
-        update_display()
+		_stats = s
+		update_display()
 
 
 func update_display() -> void:
-        #print("updating display")
-        if icon:
-                icon.texture = item.icon if item else null
-        if quantity_label:
-                quantity_label.text = str(amount) if amount > 1 else ""
-        if item:
-                tooltip_text = item.get_display_text()
-        else:
-                tooltip_text = ""
-        if requirement_overlay:
-                requirement_overlay.visible = item and _stats and not item.requirements_met(_stats)
+		#print("updating display")
+		if icon:
+				icon.texture = item.icon if item else null
+		if quantity_label:
+				quantity_label.text = str(amount) if amount > 1 else ""
+		if item:
+				tooltip_text = item.get_display_text()
+		else:
+				tooltip_text = ""
+		if requirement_overlay:
+				requirement_overlay.visible = item and _stats and not item.requirements_met(_stats)

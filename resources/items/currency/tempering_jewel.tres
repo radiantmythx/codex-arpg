@@ -3,17 +3,21 @@
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_0yqyk"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_mrj6d"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_6e5va"]
-[ext_resource type="Texture2D" uid="uid://nuj4h5wgpw2f" path="res://images/items/currency/chaos_orb.png" id="4_b87v8"]
+[ext_resource type="Texture2D" uid="uid://d3p56kbtq7h4v" path="res://images/items/currency/tempering_jewel.png" id="4_0yqyk"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="5_g0gvc"]
 
 [resource]
 script = ExtResource("5_g0gvc")
 item_name = "Temper Jewel"
 description = "Upgrades a random affix to an item"
-icon = ExtResource("4_b87v8")
+icon = ExtResource("4_0yqyk")
 max_stack = 20
-item_type = ""
+item_type = "craft"
 equip_slot = ""
+req_body = 0
+req_mind = 0
+req_soul = 0
+req_luck = 0
 hide_hair = false
 affix_pool = Array[ExtResource("2_mrj6d")]([])
 affix_groups = Array[ExtResource("1_0yqyk")]([])

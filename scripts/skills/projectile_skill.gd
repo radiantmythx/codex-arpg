@@ -87,7 +87,7 @@ func _on_projectile_finished(projectile):
 	projectile.queue_free()
 
 func _explode(projectile):
-	print("BOOM!")
+	#print("BOOM!")
 	var origin = projectile.global_transform.origin
 	if explosion_radius <= 0.0:
 			if explosion_effect:
@@ -102,7 +102,7 @@ func _explode(projectile):
 	params.shape = shape
 	params.transform = Transform3D(Basis(), origin)
 	params.collide_with_bodies = true
-	var bodies = projectile.get_world_3d().direct_space_state.intersect_shape(params)
+	var bodies = projectile.get_world_3d().direct_space_state.intersect_shape(params, 1024)
 	var dmg_map = projectile.get_meta("dmg_map")
 	var buff_snapshot = projectile.get_meta("buff_snapshot")
 	var is_player = projectile.get_meta("is_player")
@@ -110,6 +110,7 @@ func _explode(projectile):
 			var body = result.get("collider")
 			if body and body.has_method("take_damage"):
 					if (is_player and body.is_in_group("enemy")) or (not is_player and body.is_in_group("player")):
+							print(dmg_map)
 							for dt in dmg_map.keys():
 									var dmg = dmg_map[dt]
 									if dmg > 0:

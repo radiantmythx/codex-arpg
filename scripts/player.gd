@@ -25,6 +25,8 @@ extends CharacterBody3D
 @export var dialogue_ui_path: NodePath ## NodePath to the DialogueBox control.
 
 @export var healthbar_node_path: NodePath
+@export var health_orb_node_path: NodePath
+@export var mana_orb_node_path: NodePath
 
 # Base combat and attribute values.
 @export var base_damage: float = 1.0
@@ -58,6 +60,8 @@ var _camera_offset: Vector3 = Vector3.ZERO ## Offset from player to camera.
 var _inventory_open := false
 var _skills_open := false
 var _healthbar: Healthbar
+var _health_orb: HealthOrb
+var _mana_orb: HealthOrb
 var _target_display: TargetDisplay
 var _dialogue_ui: DialogueBox
 var _hovered_target: Node
@@ -128,7 +132,7 @@ func _ready() -> void:
 	# Create equipment slots.  Rings use the same "ring" slot type but
 	# appear twice so the player can wear one on each hand.
 	# `EquipmentManager` will treat duplicate entries as separate slots.
-	equipment.set_slots(["weapon", "offhand", "armor", "helmet", "ring", "ring"])
+	equipment.set_slots(["weapon", "offhand", "body", "legs", "quiver", "cloak", "amulet", "helmet", "ring", "ring", "boots"])
 	equipment.connect("slot_changed", Callable(self, "_on_equipment_slot_changed"))
 	add_child(equipment)
 
@@ -156,11 +160,11 @@ func _ready() -> void:
 					_anim_state = _anim_tree.get("parameters/playback")
 	if inventory_ui_path != NodePath():
 		_inventory_ui = get_node(inventory_ui_path)
-                if _inventory_ui:
-                        _inventory_ui.bind_inventory(inventory)
-                        _inventory_ui.bind_equipment(equipment)
-                        _inventory_ui.bind_rune_manager(rune_manager)
-                        _inventory_ui.bind_stats(stats)
+		if _inventory_ui:
+				_inventory_ui.bind_inventory(inventory)
+				_inventory_ui.bind_equipment(equipment)
+				_inventory_ui.bind_rune_manager(rune_manager)
+				_inventory_ui.bind_stats(stats)
 		if inventory_camera_path != NodePath():
 			_camera = get_node(inventory_camera_path)
 			if _camera:
@@ -184,6 +188,10 @@ func _ready() -> void:
 					_target_display = get_node_or_null(target_display_path)
 	if dialogue_ui_path != NodePath():
 					_dialogue_ui = get_node_or_null(dialogue_ui_path)
+	if health_orb_node_path != NodePath():
+		_health_orb = get_node_or_null(health_orb_node_path)
+	if mana_orb_node_path != NodePath():
+		_mana_orb = get_node_or_null(mana_orb_node_path)
 	if not _dialogue_ui:
 			var canvas_layer := get_node_or_null("../CanvasLayer")
 			if canvas_layer:
@@ -369,8 +377,8 @@ func _update_camera() -> void:
 		if not _camera:
 				return
 		var target := global_position + _camera_offset
-		if _inventory_open:
-				target.x += inventory_camera_shift
+		#if _inventory_open:
+		#		target.x += inventory_camera_shift
 		_camera.global_position = _camera.global_position.lerp(target, 0.1)
 
 func close_skills() -> void:
@@ -398,8 +406,12 @@ func _on_rune_skill_changed(index: int, skill: Skill) -> void:
 		secondary_skill = skill
 
 func get_skill_slot(index: int) -> Skill:
+		if index == 0:
+			#print("hey!")
+			return main_skill
 		if rune_manager:
 				return rune_manager.get_skill(index)
+		
 		return null
 
 func get_skill_cooldown_remaining(index: int) -> float:
@@ -500,6 +512,8 @@ func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType
 	health -= amount
 	if _healthbar:
 		_healthbar.set_health(health, max_health)
+	if _health_orb:
+		_health_orb.update_health(health, max_health)
 	if health <= 0:
 		die()
 
@@ -518,6 +532,10 @@ func _process_regen(delta: float) -> void:
 	if _healthbar:
 		_healthbar.set_health(health, max_health)
 		_healthbar.set_mana(mana, max_mana)
+	if _health_orb:
+		_health_orb.update_health(health, max_health)
+	if _mana_orb:
+		_mana_orb.update_health(mana, max_mana)
 
 func die():
 				queue_free()

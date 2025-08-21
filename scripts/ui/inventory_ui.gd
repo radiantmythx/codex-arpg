@@ -4,7 +4,7 @@ extends CanvasLayer
 @export var slots_parent_path: NodePath
 @export var equip_slots_parent_path: NodePath
 @export var camera_path: NodePath
-@export var camera_shift: float = 3.0
+@export var camera_shift: float = 5.0
 @export var rune_slots_parent_path: NodePath
 
 var _slots: Array = []
@@ -25,8 +25,8 @@ var _rune_manager: RuneManager
 
 
 func _ready() -> void:
-        ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 0.0)
-        _collect_slots()
+	ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 0.0)
+	_collect_slots()
 #	if camera_path != NodePath():
 #		_camera = get_node(camera_path)
 #		if _camera:
@@ -42,10 +42,10 @@ func _ready() -> void:
 	visible = false
 	if _inventory:
 		bind_inventory(_inventory)
-        if _equipment:
-                bind_equipment(_equipment)
-        if _rune_manager:
-                bind_rune_manager(_rune_manager)
+	if _equipment:
+			bind_equipment(_equipment)
+	if _rune_manager:
+			bind_rune_manager(_rune_manager)
 
 
 func _process(_delta: float) -> void:
@@ -62,19 +62,19 @@ func bind_inventory(inv: Inventory) -> void:
 
 
 func bind_equipment(eq: EquipmentManager) -> void:
-        _equipment = eq
-        if _equipment:
-                _equipment.connect("slot_changed", Callable(self, "_on_equip_slot_changed"))
-                _update_equip_slots()
+		_equipment = eq
+		if _equipment:
+				_equipment.connect("slot_changed", Callable(self, "_on_equip_slot_changed"))
+				_update_equip_slots()
 
 func bind_stats(st: Stats) -> void:
-        _stats = st
-        for s in _slots:
-                if s.has_method("set_stats"):
-                        s.set_stats(_stats)
-        for s in _equip_slots:
-                if s.has_method("set_stats"):
-                        s.set_stats(_stats)
+		_stats = st
+		for s in _slots:
+				if s.has_method("set_stats"):
+						s.set_stats(_stats)
+		for s in _equip_slots:
+				if s.has_method("set_stats"):
+						s.set_stats(_stats)
 
 func bind_rune_manager(rm: RuneManager) -> void:
 	_rune_manager = rm
@@ -93,7 +93,7 @@ func toggle() -> void:
 func open() -> void:
 	_open = true
 	visible = true
-	_shift_camera(true)
+	#_shift_camera(true)
 	_update_slots()
 	_update_equip_slots()
 	_update_rune_slots()
@@ -103,7 +103,7 @@ func open() -> void:
 func close() -> void:
 	_open = false
 	visible = false
-	_shift_camera(false)
+	#_shift_camera(false)
 	_update_cursor_visibility()
 
 
@@ -168,7 +168,7 @@ func _on_slot_right_clicked(index: int) -> void:
 			print("Cursor item is", _cursor_item.item_name)
 			var success := false
 			match _cursor_item.item_name:
-					"Chaos Orb":
+					"Chaos Jewel":
 							success = item.reroll_affixes()
 					"Temper Jewel":
 							print("Trying to apply temper jewel")
@@ -181,7 +181,7 @@ func _on_slot_right_clicked(index: int) -> void:
 							success = item.clear_affixes()
 					_:
 							pass
-			if _cursor_item.item_name in ["Chaos Orb", "Temper Jewel", "Culling Jewel", "Elevating Jewel", "Cleansing Jewel"]:
+			if _cursor_item.item_name in ["Chaos Jewel", "Temper Jewel", "Culling Jewel", "Elevating Jewel", "Cleansing Jewel"]:
 					
 					if success:
 							_cursor_amount -= 1
@@ -343,8 +343,8 @@ func _collect_slots() -> void:
 	var inv_slots: Array = find_children("*", "InventorySlot", true)
 	var inv_index := 0
 	var equip_counts := {}
-        for slot in inv_slots:
-                        if slot.is_equipment:
+	for slot in inv_slots:
+				if slot.is_equipment:
 					# Automatically assign an index to equipment slots if one
 					# isn't provided so multiple slots of the same type (like
 					# rings) can be distinguished.
@@ -353,22 +353,22 @@ func _collect_slots() -> void:
 							slot.index = count
 							equip_counts[slot.slot_type] = count + 1
 					_equip_slots.append(slot)
-                                        if slot.has_signal("pressed"):
-                                                        slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
-                                        if slot.has_signal("right_clicked"):
-                                                        slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
-                                        if _stats and slot.has_method("set_stats"):
-                                                        slot.set_stats(_stats)
-                        else:
-                                        slot.index = inv_index
-                                        inv_index += 1
-                                        _slots.append(slot)
-                                        if slot.has_signal("pressed"):
-                                                        slot.connect("pressed", Callable(self, "_on_slot_pressed"))
-                                        if slot.has_signal("right_clicked"):
-                                                        slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
-                                        if _stats and slot.has_method("set_stats"):
-                                                        slot.set_stats(_stats)
+					if slot.has_signal("pressed"):
+									slot.connect("pressed", Callable(self, "_on_equip_slot_pressed").bind(slot))
+					if slot.has_signal("right_clicked"):
+									slot.connect("right_clicked", Callable(self, "_on_equip_slot_right_clicked").bind(slot))
+					if _stats and slot.has_method("set_stats"):
+									slot.set_stats(_stats)
+				else:
+						slot.index = inv_index
+						inv_index += 1
+						_slots.append(slot)
+						if slot.has_signal("pressed"):
+										slot.connect("pressed", Callable(self, "_on_slot_pressed"))
+						if slot.has_signal("right_clicked"):
+										slot.connect("right_clicked", Callable(self, "_on_slot_right_clicked"))
+						if _stats and slot.has_method("set_stats"):
+										slot.set_stats(_stats)
 
 	var rslots: Array = find_children("*", "RuneSlot", true)
 	for rslot in rslots:

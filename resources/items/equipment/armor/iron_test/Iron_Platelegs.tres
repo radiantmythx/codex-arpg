@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Item" load_steps=12 format=3 uid="uid://dqt40e75y6d5r"]
+[gd_resource type="Resource" script_class="Equipment" load_steps=12 format=3 uid="uid://dqt40e75y6d5r"]
 
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="1_clj57"]
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_xrkgp"]
@@ -10,16 +10,24 @@
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="7_yoegr"]
 [ext_resource type="Texture2D" uid="uid://b6ge1fwuy3fbd" path="res://images/items/equipment/platelegs_of_based.png" id="8_clj57"]
 [ext_resource type="PackedScene" uid="uid://b5t2553jc5aj3" path="res://scenes/items/equipment/armor/iron_test/plate_legs.tscn" id="9_xrkgp"]
-[ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="10_ui4fx"]
+[ext_resource type="Script" uid="uid://d378xadv2olhs" path="res://scripts/items/equipment.gd" id="11_hsmmi"]
 
 [resource]
-script = ExtResource("10_ui4fx")
+script = ExtResource("11_hsmmi")
+base_evasion = 0.0
+base_block = 1.0
+base_damage_reduction = 1.0
+base_energy_shield = 0.0
 item_name = "Iron Platelegs"
 description = "Platelegs made of Iron"
 icon = ExtResource("8_clj57")
 max_stack = 1
 item_type = ""
 equip_slot = "legs"
+req_body = 3
+req_mind = 0
+req_soul = 0
+req_luck = 0
 hide_hair = false
 affix_pool = Array[ExtResource("1_clj57")]([ExtResource("2_xrkgp"), ExtResource("3_gnnxd"), ExtResource("4_cupf5"), ExtResource("5_k3yut"), ExtResource("6_ef1l7")])
 affix_groups = Array[ExtResource("1_xrkgp")]([])

@@ -31,6 +31,7 @@ func _process(_delta: float) -> void:
 	if not _player:
 		return
 	var skill: Skill = _player.get_skill_slot(slot_index)
+	#print("trying to get skill")
 	texture_normal = skill.icon if skill else null
 	if skill:
 		tooltip_text = "%s\n%s" % [skill.name, skill.description]

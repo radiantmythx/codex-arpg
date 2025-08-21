@@ -1,8 +1,12 @@
-[gd_scene load_steps=32 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=67 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="Resource" uid="uid://0a3166e21fbf" path="res://resources/skills/debug/god_fireball.tres" id="2_jbj1t"]
+[ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="3_dp3eg"]
+[ext_resource type="Script" uid="uid://bodjkipcd4jj7" path="res://scripts/ui/components/health_orb.gd" id="4_0ld40"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cuaf4c562utg5" path="res://scenes/ui/components/skill_icon.tscn" id="5_0ld40"]
 [ext_resource type="Script" uid="uid://in6w0cndbqsl" path="res://scripts/portal.gd" id="6_jkv2x"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="7_choun"]
 [ext_resource type="Shader" uid="uid://ddpmqocxck50v" path="res://shaders/visual/portal_shader.tres" id="7_jbj1t"]
@@ -12,9 +16,25 @@
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="9_85g3d"]
 [ext_resource type="Resource" uid="uid://du6v6hhtgimgw" path="res://resources/items/currency/elevating_jewel.tres" id="9_choun"]
 [ext_resource type="Texture2D" uid="uid://bbw53vxy4oba6" path="res://images/shaders/flare.png" id="9_dp3eg"]
-[ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/Iron_Helmet.tres" id="9_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://inyqjdajftyy" path="res://scenes/ui/portal_ui.tscn" id="10_0ld40"]
-[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_orb.tres" id="10_choun"]
+[ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_jewel.tres" id="10_choun"]
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="17_j8jky"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="18_kmb1v"]
+[ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="19_fuf3a"]
+[ext_resource type="Resource" uid="uid://bgvlwtf7ig8rh" path="res://resources/affixes/soul_inc.tres" id="20_pibwh"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_add.tres" id="21_c6pm6"]
+[ext_resource type="Resource" path="res://resources/affixes/unholy_damage_melee_inc.tres" id="22_5he1u"]
+[ext_resource type="Resource" path="res://resources/affixes/ice_damage_melee_add.tres" id="23_5poiv"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="24_2cjbq"]
+[ext_resource type="Texture2D" uid="uid://xrkhjl3ivofw" path="res://images/items/equipment/iron_helm.png" id="25_chjal"]
+[ext_resource type="PackedScene" uid="uid://0ssw2ee00e0i" path="res://scenes/items/equipment/armor/iron_test/plate_helm.tscn" id="26_cjqg0"]
+[ext_resource type="Script" uid="uid://d378xadv2olhs" path="res://scripts/items/equipment.gd" id="27_vchkt"]
+[ext_resource type="Texture2D" uid="uid://1epbx58l6rtn" path="res://images/items/equipment/armor_of_based.png" id="28_txyw0"]
+[ext_resource type="PackedScene" uid="uid://cddo4oego8nf8" path="res://scenes/items/equipment/armor/iron_test/armor.tscn" id="29_vc5cj"]
+[ext_resource type="Texture2D" uid="uid://b6ge1fwuy3fbd" path="res://images/items/equipment/platelegs_of_based.png" id="30_nvyfr"]
+[ext_resource type="PackedScene" uid="uid://b5t2553jc5aj3" path="res://scenes/items/equipment/armor/iron_test/plate_legs.tscn" id="31_ty1g6"]
+[ext_resource type="Texture2D" uid="uid://ciec8m54byuj4" path="res://images/items/equipment/shield_of_based.png" id="32_j2jfr"]
+[ext_resource type="PackedScene" uid="uid://fkx7nou7gfx1" path="res://scenes/items/equipment/armor/iron_test/shield.tscn" id="33_bjg73"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_choun"]
 sky_top_color = Color(0.253654, 0.42179, 0.817933, 1)
@@ -31,6 +51,88 @@ background_mode = 2
 sky = SubResource("Sky_ya4ey")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sd2ls"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5al6o"]
+noise = SubResource("FastNoiseLite_sd2ls")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_u88a6"]
+frequency = 0.0137
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sd2ls"]
+seamless = true
+noise = SubResource("FastNoiseLite_u88a6")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v45cj"]
+shader = ExtResource("3_dp3eg")
+shader_parameter/health_ratio = 1.0
+shader_parameter/tilt = 2.375e-08
+shader_parameter/sloshing_amp = 0.005
+shader_parameter/sloshing_speed = 1.47
+shader_parameter/edge_softness = 0.05
+shader_parameter/foam_thickness = 0.001
+shader_parameter/foam_speed = 0.4
+shader_parameter/glass_rim_intensity = 0.791
+shader_parameter/glass_rim_width = 3.911
+shader_parameter/rim_offset = Vector2(0.5, 0.5)
+shader_parameter/aspect = 1.0
+shader_parameter/liquid_color = Color(0.9, 0.08, 0.08, 1)
+shader_parameter/foam_color = Color(0.698806, 0.597911, 0.550599, 1)
+shader_parameter/glass_normal = SubResource("NoiseTexture2D_5al6o")
+shader_parameter/use_glass_normal = false
+shader_parameter/glass_normal_tiling = Vector2(3, 3)
+shader_parameter/liquid_noise = SubResource("NoiseTexture2D_sd2ls")
+shader_parameter/use_liquid_noise = true
+shader_parameter/liquid_noise_tiling = Vector2(1, 1)
+shader_parameter/liquid_noise_scroll = Vector2(0.01, -0.04)
+shader_parameter/liquid_noise_intensity = 0.45
+
+[sub_resource type="Gradient" id="Gradient_5uxjj"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5al6o"]
+frequency = 0.0292
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1hw2b"]
+width = 128
+height = 128
+generate_mipmaps = false
+normalize = false
+color_ramp = SubResource("Gradient_5uxjj")
+noise = SubResource("FastNoiseLite_5al6o")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7qawa"]
+frequency = 0.0057
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b6wld"]
+seamless = true
+noise = SubResource("FastNoiseLite_7qawa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5uxjj"]
+shader = ExtResource("3_dp3eg")
+shader_parameter/health_ratio = 1.0
+shader_parameter/tilt = 2.375e-08
+shader_parameter/sloshing_amp = 0.005
+shader_parameter/sloshing_speed = 1.47
+shader_parameter/edge_softness = 0.05
+shader_parameter/foam_thickness = 0.001
+shader_parameter/foam_speed = 0.4
+shader_parameter/glass_rim_intensity = 0.791
+shader_parameter/glass_rim_width = 3.911
+shader_parameter/rim_offset = Vector2(0.5, 0.5)
+shader_parameter/aspect = 1.0
+shader_parameter/liquid_color = Color(0, 0.513539, 0.78285, 1)
+shader_parameter/foam_color = Color(0.698806, 0.597911, 0.550599, 1)
+shader_parameter/glass_normal = SubResource("NoiseTexture2D_5al6o")
+shader_parameter/use_glass_normal = false
+shader_parameter/glass_normal_tiling = Vector2(3, 3)
+shader_parameter/liquid_noise = SubResource("NoiseTexture2D_b6wld")
+shader_parameter/use_liquid_noise = true
+shader_parameter/liquid_noise_tiling = Vector2(1, 1)
+shader_parameter/liquid_noise_scroll = Vector2(0.03, 0.03)
+shader_parameter/liquid_noise_intensity = 0.45
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u3n0w"]
 render_priority = 0
@@ -98,6 +200,110 @@ albedo_color = Color(0.352941, 1, 1, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_ai4ee"]
 radius = 1.88656
 
+[sub_resource type="Resource" id="Resource_bu4jf"]
+script = ExtResource("27_vchkt")
+base_evasion = 0.0
+base_block = 1.0
+base_damage_reduction = 1.0
+base_energy_shield = 0.0
+item_name = "Iron Helmet"
+description = "Helmet made of Iron"
+icon = ExtResource("25_chjal")
+max_stack = 1
+item_type = ""
+equip_slot = "helmet"
+req_body = 3
+req_mind = 0
+req_soul = 0
+req_luck = 0
+hide_hair = true
+affix_pool = Array[ExtResource("18_kmb1v")]([ExtResource("19_fuf3a"), ExtResource("20_pibwh"), ExtResource("21_c6pm6"), ExtResource("22_5he1u"), ExtResource("23_5poiv")])
+affix_groups = Array[ExtResource("17_j8jky")]([])
+affixes = Array[ExtResource("24_2cjbq")]([])
+model = ExtResource("26_cjqg0")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(-3.65199, 10.4911, 3.21081)
+equip_rotation_rads = Vector3(0.281258, 1.61489, 2.15432)
+metadata/_custom_type_script = "uid://cy34tikq4w1km"
+
+[sub_resource type="Resource" id="Resource_o7ddy"]
+script = ExtResource("27_vchkt")
+base_evasion = 0.0
+base_block = 2.0
+base_damage_reduction = 3.0
+base_energy_shield = 0.0
+item_name = "Iron Armor"
+description = "Armor made of Iron"
+icon = ExtResource("28_txyw0")
+max_stack = 1
+item_type = ""
+equip_slot = "body"
+req_body = 3
+req_mind = 0
+req_soul = 0
+req_luck = 0
+hide_hair = false
+affix_pool = Array[ExtResource("18_kmb1v")]([ExtResource("19_fuf3a"), ExtResource("20_pibwh"), ExtResource("21_c6pm6"), ExtResource("22_5he1u"), ExtResource("23_5poiv")])
+affix_groups = Array[ExtResource("17_j8jky")]([])
+affixes = Array[ExtResource("24_2cjbq")]([])
+model = ExtResource("29_vc5cj")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(-3.65199, 10.4911, 3.21081)
+equip_rotation_rads = Vector3(0.281258, 1.61489, 2.15432)
+metadata/_custom_type_script = "uid://cy34tikq4w1km"
+
+[sub_resource type="Resource" id="Resource_0loja"]
+script = ExtResource("27_vchkt")
+base_evasion = 0.0
+base_block = 1.0
+base_damage_reduction = 1.0
+base_energy_shield = 0.0
+item_name = "Iron Platelegs"
+description = "Platelegs made of Iron"
+icon = ExtResource("30_nvyfr")
+max_stack = 1
+item_type = ""
+equip_slot = "legs"
+req_body = 3
+req_mind = 0
+req_soul = 0
+req_luck = 0
+hide_hair = false
+affix_pool = Array[ExtResource("18_kmb1v")]([ExtResource("19_fuf3a"), ExtResource("20_pibwh"), ExtResource("21_c6pm6"), ExtResource("22_5he1u"), ExtResource("23_5poiv")])
+affix_groups = Array[ExtResource("17_j8jky")]([])
+affixes = Array[ExtResource("24_2cjbq")]([])
+model = ExtResource("31_ty1g6")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(-3.65199, 10.4911, 3.21081)
+equip_rotation_rads = Vector3(0.281258, 1.61489, 2.15432)
+metadata/_custom_type_script = "uid://cy34tikq4w1km"
+
+[sub_resource type="Resource" id="Resource_ids8r"]
+script = ExtResource("27_vchkt")
+base_evasion = 0.0
+base_block = 5.0
+base_damage_reduction = 2.0
+base_energy_shield = 0.0
+item_name = "Iron Kiteshield"
+description = "Kiteshield made of Iron"
+icon = ExtResource("32_j2jfr")
+max_stack = 1
+item_type = ""
+equip_slot = "offhand"
+req_body = 3
+req_mind = 0
+req_soul = 0
+req_luck = 0
+hide_hair = false
+affix_pool = Array[ExtResource("18_kmb1v")]([ExtResource("19_fuf3a"), ExtResource("20_pibwh"), ExtResource("21_c6pm6"), ExtResource("22_5he1u"), ExtResource("23_5poiv")])
+affix_groups = Array[ExtResource("17_j8jky")]([])
+affixes = Array[ExtResource("24_2cjbq")]([])
+model = ExtResource("33_bjg73")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(0.224891, 0.0628352, 0.136744)
+equip_rotation_rads = Vector3(-0.243151, 1.50788, -2.29493)
+metadata/_custom_type_script = "uid://cy34tikq4w1km"
+
 [node name="WorldRoot" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -108,10 +314,17 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
+main_skill = ExtResource("2_jbj1t")
 inventory_ui_path = NodePath("../InventoryUI")
 inventory_camera_path = NodePath("../Camera3D")
 skills_ui_path = NodePath("../SkillsUI")
 target_display_path = NodePath("../CanvasLayer/EnemyTargetDisplay")
+health_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/HealthOrb")
+mana_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/ManaOrb")
+base_body = 5
+base_mind = 5
+base_soul = 5
+base_luck = 5
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.707107, -0.425547, 0.564721, 0, 0.798636, 0.601814, -0.707107, -0.425547, 0.564721, 12.6859, 15.493, 13.9148)
@@ -120,23 +333,87 @@ size = 19.613
 near = 0.005
 far = 3779.05
 
+[node name="PlayerUI" type="CanvasLayer" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="PlayerUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="PlayerUI/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+size_2d_override = Vector2i(1152, 648)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerUI/SubViewportContainer/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HealthOrb" type="TextureRect" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control"]
+material = SubResource("ShaderMaterial_v45cj")
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+offset_right = 128.0
+grow_vertical = 0
+texture = SubResource("NoiseTexture2D_1hw2b")
+script = ExtResource("4_0ld40")
+
+[node name="ManaOrb" type="TextureRect" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control"]
+material = SubResource("ShaderMaterial_5uxjj")
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -128.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = SubResource("NoiseTexture2D_1hw2b")
+script = ExtResource("4_0ld40")
+
+[node name="PanelContainer" type="PanelContainer" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="Skill1" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
-visible = false
 script = ExtResource("7_choun")
 
 [node name="InventoryUI" parent="." instance=ExtResource("4_jyhfs")]
-visible = false
 camera_path = NodePath("../Camera3D")
+camera_shift = 0.0
 
 [node name="SkillsUI" parent="." instance=ExtResource("4_tbgi4")]
-visible = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("9_85g3d")]
-
-[node name="PlayerUI" type="CanvasLayer" parent="."]
 
 [node name="Portal" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.371992, 3.5, -6.7006)
@@ -163,7 +440,6 @@ shape = SubResource("SphereShape3D_3cqk8")
 
 [node name="PortalUI" parent="Portal" instance=ExtResource("10_0ld40")]
 process_mode = 2
-visible = false
 
 [node name="GeneratedLevel" type="Node3D" parent="."]
 
@@ -185,7 +461,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
 shape = SubResource("SphereShape3D_ai4ee")
 
 [node name="ItemDrop4" type="Node3D" parent="GeneratedLevel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, -0.287262)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, -3.83337)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
@@ -194,10 +470,61 @@ surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
 
 [node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop4"]
 script = ExtResource("7_tipki")
-item = ExtResource("9_ya4ey")
+item = SubResource("Resource_bu4jf")
 item_tag_layer_path = NodePath("../../../ItemTagLayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop4/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
+
+[node name="ItemDrop5" type="Node3D" parent="GeneratedLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, -0.419003)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop5"]
+script = ExtResource("7_tipki")
+item = SubResource("Resource_o7ddy")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop5/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
+
+[node name="ItemDrop6" type="Node3D" parent="GeneratedLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, 3.00761)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop6"]
+script = ExtResource("7_tipki")
+item = SubResource("Resource_0loja")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop6/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
+shape = SubResource("SphereShape3D_ai4ee")
+
+[node name="ItemDrop7" type="Node3D" parent="GeneratedLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27867, 0, 6.91659)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GeneratedLevel/ItemDrop7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504479, 0)
+mesh = SubResource("SphereMesh_06m3a")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8wxw")
+
+[node name="Area3D" type="Area3D" parent="GeneratedLevel/ItemDrop7"]
+script = ExtResource("7_tipki")
+item = SubResource("Resource_ids8r")
+item_tag_layer_path = NodePath("../../../ItemTagLayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GeneratedLevel/ItemDrop7/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.505712, 0)
 shape = SubResource("SphereShape3D_ai4ee")
 

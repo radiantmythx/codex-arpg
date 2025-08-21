@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuaf4c562utg5"]
+
+[ext_resource type="Script" uid="uid://vimueh5ni8l2" path="res://scripts/ui/skill_icon.gd" id="1_ak7h1"]
+
+[node name="Skill1" type="TextureButton"]
+process_mode = 3
+custom_minimum_size = Vector2(48, 48)
+script = ExtResource("1_ak7h1")
+cooldown_progress_path = NodePath("TextureProgressBar")
+active_overlay_path = NodePath("ActiveOverlay")
+mana_overlay_path = NodePath("ManaLackOverlay")
+
+[node name="TextureProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -8.0
+offset_right = 24.0
+grow_horizontal = 2
+grow_vertical = 0
+value = 50.0
+show_percentage = false
+
+[node name="ActiveOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(53.039, 58.011, 50.276, 0.277)
+
+[node name="ManaLackOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.756, 0, 0.142, 0.669)

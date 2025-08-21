@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dboy0si8jxuh7"]
+[gd_scene load_steps=18 format=3 uid="uid://ctxvnspk3m8q6"]
 
 [ext_resource type="PackedScene" uid="uid://cjd7m3ebr8q5x" path="res://scenes/tiles/floating_islands/northwest_tile.tscn" id="1_bw376"]
 [ext_resource type="PackedScene" uid="uid://bukw3isei4cfs" path="res://scenes/tiles/floating_islands/west_tile.tscn" id="3_52gfs"]

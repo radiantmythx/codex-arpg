@@ -3,17 +3,21 @@
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_8hkl1"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_jm058"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_ycq6j"]
-[ext_resource type="Texture2D" uid="uid://nuj4h5wgpw2f" path="res://images/items/currency/chaos_orb.png" id="4_4c13e"]
+[ext_resource type="Texture2D" uid="uid://bbxgm54pyltcv" path="res://images/items/currency/elevating_jewel.png" id="4_8hkl1"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="5_yuxej"]
 
 [resource]
 script = ExtResource("5_yuxej")
 item_name = "Elevating Jewel"
 description = "Adds a random affix to an item"
-icon = ExtResource("4_4c13e")
+icon = ExtResource("4_8hkl1")
 max_stack = 20
 item_type = ""
 equip_slot = ""
+req_body = 0
+req_mind = 0
+req_soul = 0
+req_luck = 0
 hide_hair = false
 affix_pool = Array[ExtResource("2_jm058")]([])
 affix_groups = Array[ExtResource("1_8hkl1")]([])
