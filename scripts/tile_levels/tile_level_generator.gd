@@ -215,7 +215,13 @@ func generate(settings: TileLevelSettings) -> Node3D:
 																									_set_owner_recursive(enemy, root)
 																					else:
 																									enemy.owner = root
-
+	
+	# Expose grid data for runtime systems such as the minimap.
+	# Store only the walkable tiles (centers and edges) so UI scripts can
+	# rebuild a 2D representation without parsing the entire scene tree.
+	root.set_meta("walkable_tiles", tiles.keys())
+	root.set_meta("level_size", settings.level_size)
+	root.set_meta("tile_size", settings.tile_size)
 	return root
 
 func _make_children_unique(node: Node) -> void:
@@ -313,28 +319,28 @@ func _ensure_connected(tiles: Dictionary) -> void:
 		if not visited.has(pos):
 			tiles.erase(pos)
 
-func _select_tile_scene(pos: Vector2i, tiles: Dictionary, set: Tile9Set) -> PackedScene:
-	var n = tiles.has(pos + Vector2i(0, -1))
-	var s = tiles.has(pos + Vector2i(0, 1))
-	var e = tiles.has(pos + Vector2i(1, 0))
-	var w = tiles.has(pos + Vector2i(-1, 0))
-	if not n and not w:
-		return set.corner_nw
-	if not n and not e:
-		return set.corner_ne
-	if not s and not w:
-		return set.corner_sw
-	if not s and not e:
-		return set.corner_se
-	if not n:
-		return set.edge_n
-	if not s:
-		return set.edge_s
-	if not e:
-		return set.edge_e
-	if not w:
-		return set.edge_w
-	return set.center
+func _select_tile_scene(pos: Vector2i, tiles: Dictionary, tile_set: Tile9Set) -> PackedScene:
+        var n = tiles.has(pos + Vector2i(0, -1))
+        var s = tiles.has(pos + Vector2i(0, 1))
+        var e = tiles.has(pos + Vector2i(1, 0))
+        var w = tiles.has(pos + Vector2i(-1, 0))
+        if not n and not w:
+                return tile_set.corner_nw
+        if not n and not e:
+                return tile_set.corner_ne
+        if not s and not w:
+                return tile_set.corner_sw
+        if not s and not e:
+                return tile_set.corner_se
+        if not n:
+                return tile_set.edge_n
+        if not s:
+                return tile_set.edge_s
+        if not e:
+                return tile_set.edge_e
+        if not w:
+                return tile_set.edge_w
+        return tile_set.center
 
 func _spawn_decorations(parent: Node3D, tile_positions: Array, decos: Array[LevelDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
 				if decos.is_empty():
