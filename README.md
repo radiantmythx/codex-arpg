@@ -611,3 +611,23 @@ tile_level_runtime.gd` wraps this logic and exposes an exportable
 ### Editor Preview
 `scripts/tile_levels/tile_level_preview.gd` is an `EditorScript` that can generate a `.tscn` from a settings resource. Open the script in Godot, set `settings_path` and `output_path`, then run it from the editor to inspect a sample generation.
 
+## Minimap and Fog of War
+The level generator now exposes grid data on the `GeneratedLevel` root so runtime
+scripts can reconstruct the map. A new `Minimap` control (`scripts/ui/minimap.gd`)
+renders a scaled image of the walkable tiles and gradually reveals it as the
+player explores.
+
+### Setup
+1. In the **Main** scene add a `CanvasLayer` with a `Control` node sized and
+   positioned for the minimap (for example, anchor it to the upper-right
+   corner).
+2. Attach `scripts/ui/minimap.gd` to this `Control`.
+3. In the Inspector set **player_path** to your Player node. Adjust
+   **map_scale** and **enemy_reveal_distance** as desired.
+
+The minimap automatically detects when a new `GeneratedLevel` is added to the
+scene tree. Walkable tiles are drawn in white while undiscovered areas remain
+black. The tile under the player is revealed each frame, lifting the fog in a
+classic "fog of war" style. Nearby enemies appear as red dots; bosses use a
+magenta icon once their tile has been uncovered.
+
