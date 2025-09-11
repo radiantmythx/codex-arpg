@@ -19,7 +19,7 @@ var _player: Node3D
 var _level: Node3D
 var _level_size: Vector2i = Vector2i.ZERO
 var _tile_size: float = 1.0
-var _walkable_tiles: Array[Vector2i] = []
+var _walkable_tiles: Array = []
 var _discovered := {}
 var _map_tex: Texture2D
 var _fog_image: Image
@@ -39,6 +39,7 @@ func _ready() -> void:
 
 func _on_node_added(node: Node) -> void:
 	if node.name == "GeneratedLevel" and node is Node3D:
+		print("Level generated")
 		_set_level(node)
 
 
@@ -52,6 +53,7 @@ func _on_node_removed(node: Node) -> void:
 
 
 func _set_level(level: Node3D) -> void:
+	print("SETTING LEVEL")
 	_level = level
 	_walkable_tiles = level.get_meta("walkable_tiles", [])
 	_level_size = level.get_meta("level_size", Vector2i.ZERO)

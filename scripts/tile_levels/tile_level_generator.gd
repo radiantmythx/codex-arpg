@@ -320,27 +320,27 @@ func _ensure_connected(tiles: Dictionary) -> void:
 			tiles.erase(pos)
 
 func _select_tile_scene(pos: Vector2i, tiles: Dictionary, tile_set: Tile9Set) -> PackedScene:
-        var n = tiles.has(pos + Vector2i(0, -1))
-        var s = tiles.has(pos + Vector2i(0, 1))
-        var e = tiles.has(pos + Vector2i(1, 0))
-        var w = tiles.has(pos + Vector2i(-1, 0))
-        if not n and not w:
-                return tile_set.corner_nw
-        if not n and not e:
-                return tile_set.corner_ne
-        if not s and not w:
-                return tile_set.corner_sw
-        if not s and not e:
-                return tile_set.corner_se
-        if not n:
-                return tile_set.edge_n
-        if not s:
-                return tile_set.edge_s
-        if not e:
-                return tile_set.edge_e
-        if not w:
-                return tile_set.edge_w
-        return tile_set.center
+		var n = tiles.has(pos + Vector2i(0, -1))
+		var s = tiles.has(pos + Vector2i(0, 1))
+		var e = tiles.has(pos + Vector2i(1, 0))
+		var w = tiles.has(pos + Vector2i(-1, 0))
+		if not n and not w:
+				return tile_set.corner_nw
+		if not n and not e:
+				return tile_set.corner_ne
+		if not s and not w:
+				return tile_set.corner_sw
+		if not s and not e:
+				return tile_set.corner_se
+		if not n:
+				return tile_set.edge_n
+		if not s:
+				return tile_set.edge_s
+		if not e:
+				return tile_set.edge_e
+		if not w:
+				return tile_set.edge_w
+		return tile_set.center
 
 func _spawn_decorations(parent: Node3D, tile_positions: Array, decos: Array[LevelDecoration], rng: RandomNumberGenerator, tile_size: float) -> void:
 				if decos.is_empty():

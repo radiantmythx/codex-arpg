@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=68 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="Resource" uid="uid://0a3166e21fbf" path="res://resources/skills/debug/god_fireball.tres" id="2_jbj1t"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://bbw53vxy4oba6" path="res://images/shaders/flare.png" id="9_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://inyqjdajftyy" path="res://scenes/ui/portal_ui.tscn" id="10_0ld40"]
 [ext_resource type="Resource" uid="uid://cwfjss6flwbno" path="res://resources/items/currency/chaos_jewel.tres" id="10_choun"]
+[ext_resource type="Script" uid="uid://depd4ivprvjp1" path="res://scripts/ui/minimap.gd" id="10_kmb1v"]
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="17_j8jky"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="18_kmb1v"]
 [ext_resource type="Resource" path="res://resources/affixes/holy_damage_melee_add.tres" id="19_fuf3a"]
@@ -332,6 +333,17 @@ projection = 1
 size = 19.613
 near = 0.005
 far = 3779.05
+
+[node name="Minimap" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="Minimap"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 224.0
+offset_bottom = 224.0
+script = ExtResource("10_kmb1v")
+player_path = NodePath("../../Player")
+map_scale = 8.0
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 

@@ -80,6 +80,6 @@ level_size = Vector2i(60, 60)
 room_enemy_scenes = Array[PackedScene]([ExtResource("7_ksrbg")])
 tunnel_enemy_scenes = Array[PackedScene]([])
 tunnels_use_room_enemies = true
-enemy_density = 0.096
+enemy_density = 0.242
 boss_scene = ExtResource("3_sqcl2")
 metadata/_custom_type_script = "uid://dpqu30glu37m"
