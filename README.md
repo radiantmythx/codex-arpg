@@ -41,6 +41,22 @@ define their own decoration arrays and can optionally inherit the standard room 
 Enemy scenes are also split between rooms and tunnels through `room_enemy_scenes` and
 `tunnel_enemy_scenes`. When `tunnels_use_room_enemies` is enabled, room enemies automatically populate corridors as well.
 
+### Portal and minimap runtime
+Portals (`scripts/portal.gd`) now clean up any existing `GeneratedLevel*` nodes
+before creating a new tile level. Godot will otherwise append suffixes like
+"GeneratedLevel2" which breaks portal lookups and the minimap. The script waits
+for each old level to emit `tree_exited` to ensure the scene tree is clear
+before instancing the next layout.
+
+The minimap (`scripts/ui/minimap.gd`) supports isometric worlds by rotating the
+drawn map. Its `map_rotation_degrees` export defaults to 45°, matching a camera
+rotated around the Y axis. The entire Control uses the exported `map_alpha`
+value for transparency and optional textures may be supplied for the player,
+enemies and bosses. These icons are placed in code so they can be swapped
+without editing `.tscn` files. The minimap still reveals tiles as the player
+explores and will automatically update when a new `GeneratedLevel` node is
+added to the scene tree.
+
 ## Creating Additional Scenes
 1. Open the project in Godot.
 2. Add 3D nodes (enemies, environment, etc.) to `scenes/Main.tscn` or create new scenes that can be instanced into Main.
