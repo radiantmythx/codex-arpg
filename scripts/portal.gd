@@ -62,12 +62,21 @@ func _teleport() -> void:
 				return
 		var scene_root := get_tree().current_scene
 
-		# Remove any previously generated level.
-		var existing := scene_root.get_node_or_null("GeneratedLevel")
-		if existing:
-				print("deleting existing")
-				existing.queue_free()
-				await get_tree().process_frame #allow the free
+                # Remove any previously generated level.
+                #
+                # When `add_child` is called with a name that already exists Godot
+                # will automatically rename the node ("GeneratedLevel2" etc.).
+                # The minimap and portal logic rely on the exact name, so we make
+                # sure *all* prior generated levels are freed before spawning a
+                # new one. Waiting on the `tree_exited` signal guarantees the node
+                # has been fully removed from the scene tree before continuing.
+                for child in scene_root.get_children():
+                                if child.name.begins_with("GeneratedLevel"):
+                                                child.queue_free()
+                # Ensure the queued nodes actually leave the tree.
+                for child in scene_root.get_children():
+                                if child.name.begins_with("GeneratedLevel"):
+                                                await child.tree_exited
 
 		# Generate the new level using the runtime helper.
 		var runtime := TileLevelRuntime.new()
