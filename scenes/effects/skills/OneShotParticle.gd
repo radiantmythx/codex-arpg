@@ -22,7 +22,7 @@ func _start():
 						mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 						mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
 					mesh.surface_set_material(s, mat)
-	print("On hit effect!")
+	#print("On hit effect!")
 	await get_tree().process_frame  # guarantees we're in the scene and visible
 	restart()
 	emitting = true

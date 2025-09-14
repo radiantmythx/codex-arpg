@@ -9,7 +9,7 @@
 script = ExtResource("1_ivvuh")
 speed = 10.0
 range = 15.0
-explosion_radius = 5.0
+explosion_radius = 1.0
 projectile_scene = ExtResource("2_qym5n")
 on_hit_effect = ExtResource("1_qym5n")
 name = "Fireball"
