@@ -343,7 +343,7 @@ offset_right = 224.0
 offset_bottom = 224.0
 script = ExtResource("10_kmb1v")
 player_path = NodePath("../../Player")
-map_scale = 8.0
+reveal_radius = 10
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 

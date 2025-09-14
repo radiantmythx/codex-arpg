@@ -34,127 +34,129 @@ func _ready() -> void:
 			_player = players[0] as Node3D
 	get_tree().connect("node_added", Callable(self, "_on_node_added"))
 	get_tree().connect("node_removed", Callable(self, "_on_node_removed"))
+	print("minimap ready!")
 
 
 func _on_node_added(node: Node) -> void:
 	if node.name == "GeneratedLevel" and node is Node3D:
 		print("Level generated")
 		_set_level(node)
+		print("Level set for minimap!!!!!!")
 
 
 func _on_node_removed(node: Node) -> void:
 	if node == _level:
 		_level = null
-                _walkable_tiles.clear()
-                _walkable.clear()
-                _level_size = Vector2i.ZERO
-                _discovered.clear()
-                queue_redraw()
+		_walkable_tiles.clear()
+		_walkable.clear()
+		_level_size = Vector2i.ZERO
+		_discovered.clear()
+		queue_redraw()
 
 
 func _set_level(level: Node3D) -> void:
 	print("SETTING LEVEL")
 	_level = level
-        _walkable_tiles = level.get_meta("walkable_tiles", [])
-        _walkable.clear()
-        for p in _walkable_tiles:
-                _walkable[p] = true
-        _level_size = level.get_meta("level_size", Vector2i.ZERO)
-        _tile_size = level.get_meta("tile_size", 1.0)
-        _discovered.clear()
+	_walkable_tiles = level.get_meta("walkable_tiles", [])
+	_walkable.clear()
+	for p in _walkable_tiles:
+			_walkable[p] = true
+	_level_size = level.get_meta("level_size", Vector2i.ZERO)
+	_tile_size = level.get_meta("tile_size", 1.0)
+	_discovered.clear()
 
-        # The minimap itself is transparent, so we simply size the Control.
-        custom_minimum_size = Vector2(_level_size) * map_scale
-        queue_redraw()
+	# The minimap itself is transparent, so we simply size the Control.
+	custom_minimum_size = Vector2(_level_size) * map_scale
+	queue_redraw()
 
 
 func _process(_delta: float) -> void:
 	if not _player or not _level:
 		return
-        var tile := Vector2i(
-                int(floor(_player.global_position.x / _tile_size)),
-                int(floor(_player.global_position.z / _tile_size))
-        )
-        var radius_sq := reveal_radius * reveal_radius
-        for x in range(tile.x - reveal_radius, tile.x + reveal_radius + 1):
-                for y in range(tile.y - reveal_radius, tile.y + reveal_radius + 1):
-                        var p := Vector2i(x, y)
-                        var d := p - tile
-                        if d.length_squared() > radius_sq:
-                                continue
-                        if _walkable.has(p) and not _discovered.has(p):
-                                _reveal(p)
-        queue_redraw()
+	var tile := Vector2i(
+			int(floor(_player.global_position.x / _tile_size)),
+			int(floor(_player.global_position.z / _tile_size))
+	)
+	var radius_sq := reveal_radius * reveal_radius
+	for x in range(tile.x - reveal_radius, tile.x + reveal_radius + 1):
+			for y in range(tile.y - reveal_radius, tile.y + reveal_radius + 1):
+					var p := Vector2i(x, y)
+					var d := p - tile
+					if d.length_squared() > radius_sq:
+							continue
+					if _walkable.has(p) and not _discovered.has(p):
+							_reveal(p)
+	queue_redraw()
 
 
 func _reveal(tile: Vector2i) -> void:
-        """Marks a tile as explored so its walls and contents remain visible."""
-        _discovered[tile] = true
+	"""Marks a tile as explored so its walls and contents remain visible."""
+	_discovered[tile] = true
 
 
 func _draw() -> void:
-        if _level_size == Vector2i.ZERO:
-                return
+		if _level_size == Vector2i.ZERO:
+				return
 
-        # Draw discovered wall segments.
-        var thickness := max(1.0, map_scale * 0.1)
-        for tile in _discovered.keys():
-                var base := Vector2(tile) * map_scale
-                var neighbors := [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
-                for dir in neighbors:
-                        var ntile := tile + dir
-                        var out_of_bounds := ntile.x < 0 or ntile.y < 0 or ntile.x >= _level_size.x or ntile.y >= _level_size.y
-                        if out_of_bounds or not _walkable.has(ntile):
-                                match dir:
-                                        Vector2i.UP:
-                                                draw_line(base, base + Vector2(map_scale, 0), wall_color, thickness)
-                                        Vector2i.DOWN:
-                                                draw_line(
-                                                        base + Vector2(0, map_scale),
-                                                        base + Vector2(map_scale, map_scale),
-                                                        wall_color,
-                                                        thickness
-                                                )
-                                        Vector2i.LEFT:
-                                                draw_line(base, base + Vector2(0, map_scale), wall_color, thickness)
-                                        Vector2i.RIGHT:
-                                                draw_line(
-                                                        base + Vector2(map_scale, 0),
-                                                        base + Vector2(map_scale, map_scale),
-                                                        wall_color,
-                                                        thickness
-                                                )
+		# Draw discovered wall segments.
+		var thickness = max(1.0, map_scale * 0.1)
+		for tile in _discovered.keys():
+				var base := Vector2(tile) * map_scale
+				var neighbors := [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+				for dir in neighbors:
+						var ntile = tile + dir
+						var out_of_bounds = ntile.x < 0 or ntile.y < 0 or ntile.x >= _level_size.x or ntile.y >= _level_size.y
+						if out_of_bounds or not _walkable.has(ntile):
+								match dir:
+										Vector2i.UP:
+												draw_line(base, base + Vector2(map_scale, 0), wall_color, thickness)
+										Vector2i.DOWN:
+												draw_line(
+														base + Vector2(0, map_scale),
+														base + Vector2(map_scale, map_scale),
+														wall_color,
+														thickness
+												)
+										Vector2i.LEFT:
+												draw_line(base, base + Vector2(0, map_scale), wall_color, thickness)
+										Vector2i.RIGHT:
+												draw_line(
+														base + Vector2(map_scale, 0),
+														base + Vector2(map_scale, map_scale),
+														wall_color,
+														thickness
+												)
 
-        # Draw the player icon.
-        if _player:
-                var p := (
-                        Vector2(_player.global_position.x / _tile_size, _player.global_position.z / _tile_size)
-                        * map_scale
-                )
-                draw_circle(p + Vector2(map_scale * 0.5, map_scale * 0.5), map_scale * 0.3, player_color)
+		# Draw the player icon.
+		if _player:
+				var p := (
+						Vector2(_player.global_position.x / _tile_size, _player.global_position.z / _tile_size)
+						* map_scale
+				)
+				draw_circle(p + Vector2(map_scale * 0.5, map_scale * 0.5), map_scale * 0.3, player_color)
 
-        # Draw visible enemies and bosses.
-        if _level:
-                var enemies = _level.get_tree().get_nodes_in_group("enemy")
-                for e in enemies:
-                        if not (e is Node3D):
-                                continue
-                        if (
-                                _player
-                                and (
-                                        (e as Node3D).global_position.distance_to(_player.global_position)
-                                        > enemy_reveal_distance
-                                )
-                        ):
-                                continue
-                        var etile := Vector2i(
-                                int(floor((e as Node3D).global_position.x / _tile_size)),
-                                int(floor((e as Node3D).global_position.z / _tile_size))
-                        )
-                        if not _discovered.has(etile):
-                                continue
-                        var color := enemy_color
-                        if "tier" in e and e.tier == e.Tier.BOSS:
-                                color = boss_color
-                        var pos := Vector2(etile) * map_scale + Vector2(map_scale * 0.5, map_scale * 0.5)
-                        draw_circle(pos, map_scale * 0.3, color)
+		# Draw visible enemies and bosses.
+		if _level:
+				var enemies = _level.get_tree().get_nodes_in_group("enemy")
+				for e in enemies:
+						if not (e is Node3D):
+								continue
+						if (
+								_player
+								and (
+										(e as Node3D).global_position.distance_to(_player.global_position)
+										> enemy_reveal_distance
+								)
+						):
+								continue
+						var etile := Vector2i(
+								int(floor((e as Node3D).global_position.x / _tile_size)),
+								int(floor((e as Node3D).global_position.z / _tile_size))
+						)
+						if not _discovered.has(etile):
+								continue
+						var color := enemy_color
+						if "tier" in e and e.tier == e.Tier.BOSS:
+								color = boss_color
+						var pos := Vector2(etile) * map_scale + Vector2(map_scale * 0.5, map_scale * 0.5)
+						draw_circle(pos, map_scale * 0.3, color)
