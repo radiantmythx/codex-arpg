@@ -1,0 +1,53 @@
+[gd_scene load_steps=10 format=3 uid="uid://ch443litmxd3n"]
+
+[ext_resource type="Texture2D" uid="uid://d1us2khg6rwt1" path="res://images/particles/flake.png" id="1_2mvvo"]
+[ext_resource type="Script" uid="uid://bof67xrx4hr7p" path="res://scenes/effects/skills/OneShotParticle.gd" id="2_4qtrf"]
+
+[sub_resource type="Gradient" id="Gradient_bvs1k"]
+offsets = PackedFloat32Array(0, 0.56869)
+colors = PackedColorArray(1, 2, 2, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pd7to"]
+gradient = SubResource("Gradient_bvs1k")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_4qtrf"]
+_data = [Vector2(0.0265487, 0.992407), 0.0, 0.0, 0, 0, Vector2(0.979351, 0.0584112), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ytqv1"]
+curve = SubResource("Curve_4qtrf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4hf1n"]
+radial_velocity_min = 3.19998
+radial_velocity_max = 3.19998
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_curve = SubResource("CurveTexture_ytqv1")
+color = Color(0.436628, 0.413633, 0.41563, 1)
+color_ramp = SubResource("GradientTexture1D_pd7to")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gwgro"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 2, 2, 1)
+albedo_texture = ExtResource("1_2mvvo")
+texture_filter = 0
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_fqp3x"]
+material = SubResource("StandardMaterial3D_gwgro")
+
+[node name="GPUParticles3D" type="GPUParticles3D"]
+emitting = false
+amount = 10
+lifetime = 1.23
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_4hf1n")
+draw_pass_1 = SubResource("QuadMesh_fqp3x")
+script = ExtResource("2_4qtrf")

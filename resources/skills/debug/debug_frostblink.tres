@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MovementSkill" load_steps=4 format=3 uid="uid://bmwetudyv7ddi"]
+
+[ext_resource type="Script" uid="uid://b4jrw63h14jf8" path="res://scripts/skills/movement_skill.gd" id="1_ie7mv"]
+[ext_resource type="PackedScene" uid="uid://weqliv6m4u4e" path="res://scenes/effects/auras/test_aura.tscn" id="1_k6s4o"]
+[ext_resource type="PackedScene" uid="uid://ch443litmxd3n" path="res://scenes/effects/explosions/frost_explosion.tscn" id="2_ulsh7"]
+
+[resource]
+script = ExtResource("1_ie7mv")
+phase_through = true
+stop_on_collision = false
+damage_radius = 3.0
+on_cast_effect = ExtResource("2_ulsh7")
+on_arrival_effect = ExtResource("2_ulsh7")
+active_effect = ExtResource("1_k6s4o")
+name = ""
+description = "Blink"
+mana_cost = 5.0
+cooldown = 2.0
+duration = 1.0
+move_multiplier = 10.0
+damage_type = 0
+base_damage_low = 0.0
+base_damage_high = 0.0
+tags = Array[String]([])
+animation_name = &""
+attack_time = 0.0
+cancel_time = 0.0
+metadata/_custom_type_script = "uid://b4jrw63h14jf8"

@@ -1,7 +1,7 @@
 [gd_scene load_steps=68 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
-[ext_resource type="Resource" uid="uid://0a3166e21fbf" path="res://resources/skills/debug/god_fireball.tres" id="2_jbj1t"]
+[ext_resource type="Resource" uid="uid://bmwetudyv7ddi" path="res://resources/skills/debug/debug_frostblink.tres" id="2_kmb1v"]
 [ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="3_dp3eg"]
 [ext_resource type="Script" uid="uid://bodjkipcd4jj7" path="res://scripts/ui/components/health_orb.gd" id="4_0ld40"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]
@@ -315,7 +315,7 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
-main_skill = ExtResource("2_jbj1t")
+main_skill = ExtResource("2_kmb1v")
 inventory_ui_path = NodePath("../InventoryUI")
 inventory_camera_path = NodePath("../Camera3D")
 skills_ui_path = NodePath("../SkillsUI")
@@ -343,6 +343,7 @@ offset_right = 224.0
 offset_bottom = 224.0
 script = ExtResource("10_kmb1v")
 player_path = NodePath("../../Player")
+map_scale = 10.0
 reveal_radius = 10
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
