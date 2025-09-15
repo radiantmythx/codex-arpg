@@ -81,6 +81,20 @@ var _is_dodging: bool = false
 var _dodge_exceptions: Array = []
 var _last_move_input: Vector3 = Vector3.FORWARD
 
+# --- Movement skill state ---
+# These variables track the transient state when a MovementSkill is active.
+var _movement_skill_active: bool = false
+var _movement_skill_velocity: Vector3 = Vector3.ZERO
+var _movement_skill_timer: float = 0.0
+var _movement_skill_stop_on_collision: bool = false
+var _movement_skill_damage_radius: float = 0.0
+var _movement_skill_dmg_map: Dictionary = {}
+var _movement_skill_on_arrival_effect: PackedScene
+var _movement_skill_active_effect: Node
+var _movement_skill_phase: bool = false
+var _movement_skill_restore_layer: int = 0
+var _movement_skill_restore_mask: int = 0
+
 var _anim_tree: AnimationTree
 var _anim_state: AnimationNodeStateMachinePlayback
 var _attack_progress: float = 0.0
@@ -210,9 +224,25 @@ func _get_click_direction() -> Vector3:
 	var plane_y := global_transform.origin.y
 	if abs(ray_dir.y) <= 0.0001:
 		return -global_transform.basis.z
-	var distance := (plane_y - ray_origin.y) / ray_dir.y
-	var target := ray_origin + ray_dir * distance
-	return (target - global_transform.origin).normalized()
+        var distance := (plane_y - ray_origin.y) / ray_dir.y
+        var target := ray_origin + ray_dir * distance
+        return (target - global_transform.origin).normalized()
+
+# Returns the world-space position on the horizontal plane at the mouse cursor.
+# This mirrors `_get_click_direction` but provides the actual target location
+# which is required by movement skills to know where to travel.
+func _get_click_position() -> Vector3:
+        var camera := get_viewport().get_camera_3d()
+        if camera == null:
+                return global_transform.origin
+        var mouse_pos := get_viewport().get_mouse_position()
+        var ray_origin := camera.project_ray_origin(mouse_pos)
+        var ray_dir := camera.project_ray_normal(mouse_pos)
+        if abs(ray_dir.y) <= 0.0001:
+                return global_transform.origin
+        var plane_y := global_transform.origin.y
+        var distance := (plane_y - ray_origin.y) / ray_dir.y
+        return ray_origin + ray_dir * distance
 
 func _physics_process(delta: float) -> void:
 				_process_inventory_input()
@@ -225,11 +255,28 @@ func _physics_process(delta: float) -> void:
 				_update_camera()
 
 func _process_movement(delta: float) -> void:
-	if _dodge_cooldown_timer > 0.0:
-		_dodge_cooldown_timer -= delta
-	if _dodge_timer > 0.0:
-		_dodge_timer -= delta
-		velocity = _dodge_direction * dodge_speed
+        # If a movement skill is active we let it drive all motion for the
+        # duration and bypass normal input handling.
+        if _movement_skill_active:
+                _movement_skill_timer -= delta
+                var motion := _movement_skill_velocity * delta
+                if _movement_skill_stop_on_collision and not _movement_skill_phase:
+                        var collision := move_and_collide(motion)
+                        if collision:
+                                _end_movement_skill()
+                                return
+                else:
+                        translate(motion)
+                if _movement_skill_damage_radius > 0.0:
+                        _movement_skill_apply_damage()
+                if _movement_skill_timer <= 0.0:
+                        _end_movement_skill()
+                return
+        if _dodge_cooldown_timer > 0.0:
+                _dodge_cooldown_timer -= delta
+        if _dodge_timer > 0.0:
+                _dodge_timer -= delta
+                velocity = _dodge_direction * dodge_speed
 		if _dodge_timer <= 0.0:
 			_is_dodging = false
 			_remove_dodge_exceptions()
@@ -278,8 +325,10 @@ func _process_movement(delta: float) -> void:
 	move_and_slide()
 
 func _process_attack(delta: float) -> void:
-		if _is_dodging:
-						return
+                if _movement_skill_active:
+                                                return
+                if _is_dodging:
+                                                return
 		if _attack_timer > 0.0:
 						_attack_timer -= delta
 		if _secondary_cooldown > 0.0:
@@ -571,10 +620,69 @@ func _add_dodge_exceptions() -> void:
 
 ## Restore enemy collisions after rolling.
 func _remove_dodge_exceptions() -> void:
-		for e in _dodge_exceptions:
-				if is_instance_valid(e):
-						remove_collision_exception_with(e)
-		_dodge_exceptions.clear()
+                for e in _dodge_exceptions:
+                                if is_instance_valid(e):
+                                                remove_collision_exception_with(e)
+                _dodge_exceptions.clear()
+
+# --- Movement skill helpers ---
+# Called by MovementSkill.perform to initialise movement state.
+func start_movement_skill(skill: MovementSkill, direction: Vector3, distance: float, dmg_map: Dictionary) -> void:
+                _movement_skill_active = true
+                var speed := stats.get_move_speed() * skill.move_multiplier
+                _movement_skill_velocity = direction * speed
+                _movement_skill_timer = distance / max(speed, 0.001)
+                _movement_skill_stop_on_collision = skill.stop_on_collision
+                _movement_skill_damage_radius = skill.damage_radius
+                _movement_skill_dmg_map = dmg_map
+                _movement_skill_on_arrival_effect = skill.on_arrival_effect
+                if skill.phase_through:
+                                _movement_skill_phase = true
+                                _movement_skill_restore_layer = collision_layer
+                                _movement_skill_restore_mask = collision_mask
+                                collision_layer = 0
+                                collision_mask = 0
+                if skill.on_cast_effect:
+                                var cast_eff = skill.on_cast_effect.instantiate()
+                                cast_eff.global_transform.origin = global_transform.origin
+                                get_parent().add_child(cast_eff)
+                if skill.active_effect:
+                                _movement_skill_active_effect = skill.active_effect.instantiate()
+                                add_child(_movement_skill_active_effect)
+
+func _end_movement_skill() -> void:
+                _movement_skill_active = false
+                _movement_skill_timer = 0.0
+                velocity = Vector3.ZERO
+                if _movement_skill_phase:
+                                collision_layer = _movement_skill_restore_layer
+                                collision_mask = _movement_skill_restore_mask
+                                _movement_skill_phase = false
+                if _movement_skill_active_effect:
+                                _movement_skill_active_effect.queue_free()
+                                _movement_skill_active_effect = null
+                if _movement_skill_on_arrival_effect:
+                                var eff = _movement_skill_on_arrival_effect.instantiate()
+                                eff.global_transform.origin = global_transform.origin
+                                get_parent().add_child(eff)
+                                _movement_skill_on_arrival_effect = null
+
+# Apply damage around the player while the movement skill is active.
+func _movement_skill_apply_damage() -> void:
+                var shape := SphereShape3D.new()
+                shape.radius = _movement_skill_damage_radius
+                var params := PhysicsShapeQueryParameters3D.new()
+                params.shape = shape
+                params.transform = Transform3D(Basis(), global_transform.origin)
+                params.collide_with_bodies = true
+                var bodies := get_world_3d().direct_space_state.intersect_shape(params, 32)
+                for result in bodies:
+                                var body = result.get("collider")
+                                if body and body.has_method("take_damage") and body.is_in_group("enemy"):
+                                                for dt in _movement_skill_dmg_map.keys():
+                                                                var dmg = _movement_skill_dmg_map[dt]
+                                                                if dmg > 0:
+                                                                                body.take_damage(dmg, dt)
 
 func _update_target_hover() -> void:
 		"""Cast a ray from the camera to the mouse and update the target display."""
