@@ -68,6 +68,13 @@ added to the scene tree.
 - **Q** – Activate the secondary skill (e.g., the Haste aura).
 - **Dodge action** – Perform a directional dodge roll with a short invincibility window. Configure the input mapping in Project Settings.
 
+### Movement Skills
+The new `MovementSkill` (`scripts/skills/movement_skill.gd`) lets a player dash
+to a clicked location at a speed based on their current move rate. Movement
+skills can optionally ignore collisions, stop on impact, apply damage in a
+radius while travelling and trigger particle effects when cast, while moving or
+upon arrival.
+
 ## Player Animations
 The `player.gd` script now drives an `AnimationTree` for directional movement and attack animations.
 
