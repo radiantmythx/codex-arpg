@@ -233,36 +233,31 @@ func _get_click_direction() -> Vector3:
 # which is required by movement skills to know where to travel.
 # World-space position on horizontal plane at mouse cursor.
 func _get_click_position() -> Vector3:
-	var cam := get_viewport().get_camera_3d()
-	if cam == null:
-		return global_transform.origin
+        var cam := get_viewport().get_camera_3d()
+        if cam == null:
+                return global_transform.origin
 
-	# IMPORTANT: use the camera's viewport in case it's a SubViewport.
-	var vp := cam.get_viewport()
-	var mouse := vp.get_mouse_position()
+        # IMPORTANT: use the camera's viewport in case it's a SubViewport.
+        var vp := cam.get_viewport()
+        var mouse := vp.get_mouse_position()
 
-	var ray_origin := cam.project_ray_origin(mouse)
-	var ray_dir := cam.project_ray_normal(mouse)
+        var ray_origin := cam.project_ray_origin(mouse)
+        var ray_dir := cam.project_ray_normal(mouse)
 
-	# If ray is (almost) parallel to the horizontal plane, bail.
-	if abs(ray_dir.y) <= 0.0001:
-		return global_transform.origin
+        # If ray is (almost) parallel to the horizontal plane, bail.
+        if abs(ray_dir.y) <= 0.0001:
+                return global_transform.origin
 
-	var plane_y := global_transform.origin.y
-	var plane := Plane(Vector3.UP, plane_y)
+        var plane_y := global_transform.origin.y
 
-	# Let Plane do the math:
-	var hit = plane.intersects_ray(ray_origin, ray_dir)
-	if hit == null:
-		return global_transform.origin
+        # Calculate intersection of the mouse ray with a horizontal plane
+        # at the player's height.  This mirrors `_get_click_direction` but
+        # returns the position instead of a direction vector.
+        var distance := (plane_y - ray_origin.y) / ray_dir.y
+        if distance < 0.0:
+                return global_transform.origin
 
-	# Optionally reject intersections behind the camera.
-	var distance := (plane_y - ray_origin.y) / ray_dir.y
-	if distance < 0.0:
-		return global_transform.origin
-
-	print(hit)
-	return hit
+        return ray_origin + ray_dir * distance
 
 func _physics_process(delta: float) -> void:
 				_process_inventory_input()
