@@ -1,7 +1,7 @@
 [gd_scene load_steps=68 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
-[ext_resource type="Resource" uid="uid://bmwetudyv7ddi" path="res://resources/skills/debug/debug_frostblink.tres" id="2_kmb1v"]
+[ext_resource type="Resource" uid="uid://mqpc1mqg5rqw" path="res://resources/skills/debug/haste.tres" id="2_kmb1v"]
 [ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="3_dp3eg"]
 [ext_resource type="Script" uid="uid://bodjkipcd4jj7" path="res://scripts/ui/components/health_orb.gd" id="4_0ld40"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="4_jyhfs"]

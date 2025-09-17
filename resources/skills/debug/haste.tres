@@ -1,13 +1,32 @@
-[gd_resource type="Resource" script_class="HasteAuraSkill" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="AuraSkill" load_steps=5 format=3 uid="uid://mqpc1mqg5rqw"]
 
-[ext_resource type="Script" path="res://scripts/skills/haste_aura_skill.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://weqliv6m4u4e" path="res://scenes/effects/auras/test_aura.tscn" id="1_2w28y"]
+[ext_resource type="Script" uid="uid://cunkjx53ftdis" path="res://scripts/skills/buff.gd" id="2_82frj"]
+[ext_resource type="Script" uid="uid://cwhcjof4hr4ux" path="res://scripts/skills/aura_skill.gd" id="3_2w28y"]
+
+[sub_resource type="Resource" id="Resource_82frj"]
+script = ExtResource("2_82frj")
+duration = 0.0
+main_stat_bonuses = {}
+stat_bonuses = {}
+flags = Array[String]([])
+metadata/_custom_type_script = "uid://cunkjx53ftdis"
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("3_2w28y")
+mana_reserve_percent = 25.0
+buff = SubResource("Resource_82frj")
+aura_effect = ExtResource("1_2w28y")
 name = "Haste"
+description = ""
 mana_cost = 0.0
 cooldown = 0.5
-duration = 0.0
+duration = 1.0
 move_multiplier = 1.0
 damage_type = 0
+base_damage_low = 0.0
+base_damage_high = 0.0
 tags = Array[String](["Aura"])
+animation_name = &"strike"
+attack_time = 0.1
+cancel_time = 1.0

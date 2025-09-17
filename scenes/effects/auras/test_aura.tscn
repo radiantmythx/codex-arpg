@@ -35,6 +35,7 @@ material = SubResource("StandardMaterial3D_ymxr6")
 [node name="TestAura" type="Node3D"]
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11817, 0)
 amount = 3
 process_material = SubResource("ParticleProcessMaterial_nh2av")
 draw_pass_1 = SubResource("PlaneMesh_bg5op")

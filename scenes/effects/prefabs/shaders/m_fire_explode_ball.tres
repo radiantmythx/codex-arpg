@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://nl55uohaymhm"]
+
+[ext_resource type="Shader" uid="uid://b2gp22qqw3fen" path="res://scenes/effects/prefabs/shaders/fire_explode_ball.tres" id="1_e865n"]
+[ext_resource type="Texture2D" uid="uid://dnm48hmfvnki8" path="res://images/noise_vfx/Marble/Marble 6 - 128x128.png" id="2_1hgc4"]
+[ext_resource type="Texture2D" uid="uid://den05rej7415s" path="res://images/noise_vfx/Marble/Marble 1 - 128x128.png" id="3_8mw3m"]
+[ext_resource type="Texture2D" uid="uid://cpx4qugjd7w6p" path="res://images/noise_vfx/Marble/Marble 8 - 128x128.png" id="4_kegvi"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_e865n")
+shader_parameter/Deformation_Speed = Vector2(0, 1.145)
+shader_parameter/Deformation_Texture = ExtResource("2_1hgc4")
+shader_parameter/Deformation_Intensity = 0.43
+shader_parameter/SmokeTexture = ExtResource("4_kegvi")
+shader_parameter/SmokeDisappearTexture = ExtResource("3_8mw3m")
+shader_parameter/EmissionColor = Color(0.813216, 0.125941, 0, 1)

@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="FireballSkill" load_steps=5 format=3 uid="uid://dbpb46a7kta7x"]
+[gd_resource type="Resource" script_class="FireballSkill" load_steps=6 format=3 uid="uid://dbpb46a7kta7x"]
 
 [ext_resource type="Script" uid="uid://cndualm0ptvrs" path="res://scripts/skills/fireball_skill.gd" id="1_ivvuh"]
 [ext_resource type="PackedScene" uid="uid://d1nhemyl30k8h" path="res://scenes/effects/explosions/fire_sparks.tscn" id="1_qym5n"]
+[ext_resource type="PackedScene" uid="uid://c34abngl2eyqu" path="res://scenes/effects/explosions/fireball_explosion.tscn" id="1_v0oc4"]
 [ext_resource type="Texture2D" uid="uid://bfdqueo0frg3n" path="res://images/skills/fireball.png" id="1_xiymk"]
 [ext_resource type="PackedScene" uid="uid://bx7spltxkpm6s" path="res://scenes/projectiles/skills/fireball.tscn" id="2_qym5n"]
 
@@ -12,6 +13,7 @@ range = 15.0
 explosion_radius = 1.0
 projectile_scene = ExtResource("2_qym5n")
 on_hit_effect = ExtResource("1_qym5n")
+explosion_effect = ExtResource("1_v0oc4")
 name = "Fireball"
 description = "Shoot da fuckin fireball"
 icon = ExtResource("1_xiymk")

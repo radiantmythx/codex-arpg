@@ -1,0 +1,183 @@
+[gd_scene load_steps=22 format=3 uid="uid://c34abngl2eyqu"]
+
+[ext_resource type="Material" uid="uid://nl55uohaymhm" path="res://scenes/effects/prefabs/shaders/m_fire_explode_ball.tres" id="1_0vkl0"]
+[ext_resource type="Script" uid="uid://c3vd20mhgnm2s" path="res://scripts/OneShotAnimationSystem.gd" id="1_05la0"]
+
+[sub_resource type="Curve" id="Curve_4mjrr"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.265487, 0.0432243), 0.0, 0.0, 0, 0, Vector2(0.873156, 0.992407), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mfj0y"]
+texture_mode = 1
+curve = SubResource("Curve_4mjrr")
+
+[sub_resource type="Gradient" id="Gradient_jclmf"]
+offsets = PackedFloat32Array(0, 0.408946)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_eq0mw"]
+gradient = SubResource("Gradient_jclmf")
+
+[sub_resource type="Curve" id="Curve_b8q6s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.501475, 0.271028), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0vkl0"]
+curve = SubResource("Curve_b8q6s")
+
+[sub_resource type="Curve" id="Curve_05la0"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.20649, 1), 0.0, 0.0, 0, 0, Vector2(0.710914, 0.901285), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_4mjrr"]
+curve = SubResource("Curve_05la0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mfj0y"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+radial_velocity_min = 5.99998
+radial_velocity_max = 6.99998
+radial_velocity_curve = SubResource("CurveTexture_0vkl0")
+gravity = Vector3(0, 0, 0)
+scale_min = 1.7
+scale_max = 1.8
+scale_curve = SubResource("CurveTexture_4mjrr")
+color_ramp = SubResource("GradientTexture1D_eq0mw")
+alpha_curve = SubResource("CurveTexture_mfj0y")
+
+[sub_resource type="SphereMesh" id="SphereMesh_jclmf"]
+
+[sub_resource type="Animation" id="Animation_0vkl0"]
+resource_name = "pSystem"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireballExplosion:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GPUParticles3D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.166667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_05la0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireballExplosion:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GPUParticles3D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4mjrr"]
+_data = {
+&"RESET": SubResource("Animation_05la0"),
+&"pSystem": SubResource("Animation_0vkl0")
+}
+
+[sub_resource type="Curve" id="Curve_mfj0y"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0501475, 0.764603), 0.0, 0.0, 0, 0, Vector2(0.0855457, 0.893692), 0.0, 0.0, 0, 0, Vector2(0.362832, 0.931659), 0.0, 0.0, 0, 0, Vector2(0.840708, 1), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="CurveTexture" id="CurveTexture_jclmf"]
+curve = SubResource("Curve_mfj0y")
+
+[sub_resource type="Gradient" id="Gradient_eq0mw"]
+offsets = PackedFloat32Array(0, 0.300319, 0.578275, 0.830671)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_680mt"]
+gradient = SubResource("Gradient_eq0mw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ow2lk"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.6
+emission_ring_cone_angle = 90.0
+angle_min = 1.07288e-05
+angle_max = 114.6
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 16.02
+radial_accel_max = 25.6
+color_ramp = SubResource("GradientTexture1D_680mt")
+alpha_curve = SubResource("CurveTexture_jclmf")
+
+[sub_resource type="SphereMesh" id="SphereMesh_r31bl"]
+material = ExtResource("1_0vkl0")
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("anim_player")]
+script = ExtResource("1_05la0")
+anim_player = NodePath("AnimationPlayer")
+
+[node name="FireballExplosion" type="GPUParticles3D" parent="."]
+material_override = ExtResource("1_0vkl0")
+emitting = false
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_mfj0y")
+draw_pass_1 = SubResource("SphereMesh_jclmf")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_4mjrr")
+}
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+emitting = false
+amount = 30
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ow2lk")
+draw_pass_1 = SubResource("SphereMesh_r31bl")

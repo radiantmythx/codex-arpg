@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://blvda81smvli1"]
+
+[ext_resource type="Material" uid="uid://nl55uohaymhm" path="res://scenes/effects/prefabs/shaders/m_fire_explode_ball.tres" id="1_t3bnn"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_hj4yx"]
+
+[node name="FireExplodeBall" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_hj4yx")
+surface_material_override/0 = ExtResource("1_t3bnn")
