@@ -24,24 +24,21 @@ extends Skill
 @export var active_effect: PackedScene
 
 
-func perform(user):
-	if user == null:
+func perform(user) -> void:
+	if user == null or not (user is Node3D):
 		return
-	var target: Vector3
-	if user.has_method("_get_click_position"):
-		target = user._get_click_position()
-	else:
-		return
-	var origin: Vector3 = user.global_transform.origin
+	var actor: Node3D = user
+	var target := _get_ground_target_position(user)
+	var origin: Vector3 = actor.global_transform.origin
 	var direction: Vector3 = target - origin
 	var distance: float = direction.length()
 	if distance <= 0.01:
 		return
 	direction = direction.normalized()
 	var dmg_map: Dictionary = {}
-	if damage_radius > 0.0 and user.stats:
+	if damage_radius > 0.0 and "stats" in user and user.stats:
 		var base_dict = _build_base_damage_dict(user)
-		dmg_map = user.stats.compute_damage(base_dict, tags)
+		dmg_map = user.stats.compute_damage(base_dict, get_tags())
 	# Delegate the actual motion to the user so it can integrate with
 	# existing movement code.
 	if user.has_method("start_movement_skill"):

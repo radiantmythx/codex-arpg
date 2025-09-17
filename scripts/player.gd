@@ -362,7 +362,7 @@ func _process_attack(delta: float) -> void:
 		if Input.is_action_pressed("attack") and _attack_timer <= 0.0 and main_skill and _attacking_timer <= 0.0:
 				if mana >= main_skill.mana_cost:
 						_anim_state.travel("move") #reset anim state
-						var speed = get_attack_speed(main_skill.tags)
+var speed = get_attack_speed(main_skill.get_tags())
 						print("Attack speed is ", speed)
 						_attack_timer = main_skill.cooldown / max(speed, 0.001)
 						_attacking_timer = main_skill.duration / max(speed, 0.001)

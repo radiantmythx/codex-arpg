@@ -1,72 +1,59 @@
 extends Skill
 class_name MeleeSkill
 
-@export var range: float = 2.0 # Radius of the swing
+@export var range: float = 2.0 ## Radius of the swing in metres.
 @export var angle: float = 45.0
-@export var on_hit_effect: PackedScene # Effect spawned on struck bodies
-@export var on_hit_buff: Buff # Buff or debuff applied to bodies hit
+@export var on_hit_effect: PackedScene ## Effect spawned on struck bodies.
+@export var on_hit_buff: Buff ## Buff or debuff applied to bodies hit.
 
-func perform(user):
-	if user == null:
-			return
-	var direction: Vector3
-	if user.has_method("_get_click_direction"):
-			direction = user._get_click_direction()
-	else:
-		direction = -user.global_transform.basis.z
-		user.look_at(user.global_transform.origin + direction, Vector3.UP)
-	var attack_area = Area3D.new()
-	var shape = CylinderShape3D.new()
-	shape.height = 1.0
-	shape.radius = range
-	var collider = CollisionShape3D.new()
-	collider.shape = shape
-	attack_area.add_child(collider)
-	attack_area.transform.origin = user.global_transform.origin + direction * range
-	user.get_parent().add_child(attack_area)
-	var mesh = MeshInstance3D.new()
-	mesh.mesh = CylinderMesh.new()
-	mesh.mesh.top_radius = range
-	mesh.mesh.bottom_radius = range
-	mesh.mesh.height = 1.0
-	mesh.material_override = StandardMaterial3D.new()
-	mesh.material_override.albedo_color = Color(1, 0, 0, 0.5)
-	mesh.visible = true
-	#attack_area.add_child(mesh)
-	var timer = Timer.new()
-	timer.wait_time = 0.1
-	timer.one_shot = true
-	timer.autostart = true
-	timer.connect("timeout", Callable(attack_area, "queue_free"))
-	attack_area.add_child(timer)
-	var params = PhysicsShapeQueryParameters3D.new()
-	params.shape = shape
-	params.transform = attack_area.global_transform
-	params.collide_with_bodies = true
-	var bodies = user.get_world_3d().direct_space_state.intersect_shape(params)
-	   # Snapshot damage and team info so hits remain valid if the user dies mid‑attack
-	var base_dict = _build_base_damage_dict(user)
-	var dmg_map = user.stats.compute_damage(base_dict, tags)
-	var buff_snapshot
-	if on_hit_buff:
-			buff_snapshot = on_hit_buff.duplicate(true)
-			if buff_snapshot is DamageOverTimeBuff:
-					var dot_dict = {buff_snapshot.damage_type: Vector2(buff_snapshot.base_damage_low, buff_snapshot.base_damage_high)}
-					var dot_map = user.stats.compute_damage(dot_dict, tags)
-					buff_snapshot.damage_per_second = dot_map[buff_snapshot.damage_type]
-	var is_player = user.is_in_group("player")
-	for result in bodies:
-			var body = result.get("collider")
-			if body and body.has_method("take_damage"):
-					if (is_player and body.is_in_group("enemy")) or (not is_player and body.is_in_group("player")):
-							for dt in dmg_map.keys():
-									var dmg = dmg_map[dt]
-									if dmg > 0:
-											body.take_damage(dmg, dt)
-							if buff_snapshot and body.has_method("add_buff"):
-									body.add_buff(buff_snapshot.duplicate(true))
-							if on_hit_effect:
-									var eff = on_hit_effect.instantiate()
-									eff.global_transform = body.global_transform
-									eff.position.y += 2
-									body.get_tree().current_scene.add_child(eff)
+## Performs a simple radial sweep in front of the user and applies damage to
+## valid targets. The implementation relies on the shared helpers in `Skill`
+## so it integrates with the animation-driven combat flow in `Player.gd`.
+func perform(user) -> void:
+if user == null or not (user is Node3D):
+return
+var actor: Node3D = user
+var direction := Vector3.ZERO
+if user.has_method("_get_click_direction"):
+direction = user._get_click_direction()
+else:
+direction = -actor.global_transform.basis.z
+actor.look_at(actor.global_transform.origin + direction, Vector3.UP)
+if direction == Vector3.ZERO:
+return
+var parent := actor.get_parent()
+if parent == null:
+return
+var attack_area := Area3D.new()
+var shape := CylinderShape3D.new()
+shape.height = 1.0
+shape.radius = range
+var collider := CollisionShape3D.new()
+collider.shape = shape
+attack_area.add_child(collider)
+attack_area.transform.origin = actor.global_transform.origin + direction * range
+parent.add_child(attack_area)
+var timer := Timer.new()
+timer.wait_time = 0.1
+timer.one_shot = true
+timer.autostart = true
+timer.timeout.connect(Callable(attack_area, "queue_free"))
+attack_area.add_child(timer)
+var params := PhysicsShapeQueryParameters3D.new()
+params.shape = shape
+params.transform = attack_area.global_transform
+params.collide_with_bodies = true
+var space := actor.get_world_3d()
+if space == null:
+return
+var results := space.direct_space_state.intersect_shape(params, 32)
+var dmg_map: Dictionary = {}
+if "stats" in user and user.stats:
+var base_dict := _build_base_damage_dict(user)
+dmg_map = user.stats.compute_damage(base_dict, get_tags())
+var buff_template := _prepare_buff_instance(on_hit_buff, user)
+var is_player := user.is_in_group("player")
+for result in results:
+var body := result.get("collider")
+if body:
+_apply_damage_bundle(body, dmg_map, buff_template, is_player, on_hit_effect)

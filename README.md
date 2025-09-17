@@ -75,6 +75,28 @@ skills can optionally ignore collisions, stop on impact, apply damage in a
 radius while travelling and trigger particle effects when cast, while moving or
 upon arrival.
 
+### Active skill helpers
+Godot's resource-based skill system now exposes a few utilities that make it
+easier to author new abilities without duplicating boilerplate:
+
+- `Skill.get_tags()` returns a lowercase copy of the skill's tags so existing
+  resources like `"Spell"` or `"Projectile"` continue to work with the
+  animation-driven casting logic in `player.gd`.
+- `_prepare_buff_instance()` duplicates buffs before they are applied and, if
+  the buff deals damage over time, computes the correct `damage_per_second`
+  using the caster's offensive stats. This keeps shared resources immutable and
+  ensures aura toggles can remove the exact buff instance that was applied.
+- `_get_ground_target_position()` mirrors the player's `_get_click_position`
+  helper so radial skills such as area buffs and ground explosions can target a
+  point under the cursor even when triggered by AI-controlled enemies.
+- Helper methods like `_apply_damage_bundle()` and `get_body_mid_y()` centralise
+  common behaviour for spawning hit effects and applying damage so projectiles,
+  melee swings and area blasts all benefit from the same targeting rules.
+
+Additionally, `AuraSkill` now interprets `mana_reserve_percent` values greater
+than 1.0 as whole percentages (so an editor value of `25` reserves 25% of the
+caster's mana) and refunds the exact amount when the aura is deactivated.
+
 ## Player Animations
 The `player.gd` script now drives an `AnimationTree` for directional movement and attack animations.
 
