@@ -3,8 +3,35 @@ extends CharacterBody3D
 @export var move_speed: float = 5.0 # Base move speed before modifiers
 @export var rotation_speed: float = 15.0
 @export var base_attack_speed: float = 1.0
-@export var main_skill: Skill = preload("res://resources/skills/debug/holy_smite.tres")
-@export var secondary_skill: Skill = preload("res://resources/skills/debug/haste.tres")
+
+# Skills -------------------------------------------------------------------
+# The legacy implementation exposed `main_skill` and `secondary_skill` fields
+# and hard-coded the player to exactly two abilities.  The new system supports
+# up to eight slots that are bound to input actions named "Skill1" through
+# "Skill8" (with backwards compatibility for the old "attack" and
+# "skill_#" actions).  We keep the exported properties so existing scenes and
+# resources continue to load, but internally we mirror them into the generic
+# `skill_slots` array once the skill system has been initialized.
+var _skill_system_initialized := false
+var _main_skill: Skill = null
+@export var main_skill: Skill = preload("res://resources/skills/debug/holy_smite.tres"):
+        set(value):
+                _main_skill = value
+                if _skill_system_initialized:
+                        _assign_skill_slot(0, value, false)
+                        _rebuild_known_skills()
+        get:
+                return _main_skill
+
+var _secondary_skill: Skill = null
+@export var secondary_skill: Skill = preload("res://resources/skills/debug/haste.tres"):
+        set(value):
+                _secondary_skill = value
+                if _skill_system_initialized:
+                        _assign_skill_slot(1, value, false)
+                        _rebuild_known_skills()
+        get:
+                return _secondary_skill
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
@@ -49,9 +76,19 @@ extends CharacterBody3D
 @export var base_health_regen: float = 0.0
 @export var base_mana_regen: float = 1.0
 
-var _attack_timer: float = 0.0
-var _attacking_timer: float = 0.0
-var _secondary_cooldown: float = 0.0
+const MAX_SKILL_SLOTS := 8
+const SKILL_ACTIONS := ["Skill1", "Skill2", "Skill3", "Skill4", "Skill5", "Skill6", "Skill7", "Skill8"]
+const LEGACY_SKILL_ACTIONS := ["attack", "skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6", "skill_7", "skill_8"]
+
+var skill_slots: Array[Skill] = []
+var known_skills: Array[Skill] = []
+var _skill_cooldowns: Array[float] = []
+var _active_skill_index: int = -1
+var _active_skill_timer: float = 0.0
+var _active_skill_progress: float = 0.0
+var _active_skill_execute_time: float = 0.0
+var _active_skill_cancel_time: float = 0.0
+var _active_skill_performed: bool = false
 var inventory := Inventory.new()
 var _inventory_ui: InventoryUI
 var _skills_ui: SkillsUI
@@ -97,10 +134,6 @@ var _movement_skill_restore_mask: int = 0
 
 var _anim_tree: AnimationTree
 var _anim_state: AnimationNodeStateMachinePlayback
-var _attack_progress: float = 0.0
-var _attack_execute_time: float = 0.0
-var _attack_cancel_time: float = 0.0
-var _attack_performed: bool = false
 var _last_local_input: Vector3 = Vector3.ZERO
 
 var energy_shield: float = 0.0
@@ -118,7 +151,7 @@ var rune_manager: RuneManager
 var _equip_visuals: EquipmentVisualManager
 
 func _ready() -> void:
-	stats = Stats.new()
+        stats = Stats.new()
 	stats.base_move_speed = move_speed
 	stats.base_damage[Stats.DamageType.PHYSICAL] = base_damage
 	stats.base_defense = base_defense
@@ -158,10 +191,12 @@ func _ready() -> void:
 	_equip_visuals.hair_scene = hair_scene
 	add_child(_equip_visuals)
 
-	rune_manager = RuneManager.new()
-	add_child(rune_manager)
-	rune_manager.set_slot_count(2)
-	rune_manager.connect("skill_changed", Callable(self, "_on_rune_skill_changed"))
+        rune_manager = RuneManager.new()
+        add_child(rune_manager)
+        rune_manager.set_slot_count(MAX_SKILL_SLOTS)
+        rune_manager.connect("skill_changed", Callable(self, "_on_rune_skill_changed"))
+
+        _initialize_skill_system()
 
 	add_child(inventory)
 	buff_manager = BuffManager.new()
@@ -194,9 +229,9 @@ func _ready() -> void:
 			if _healthbar:
 					_healthbar.set_health(health, max_health)
 					_healthbar.set_mana(mana, max_mana)
-			if skills_ui_path != NodePath():
-							_skills_ui = get_node(skills_ui_path)
-							_skills_ui.bind_player(self)
+                        if skills_ui_path != NodePath():
+                                                        _skills_ui = get_node(skills_ui_path)
+                                                        _skills_ui.bind_player(self)
 
 	if target_display_path != NodePath():
 					_target_display = get_node_or_null(target_display_path)
@@ -212,7 +247,21 @@ func _ready() -> void:
 				_dialogue_ui = DialogueBox.new()
 				canvas_layer.add_child(_dialogue_ui)
 
-	add_to_group("player")
+        add_to_group("player")
+
+## Prepare arrays and defaults for the new multi-slot skill system.  This is
+## called once during `_ready` after dependent nodes (such as the rune manager)
+## are created.
+func _initialize_skill_system() -> void:
+        skill_slots.resize(MAX_SKILL_SLOTS)
+        _skill_cooldowns.resize(MAX_SKILL_SLOTS)
+        for i in range(MAX_SKILL_SLOTS):
+                skill_slots[i] = null
+                _skill_cooldowns[i] = 0.0
+        _skill_system_initialized = true
+        _assign_skill_slot(0, _main_skill, false)
+        _assign_skill_slot(1, _secondary_skill, false)
+        _rebuild_known_skills()
 
 func _get_click_direction() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
@@ -326,89 +375,161 @@ func _process_movement(delta: float) -> void:
 			_last_move_input = move_dir
 		var look_dir = _get_click_direction()
 		var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
-		if(_attacking_timer <= 0.0):
-				rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
-		var speed = stats.get_move_speed()
-		if _attacking_timer > 0.0:
-				speed *= _current_move_multiplier
-		velocity.x = move_dir.x * speed
-		velocity.z = move_dir.z * speed
-		if Input.is_action_just_pressed("dodge") and _dodge_cooldown_timer <= 0.0 and not _is_dodging and _attacking_timer <= 0.0:
-			_start_dodge()
+                if(_active_skill_timer <= 0.0):
+                                rotation.y = lerp_angle(rotation.y, target_rot, rotation_speed * delta)
+                var speed = stats.get_move_speed()
+                if _active_skill_timer > 0.0:
+                                speed *= _current_move_multiplier
+                velocity.x = move_dir.x * speed
+                velocity.z = move_dir.z * speed
+                if Input.is_action_just_pressed("dodge") and _dodge_cooldown_timer <= 0.0 and not _is_dodging and _active_skill_timer <= 0.0:
+                        _start_dodge()
 	if _invincible_timer > 0.0:
 		_invincible_timer -= delta
 	move_and_slide()
 
 func _process_attack(delta: float) -> void:
-		if _movement_skill_active:
-										return
-		if _is_dodging:
-										return
-		if _attack_timer > 0.0:
-						_attack_timer -= delta
-		if _secondary_cooldown > 0.0:
-				_secondary_cooldown -= delta
-		if _attacking_timer > 0.0:
-				_attacking_timer -= delta
-				_attack_progress += delta
-				if not _attack_performed and _attack_progress >= _attack_execute_time:
-						if main_skill:
-								main_skill.perform(self)
-						_attack_performed = true
-				if _attack_cancel_time > 0.0 and _attack_progress >= _attack_cancel_time:
-						_attacking_timer = 0.0
-				if _attacking_timer <= 0.0 and _anim_state:
-						_anim_state.travel("move")
-		if Input.is_action_pressed("attack") and _attack_timer <= 0.0 and main_skill and _attacking_timer <= 0.0:
-				if mana >= main_skill.mana_cost:
-						_anim_state.travel("move") #reset anim state
-						var speed = get_attack_speed(main_skill.tags)
-						print("Attack speed is ", speed)
-						_attack_timer = main_skill.cooldown / max(speed, 0.001)
-						_attacking_timer = main_skill.duration / max(speed, 0.001)
-						_attack_progress = 0.0
-						_attack_execute_time = main_skill.attack_time / max(speed, 0.001)
-						_attack_cancel_time = main_skill.cancel_time / max(speed, 0.001)
-						_attack_performed = false
-						_current_move_multiplier = main_skill.move_multiplier
-						mana -= main_skill.mana_cost
-						var look_dir = _get_click_direction()
-						var target_rot = Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
-						rotation.y = target_rot
-						if _anim_state and main_skill.animation_name != &"":
-								#print(main_skill.animation_name)
-								_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
-								# Reset animation time to start (0.0)
-								#_anim_tree.set("parameters/%s/time" % str(main_skill.animation_name), 0.0)
-								_anim_state.start(String(main_skill.animation_name), true)
-						else:
-								print("no anim for skill")
-								main_skill.perform(self)
-								_attack_performed = true
-								_attacking_timer = 0.0
-		if secondary_skill and Input.is_action_just_pressed("skill_1") and _secondary_cooldown <= 0.0:
-				if mana >= secondary_skill.mana_cost:
-						_secondary_cooldown = secondary_skill.cooldown
-						mana -= secondary_skill.mana_cost
-						secondary_skill.perform(self)
+        # Cooldowns tick continuously so the UI remains in sync even while
+        # the player is dodging or performing other actions.
+        for i in range(_skill_cooldowns.size()):
+                if _skill_cooldowns[i] > 0.0:
+                        _skill_cooldowns[i] = max(_skill_cooldowns[i] - delta, 0.0)
+
+        var skill_active := _active_skill_index != -1
+        if skill_active:
+                _active_skill_timer -= delta
+                _active_skill_progress += delta
+                var active_skill := _get_active_skill()
+                if active_skill:
+                        if not _active_skill_performed and _active_skill_progress >= _active_skill_execute_time:
+                                active_skill.perform(self)
+                                _active_skill_performed = true
+                        if _active_skill_cancel_time > 0.0 and _active_skill_progress >= _active_skill_cancel_time:
+                                _active_skill_timer = 0.0
+                if not active_skill or _active_skill_timer <= 0.0:
+                        _end_active_skill()
+                        skill_active = false
+
+        if _movement_skill_active or _is_dodging:
+                return
+        if skill_active:
+                return
+
+        for i in range(min(skill_slots.size(), MAX_SKILL_SLOTS)):
+                var skill: Skill = skill_slots[i]
+                if not skill:
+                        continue
+                if i >= _skill_cooldowns.size():
+                        continue
+                if _skill_cooldowns[i] > 0.0:
+                        continue
+                if mana < skill.mana_cost:
+                        continue
+                if _is_skill_input_triggered(i):
+                        _activate_skill(i, skill)
+                        break
+
+## Retrieve the currently active skill from the slot array.
+func _get_active_skill() -> Skill:
+        if _active_skill_index < 0 or _active_skill_index >= skill_slots.size():
+                return null
+        return skill_slots[_active_skill_index]
+
+## Check if the input mapped to the given slot was triggered this frame.
+func _is_skill_input_triggered(index: int) -> bool:
+        var allow_hold := index == 0
+        var action_names: Array[String] = []
+        if index < SKILL_ACTIONS.size():
+                action_names.append(SKILL_ACTIONS[index])
+        if index < LEGACY_SKILL_ACTIONS.size():
+                action_names.append(LEGACY_SKILL_ACTIONS[index])
+        for action_name in action_names:
+                if _is_action_triggered(action_name, allow_hold):
+                        return true
+        return false
+
+## Wrapper that guards against querying actions that are not defined in the
+## InputMap.  Godot prints errors otherwise, so the explicit check keeps the
+## logs tidy while still supporting custom control schemes.
+func _is_action_triggered(action_name: String, allow_hold: bool) -> bool:
+        if action_name.is_empty():
+                return false
+        if not InputMap.has_action(action_name):
+                return false
+        if allow_hold:
+                return Input.is_action_pressed(action_name)
+        return Input.is_action_just_pressed(action_name)
+
+## Start casting/performing the selected skill.  Cooldowns, timers, movement
+## multipliers and animation playback are all set up here so the main process
+## loop only needs to advance timers afterwards.
+func _activate_skill(index: int, skill: Skill) -> void:
+        if skill == null:
+                return
+        var speed := get_attack_speed(skill.tags)
+        var scaled_speed := max(speed, 0.001)
+        if index < _skill_cooldowns.size():
+                _skill_cooldowns[index] = skill.cooldown / scaled_speed
+        _active_skill_index = index
+        _active_skill_timer = skill.duration / scaled_speed
+        _active_skill_progress = 0.0
+        _active_skill_execute_time = skill.attack_time / scaled_speed
+        _active_skill_cancel_time = skill.cancel_time / scaled_speed
+        _active_skill_performed = false
+        _current_move_multiplier = skill.move_multiplier
+        mana -= skill.mana_cost
+        _update_mana_indicators()
+
+        var look_dir := _get_click_direction()
+        var target_rot := Transform3D().looking_at(look_dir, Vector3.UP).basis.get_euler().y
+        rotation.y = target_rot
+
+        if _anim_state and skill.animation_name != &"":
+                _anim_tree.set("parameters/%s/TimeScale/scale" % str(skill.animation_name), speed)
+                _anim_state.start(String(skill.animation_name), true)
+        else:
+                skill.perform(self)
+                _active_skill_performed = true
+                _end_active_skill()
+
+## Reset all state associated with the active skill once its duration or
+## animation finishes.
+func _end_active_skill() -> void:
+        _active_skill_index = -1
+        _active_skill_timer = 0.0
+        _active_skill_progress = 0.0
+        _active_skill_execute_time = 0.0
+        _active_skill_cancel_time = 0.0
+        _active_skill_performed = false
+        _current_move_multiplier = 1.0
+        if _anim_state:
+                _anim_state.travel("move")
+
+## Update every UI element that displays mana so they stay in sync when skills
+## consume the resource.
+func _update_mana_indicators() -> void:
+        if _healthbar:
+                _healthbar.set_mana(mana, max_mana)
+        if _mana_orb:
+                _mana_orb.update_health(mana, max_mana)
 
 func _update_animation() -> void:
-		if not _anim_tree or not _anim_state:
-				return
-		if _attacking_timer > 0.0 or _dodge_timer > 0.0:
-				return
-		if _last_local_input != Vector3.ZERO:
-				_anim_state.travel("move")
-				var world_vel = Vector3(velocity.x, 0, velocity.z)
-				var basis = global_transform.basis.orthonormalized()
-				var right = basis.x
-				var forward = -basis.z
-				var local_x = world_vel.dot(right)
-				var local_y = world_vel.dot(forward)
-				_anim_tree.set("parameters/move/blend_position", Vector2(local_x, local_y))
-		else:
-				_anim_state.travel("move")
-				_anim_tree.set("parameters/move/blend_position", Vector2.ZERO)
+                if not _anim_tree or not _anim_state:
+                                return
+                if _active_skill_index != -1 or _dodge_timer > 0.0:
+                                return
+                if _last_local_input != Vector3.ZERO:
+                                _anim_state.travel("move")
+                                var world_vel = Vector3(velocity.x, 0, velocity.z)
+                                var basis = global_transform.basis.orthonormalized()
+                                var right = basis.x
+                                var forward = -basis.z
+                                var local_x = world_vel.dot(right)
+                                var local_y = world_vel.dot(forward)
+                                _anim_tree.set("parameters/move/blend_position", Vector2(local_x, local_y))
+                else:
+                                _anim_state.travel("move")
+                                _anim_tree.set("parameters/move/blend_position", Vector2.ZERO)
 
 func _process_inventory_input() -> void:
 	if Input.is_action_just_pressed("toggle_inventory"):
@@ -464,49 +585,61 @@ func remove_buff(buff: Buff) -> void:
 		buff_manager.remove_buff(buff)
 
 func _on_rune_skill_changed(index: int, skill: Skill) -> void:
-	if index == 0:
-		main_skill = skill
-	elif index == 1:
-		secondary_skill = skill
+        set_skill_slot(index, skill)
 
 func get_skill_slot(index: int) -> Skill:
-		if index == 0:
-			#print("hey!")
-			return main_skill
-		if rune_manager:
-				return rune_manager.get_skill(index)
-		
-		return null
+        if index < 0 or index >= skill_slots.size():
+                return null
+        return skill_slots[index]
 
 func get_skill_cooldown_remaining(index: int) -> float:
-	match index:
-		0:
-			return max(_attack_timer, 0.0)
-		1:
-			return max(_secondary_cooldown, 0.0)
-		_:
-			return 0.0
+        if index < 0 or index >= _skill_cooldowns.size():
+                return 0.0
+        return max(_skill_cooldowns[index], 0.0)
 
 func is_skill_active(index: int) -> bool:
-	match index:
-		0:
-			return _attacking_timer > 0.0
-		1:
-			return false
-		_:
-			return false
+        return _active_skill_index == index
 
-func set_skill_slot(_index: int, _skill: Skill) -> void:
-		# Skills are determined by rune combinations; manual assignment disabled.
-		pass
+func set_skill_slot(index: int, skill: Skill) -> void:
+        _assign_skill_slot(index, skill)
+        _rebuild_known_skills()
+
+## Internal helper used by the exported setters, rune manager callbacks and the
+## UI to keep the slot array and exported properties in sync.
+func _assign_skill_slot(index: int, skill: Skill, update_exports: bool = true) -> void:
+        if index < 0 or index >= MAX_SKILL_SLOTS:
+                return
+        if skill_slots.size() < MAX_SKILL_SLOTS:
+                skill_slots.resize(MAX_SKILL_SLOTS)
+        if _skill_cooldowns.size() < MAX_SKILL_SLOTS:
+                _skill_cooldowns.resize(MAX_SKILL_SLOTS)
+        skill_slots[index] = skill
+        _skill_cooldowns[index] = 0.0
+        if update_exports:
+                match index:
+                        0:
+                                _main_skill = skill
+                        1:
+                                _secondary_skill = skill
+        if _active_skill_index == index:
+                _end_active_skill()
+
+## Refresh the list presented in the skills UI.  Only unique, non-null skills
+## are tracked to avoid duplicates when multiple slots reference the same
+## ability.
+func _rebuild_known_skills() -> void:
+        known_skills.clear()
+        for skill in skill_slots:
+                if skill and not known_skills.has(skill):
+                        known_skills.append(skill)
 
 ## Equip slot callback. When a weapon is equipped, apply its default skill if provided.
 func _on_equipment_slot_changed(slot: String, index: int, item: Item) -> void:
 				# Only react when the primary weapon slot changes.
 				if slot != "weapon":
 								return
-				if item is Weapon and item.default_skill:
-								main_skill = item.default_skill
+                                if item is Weapon and item.default_skill:
+                                                                set_skill_slot(0, item.default_skill)
 
 ## Returns a dictionary of base damage contributed by the equipped weapon for
 ## skills with the given tags.
