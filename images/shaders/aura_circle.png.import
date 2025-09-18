@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p7d71cjx56ap"
-path.s3tc="res://.godot/imported/Super Noise 11 - 128x128.png-296d83a06d944ef1a568ff349ce6222c.s3tc.ctex"
+uid="uid://77v8nxwm4r55"
+path.s3tc="res://.godot/imported/aura_circle.png-a25df57f6382449fc1bd9e23ccc4376a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://images/noise_vfx/Super Noise/Super Noise 11 - 128x128.png"
-dest_files=["res://.godot/imported/Super Noise 11 - 128x128.png-296d83a06d944ef1a568ff349ce6222c.s3tc.ctex"]
+source_file="res://images/shaders/aura_circle.png"
+dest_files=["res://.godot/imported/aura_circle.png-a25df57f6382449fc1bd9e23ccc4376a.s3tc.ctex"]
 
 [params]
 

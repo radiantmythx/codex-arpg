@@ -343,7 +343,7 @@ offset_right = 224.0
 offset_bottom = 224.0
 script = ExtResource("10_kmb1v")
 player_path = NodePath("../../Player")
-map_scale = 10.0
+map_scale = 1.0
 reveal_radius = 10
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
@@ -406,7 +406,7 @@ grow_vertical = 0
 texture = SubResource("NoiseTexture2D_1hw2b")
 script = ExtResource("4_0ld40")
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer"]
+[node name="PanelContainer" type="HBoxContainer" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
@@ -414,6 +414,41 @@ size_flags_vertical = 8
 [node name="Skill1" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
 layout_mode = 2
 player_path = NodePath("../../../../../../Player")
+
+[node name="Skill2" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 1
+
+[node name="Skill3" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 2
+
+[node name="Skill4" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 3
+
+[node name="Skill5" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 4
+
+[node name="Skill6" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 5
+
+[node name="Skill7" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 6
+
+[node name="Skill8" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/PanelContainer" instance=ExtResource("5_0ld40")]
+layout_mode = 2
+player_path = NodePath("../../../../../../Player")
+slot_index = 7
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
 script = ExtResource("7_choun")
@@ -423,6 +458,7 @@ camera_path = NodePath("../Camera3D")
 camera_shift = 0.0
 
 [node name="SkillsUI" parent="." instance=ExtResource("4_tbgi4")]
+visible = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
