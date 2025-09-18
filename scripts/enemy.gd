@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var main_skill: Skill = preload("res://resources/skills/debug/fireball.tres")
 @export var healthbar_node_path: NodePath
 @export var animation_tree_path: NodePath
+@export var death_animation_states: Array[StringName] = [] ## Optional state names in the AnimationTree to choose from on death.
 @export var mesh: MeshInstance3D
 @export var base_armor: float = 0.0
 @export var base_evasion: float = 5.0 ## % chance to avoid incoming damage.
@@ -76,12 +77,13 @@ var buff_manager: BuffManager
 var _anim_tree: AnimationTree
 var _anim_state: AnimationNodeStateMachinePlayback
 var _player_detected: bool = false
+var _original_modulate: Color = Color.WHITE ## Stored so the fade-out tween preserves the original tint when rebuilding.
 
 const HOVER_OUTLINE_SHADER := preload("res://resources/enemy_hover_outline.gdshader")
 
 func _ready() -> void:
-	randomize()
-	add_to_group("enemy")
+        randomize()
+        add_to_group("enemy")
 	stats = Stats.new()
 		# Scale core stats based on tier so bosses feel tougher.
 	stats.base_max_health = max_health * TIER_HEALTH_MULT[tier]
@@ -112,9 +114,10 @@ func _ready() -> void:
 			if _anim_tree:
 					_anim_state = _anim_tree.get("parameters/playback")
 	_mesh = mesh
-	if _mesh:
-		_original_material = _mesh.material_override
-		_mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
+        if _mesh:
+                _original_material = _mesh.material_override
+                _original_modulate = _mesh.modulate
+                _mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
 						# Create a material using the hover outline shader.  It will be
 			# assigned to `material_overlay` when the mouse hovers this enemy
 			# so the original surface materials remain visible.
@@ -135,7 +138,9 @@ func _ready() -> void:
 	add_child(_culler)
 
 func _physics_process(delta: float) -> void:
-				_process_regen(delta)
+        if is_dead:
+                return
+                                _process_regen(delta)
 				var player_pos := _get_player_position()
 				_process_attack(delta, player_pos)
 				if player_pos:
@@ -266,8 +271,10 @@ func get_base_damage_dict(_tags := []) -> Dictionary:
 		return dict
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-	if randf() * 100.0 < stats.get_evasion():
-			return
+        if is_dead:
+                return
+        if randf() * 100.0 < stats.get_evasion():
+                        return
 	if randf() * 100.0 < stats.get_block():
 			return
 	if damage_type == Stats.DamageType.PHYSICAL:
@@ -284,14 +291,77 @@ func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType
 	current_health -= amount
 	if _healthbar:
 		_healthbar.set_health(current_health, max_health)
-	if current_health <= 0 and not is_dead:
-		die()
+        if current_health <= 0 and not is_dead:
+                die()
 
 func die() -> void:
-	is_dead = true
-	_drop_loot()
-	emit_signal("died")
-	queue_free()
+        if is_dead:
+                return
+
+        is_dead = true
+
+        # Stop all locomotion and combat logic immediately so the enemy no
+        # longer chases or attacks while the death sequence plays.
+        velocity = Vector3.ZERO
+        set_physics_process(false)
+        set_process(false)
+        set_process_input(false)
+        set_process_unhandled_input(false)
+        set_process_unhandled_key_input(false)
+
+        # Remove collision interactions so the corpse cannot be hit by further
+        # attacks or interfere with navigation.  The group removal ensures hover
+        # UI stops targeting the dead enemy instantly.
+        set_deferred("collision_layer", 0)
+        set_deferred("collision_mask", 0)
+        remove_from_group("enemy")
+
+        # Guarantee health values hit zero so connected UI reflects the change
+        # even before loot is collected.
+        current_health = 0.0
+        if _healthbar:
+                _healthbar.set_health(current_health, max_health)
+
+        var chosen_state := _travel_to_random_death_animation()
+
+        _drop_loot()
+        emit_signal("died")
+
+        # Allow the animation to begin before the linger timer starts.  When no
+        # animation data is available we still fall through instantly.
+        if chosen_state != StringName():
+                await get_tree().process_frame
+
+        await get_tree().create_timer(5.0).timeout
+        await _fade_out_and_queue_free()
+
+## Selects a random AnimationTree state from the exported list and travels to it.
+## Returns the state that was used so callers can optionally react to its length.
+func _travel_to_random_death_animation() -> StringName:
+        if not _anim_state:
+                return StringName()
+
+        var valid_states: Array[StringName] = []
+        for state_name in death_animation_states:
+                if String(state_name) != "":
+                        valid_states.append(state_name)
+
+        if valid_states.is_empty():
+                return StringName()
+
+        var chosen_state: StringName = valid_states.pick_random()
+        _anim_state.travel(chosen_state)
+        return chosen_state
+
+## Fades the mesh out smoothly over one second before freeing the node.  A tween
+## is used so the fade keeps running even though normal processing has been
+## disabled for the enemy.
+func _fade_out_and_queue_free() -> void:
+        if _mesh:
+                var tween := create_tween()
+                tween.tween_property(_mesh, "modulate", Color(_original_modulate.r, _original_modulate.g, _original_modulate.b, 0.0), 1.0)
+                await tween.finished
+        queue_free()
 
 func _drop_loot() -> void:
 		var drop_scene := preload("res://scenes/item_drop.tscn")

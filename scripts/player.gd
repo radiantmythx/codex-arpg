@@ -20,6 +20,7 @@ var _skill_system_initialized := false
 @export var inventory_camera_shift: float = 3.0
 @export var skills_ui_path: NodePath
 @export var animation_tree_path: NodePath
+@export var death_animation_states: Array[StringName] = [] ## Optional list of AnimationTree state names to use when the player dies.
 
 # Skeleton containing the player's bones.  Equipment models are attached to
 # this skeleton so they follow animations.
@@ -89,6 +90,7 @@ var _hovered_target: Node
 var _current_move_multiplier: float = 1.0
 var buff_manager: BuffManager
 var reserved_mana: float = 0.0
+var _is_dead: bool = false ## Tracks whether the player has already completed the death routine so it only runs once.
 
 @export var dodge_speed: float = 10.0 # Movement speed while rolling
 @export var dodge_duration: float = 0.4 # Seconds the roll lasts
@@ -679,8 +681,10 @@ func add_item(item: Item, amount: int = 1) -> void:
 				inventory.add_item(inst, amount)
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-	if _invincible_timer > 0.0:
-					return
+        if _is_dead:
+                return
+        if _invincible_timer > 0.0:
+                                        return
 	if randf() * 100.0 < stats.get_evasion():
 			return
 	if randf() * 100.0 < stats.get_block():
@@ -701,8 +705,8 @@ func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType
 		_healthbar.set_health(health, max_health)
 	if _health_orb:
 		_health_orb.update_health(health, max_health)
-	if health <= 0:
-		die()
+        if health <= 0 and not _is_dead:
+                die()
 
 func _process_regen(delta: float) -> void:
 	max_health = int(stats.get_max_health())
@@ -724,8 +728,61 @@ func _process_regen(delta: float) -> void:
 	if _mana_orb:
 		_mana_orb.update_health(mana, max_mana)
 
-func die():
-				queue_free()
+func die() -> void:
+        if _is_dead:
+                return
+
+        _is_dead = true
+
+        # Prevent any additional motion, input or combat processing so the
+        # corpse remains in place while the animation plays.  The CharacterBody
+        # still exists in the scene until the reload occurs, but it no longer
+        # collides or responds to player input.
+        velocity = Vector3.ZERO
+        set_physics_process(false)
+        set_process(false)
+        set_process_input(false)
+        set_process_unhandled_input(false)
+        set_process_unhandled_key_input(false)
+        set_deferred("collision_layer", 0)
+        set_deferred("collision_mask", 0)
+
+        # Update any health UI elements immediately so external systems do not
+        # continue showing stale values while we wait for the reload timer.
+        if _healthbar:
+                _healthbar.set_health(0.0, max_health)
+        if _health_orb:
+                _health_orb.update_health(0.0, max_health)
+
+        # Choose a random death animation (if provided) using Godot 4.4's
+        # AnimationTree state machine API.  Designers can provide as many
+        # variants as they want and we will pick one uniformly at random.
+        _travel_to_random_death_animation()
+
+        # Reload the active scene after a small delay so the player gets a
+        # moment to see the chosen death animation.  `reload_current_scene`
+        # automatically frees the existing tree according to the documentation.
+        await get_tree().create_timer(5.0).timeout
+        if get_tree():
+                get_tree().reload_current_scene()
+
+## Picks a random state from `death_animation_states` and tells the
+## AnimationTree to travel to it.  The helper is intentionally defensive so we
+## never raise errors when the animation system is not present.
+func _travel_to_random_death_animation() -> void:
+        if not _anim_state:
+                return
+
+        var valid_states: Array[StringName] = []
+        for state_name in death_animation_states:
+                if String(state_name) != "":
+                        valid_states.append(state_name)
+
+        if valid_states.is_empty():
+                return
+
+        var chosen_state: StringName = valid_states.pick_random()
+        _anim_state.travel(chosen_state)
 
 ## Begin a dodge roll using the last movement direction.
 func _start_dodge() -> void:
