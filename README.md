@@ -1,6 +1,6 @@
 # Codex ARPG Setup
 
-This repository contains a simple Godot 4 project configured for a modular action RPG. It demonstrates basic WASD movement and a right-click melee attack that rotates toward the cursor with area feedback.
+This repository contains a simple Godot 4 project configured for a modular action RPG. It demonstrates basic WASD movement and a primary skill bound to the new `Skill1` input action (which defaults to the legacy right-click attack) that rotates toward the cursor with area feedback.
 
 ## Scenes
 - `scenes/Player.tscn` – CharacterBody3D with a camera and `player.gd` script.
@@ -64,9 +64,15 @@ added to the scene tree.
 
 ## Controls
 - **WASD** – Move the player relative to the camera's facing.
-- **Right Mouse Button** – Rotate toward the clicked position and perform a melee attack. The attack area is displayed briefly as a red cylinder in front of the player.
-- **Q** – Activate the secondary skill (e.g., the Haste aura).
+- **Skill1** action (defaults to the right mouse button via the old `attack` mapping) – Rotate toward the clicked position and fire the first slotted skill. The sample melee slash still displays a red cylinder to visualize its area.
+- **Skill2** action (defaults to the old `skill_1` mapping on **Q**) – Trigger the second hotbar slot, which hosts the sample Haste aura.
+- **Skill3** → **Skill8** actions – Additional hotbar slots that can be bound in **Project Settings → Input Map** when more abilities are introduced.
 - **Dodge action** – Perform a directional dodge roll with a short invincibility window. Configure the input mapping in Project Settings.
+
+## Skill Slots and Input Actions
+`player.gd` now exposes eight skill slots through the `skill_slots` array and helper methods such as `get_skill_slot`, `set_skill_slot` and `get_skill_cooldown_remaining`. Each slot listens for a dedicated `Skill#` input action (`Skill1` … `Skill8`). For backwards compatibility the code also checks the legacy `attack` and `skill_#` bindings, so existing projects continue to function while new bindings are added. Configure or remap these actions in **Project Settings → Input Map**. Refer to the [InputMap documentation](https://docs.godotengine.org/en/latest/classes/class_inputmap.html) for details on creating custom bindings.
+
+The hotbar UI (`skill_icon.gd`) and the in-game skill inventory (`skills_ui.gd`) consume these APIs. They automatically update icons, cooldown bars and active-state overlays as the player triggers skills. `set_skill_slot` is now functional, allowing UI code to drag skills between slots without editing `.tscn` files.
 
 ### Movement Skills
 The new `MovementSkill` (`scripts/skills/movement_skill.gd`) lets a player dash
@@ -179,10 +185,10 @@ Affixes may also modify `aoe_inc` to increase the size of any skill tagged with 
 The project now includes generic projectile, melee, blast and aura skill bases. Skills may spawn optional on-hit or explosion effects that scale with the caster's area bonuses. A buff system allows temporary modifiers on players and enemies. Sample abilities include **Haste** (a mana-reserving aura that boosts move speed), **Holy Smite** (a holy blast at the cursor) and **Icicle Blast** (a slowing projectile). Enemies use the same framework and attack with the basic melee skill.
 
 ## Rune System
-Runes act as itemized mini-skills. Two rune slots combine to create a single ability.
+Runes act as itemized mini-skills. Two rune slots combine to create a single ability and the player now initialises eight rune-driven skill slots so every hotbar position can be filled by a crafted ability.
 
 ### Setting Up Rune Slots
-1. In the inventory UI scene add a container node with four `RuneSlot` children.
+1. In the inventory UI scene add a container node with up to eight `RuneSlot` children (one per skill slot you want to expose).
 2. Assign `scripts/rune_slot.gd` to each child and set `skill_slot_index` (0 for main, 1 for secondary) and `rune_index` (0 or 1).
 3. On the `InventoryUI` node, set **rune_slots_parent_path** to the container from step 1.
 4. Player `player.gd` automatically creates a `RuneManager`. When runes are equipped the manager builds the resulting skill and assigns it to the corresponding skill slot.
