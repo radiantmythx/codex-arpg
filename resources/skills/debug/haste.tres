@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="AuraSkill" load_steps=5 format=3 uid="uid://mqpc1mqg5rqw"]
+[gd_resource type="Resource" script_class="AuraSkill" load_steps=6 format=3 uid="uid://mqpc1mqg5rqw"]
 
 [ext_resource type="PackedScene" uid="uid://yyrllvnvxau" path="res://scenes/effects/auras/haste_aura.tscn" id="1_2w28y"]
 [ext_resource type="Script" uid="uid://cunkjx53ftdis" path="res://scripts/skills/buff.gd" id="2_82frj"]
 [ext_resource type="Script" uid="uid://cwhcjof4hr4ux" path="res://scripts/skills/aura_skill.gd" id="3_2w28y"]
+[ext_resource type="Texture2D" uid="uid://druhcg56l5wip" path="res://images/skills/haste.png" id="3_82frj"]
 
 [sub_resource type="Resource" id="Resource_82frj"]
 script = ExtResource("2_82frj")
@@ -21,6 +22,7 @@ buff = SubResource("Resource_82frj")
 aura_effect = ExtResource("1_2w28y")
 name = "Haste"
 description = ""
+icon = ExtResource("3_82frj")
 mana_cost = 0.0
 cooldown = 0.5
 duration = 1.0

@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=10 format=3 uid="uid://dosbesunnt4ky"]
+[gd_resource type="Resource" script_class="Weapon" load_steps=11 format=3 uid="uid://dosbesunnt4ky"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_kypck"]
 [ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_mqyvr"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_ggk64"]
 [ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="4_kxats"]
 [ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="4_mqyvr"]
+[ext_resource type="Texture2D" uid="uid://cg6j3jrb4h2bd" path="res://images/skills/default_attack.png" id="4_r63u7"]
 [ext_resource type="Script" uid="uid://d34nu4qiyhmri" path="res://scripts/items/weapon.gd" id="4_vf126"]
 [ext_resource type="Texture2D" uid="uid://ge8to51ucge8" path="res://images/items/equipment/sword_of_based.png" id="5_ggk64"]
 [ext_resource type="PackedScene" uid="uid://ctgav8eh68yuy" path="res://scenes/items/equipment/weapons/iron_test/sword.tscn" id="6_vf126"]
@@ -16,6 +17,7 @@ angle = 45.0
 on_hit_effect = ExtResource("4_kxats")
 name = "Sword Strike"
 description = ""
+icon = ExtResource("4_r63u7")
 mana_cost = 1.0
 cooldown = 0.05
 duration = 1.1
