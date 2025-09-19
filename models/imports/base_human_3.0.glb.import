@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dwq6a1p70yqqm"
-path="res://.godot/imported/sword.glb-16e95e20a2ba884404b2494828cf2a73.scn"
+uid="uid://buughicbak2vp"
+path="res://.godot/imported/base_human_3.0.glb-fe2cb1059fabd2f525455fb505a9f4f4.scn"
 
 [deps]
 
-source_file="res://models/imports/sword.glb"
-dest_files=["res://.godot/imported/sword.glb-16e95e20a2ba884404b2494828cf2a73.scn"]
+source_file="res://models/imports/base_human_3.0.glb"
+dest_files=["res://.godot/imported/base_human_3.0.glb-fe2cb1059fabd2f525455fb505a9f4f4.scn"]
 
 [params]
 

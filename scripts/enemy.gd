@@ -82,8 +82,8 @@ var _original_modulate: Color = Color.WHITE ## Stored so the fade-out tween pres
 const HOVER_OUTLINE_SHADER := preload("res://resources/enemy_hover_outline.gdshader")
 
 func _ready() -> void:
-        randomize()
-        add_to_group("enemy")
+	randomize()
+	add_to_group("enemy")
 	stats = Stats.new()
 		# Scale core stats based on tier so bosses feel tougher.
 	stats.base_max_health = max_health * TIER_HEALTH_MULT[tier]
@@ -114,10 +114,10 @@ func _ready() -> void:
 			if _anim_tree:
 					_anim_state = _anim_tree.get("parameters/playback")
 	_mesh = mesh
-        if _mesh:
-                _original_material = _mesh.material_override
-                _original_modulate = _mesh.modulate
-                _mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
+	if _mesh:
+			_original_material = _mesh.material_override
+			_original_modulate = _mesh.get_active_material(0).albedo_color
+			_mesh.scale = Vector3(TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier], TIER_SIZE_MULT[tier])
 						# Create a material using the hover outline shader.  It will be
 			# assigned to `material_overlay` when the mouse hovers this enemy
 			# so the original surface materials remain visible.
@@ -138,23 +138,23 @@ func _ready() -> void:
 	add_child(_culler)
 
 func _physics_process(delta: float) -> void:
-        if is_dead:
-                return
-                                _process_regen(delta)
-				var player_pos := _get_player_position()
-				_process_attack(delta, player_pos)
-				if player_pos:
-								var dist := global_transform.origin.distance_to(player_pos)
-								if _player_detected:
-												if dist > detection_range * 5.0:
-																_player_detected = false
-								elif dist <= detection_range:
-												_player_detected = true
-				if _player_detected and player_pos:
-								_chase(player_pos, delta)
-				else:
-								_wander(delta)
-				_update_animation()
+	if is_dead:
+		return
+	_process_regen(delta)
+	var player_pos := _get_player_position()
+	_process_attack(delta, player_pos)
+	if player_pos:
+					var dist := global_transform.origin.distance_to(player_pos)
+					if _player_detected:
+									if dist > detection_range * 5.0:
+													_player_detected = false
+					elif dist <= detection_range:
+									_player_detected = true
+	if _player_detected and player_pos:
+					_chase(player_pos, delta)
+	else:
+					_wander(delta)
+	_update_animation()
 
 func _process_attack(delta: float, player_pos: Vector3) -> void:
 		if _attack_timer > 0.0:
@@ -271,12 +271,12 @@ func get_base_damage_dict(_tags := []) -> Dictionary:
 		return dict
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
-        if is_dead:
-                return
-        if randf() * 100.0 < stats.get_evasion():
-                        return
+	if is_dead:
+		return
+	if randf() * 100.0 < stats.get_evasion():
+		return
 	if randf() * 100.0 < stats.get_block():
-			return
+		return
 	if damage_type == Stats.DamageType.PHYSICAL:
 			amount = max(0.0, amount - stats.get_armor())
 	var resist = stats.get_resistance(damage_type)
@@ -291,77 +291,134 @@ func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType
 	current_health -= amount
 	if _healthbar:
 		_healthbar.set_health(current_health, max_health)
-        if current_health <= 0 and not is_dead:
-                die()
+	if current_health <= 0 and not is_dead:
+			die()
 
 func die() -> void:
-        if is_dead:
-                return
+	if is_dead:
+			return
 
-        is_dead = true
+	is_dead = true
 
-        # Stop all locomotion and combat logic immediately so the enemy no
-        # longer chases or attacks while the death sequence plays.
-        velocity = Vector3.ZERO
-        set_physics_process(false)
-        set_process(false)
-        set_process_input(false)
-        set_process_unhandled_input(false)
-        set_process_unhandled_key_input(false)
+	# Stop all locomotion and combat logic immediately so the enemy no
+	# longer chases or attacks while the death sequence plays.
+	velocity = Vector3.ZERO
+	set_physics_process(false)
+	set_process(false)
+	set_process_input(false)
+	set_process_unhandled_input(false)
+	set_process_unhandled_key_input(false)
 
-        # Remove collision interactions so the corpse cannot be hit by further
-        # attacks or interfere with navigation.  The group removal ensures hover
-        # UI stops targeting the dead enemy instantly.
-        set_deferred("collision_layer", 0)
-        set_deferred("collision_mask", 0)
-        remove_from_group("enemy")
+	# Remove collision interactions so the corpse cannot be hit by further
+	# attacks or interfere with navigation.  The group removal ensures hover
+	# UI stops targeting the dead enemy instantly.
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
+	remove_from_group("enemy")
 
-        # Guarantee health values hit zero so connected UI reflects the change
-        # even before loot is collected.
-        current_health = 0.0
-        if _healthbar:
-                _healthbar.set_health(current_health, max_health)
+	# Guarantee health values hit zero so connected UI reflects the change
+	# even before loot is collected.
+	current_health = 0.0
+	if _healthbar:
+		_healthbar.set_health(current_health, max_health)
+		_healthbar.visible = false
 
-        var chosen_state := _travel_to_random_death_animation()
+	var chosen_state := _travel_to_random_death_animation()
 
-        _drop_loot()
-        emit_signal("died")
+	_drop_loot()
+	emit_signal("died")
 
-        # Allow the animation to begin before the linger timer starts.  When no
-        # animation data is available we still fall through instantly.
-        if chosen_state != StringName():
-                await get_tree().process_frame
+	# Allow the animation to begin before the linger timer starts.  When no
+	# animation data is available we still fall through instantly.
+	if chosen_state != StringName():
+			await get_tree().process_frame
 
-        await get_tree().create_timer(5.0).timeout
-        await _fade_out_and_queue_free()
+	await get_tree().create_timer(5.0).timeout
+	await _fade_out_and_queue_free()
 
 ## Selects a random AnimationTree state from the exported list and travels to it.
 ## Returns the state that was used so callers can optionally react to its length.
 func _travel_to_random_death_animation() -> StringName:
-        if not _anim_state:
-                return StringName()
+		if not _anim_state:
+				return StringName()
 
-        var valid_states: Array[StringName] = []
-        for state_name in death_animation_states:
-                if String(state_name) != "":
-                        valid_states.append(state_name)
+		var valid_states: Array[StringName] = []
+		for state_name in death_animation_states:
+				if String(state_name) != "":
+						valid_states.append(state_name)
 
-        if valid_states.is_empty():
-                return StringName()
+		if valid_states.is_empty():
+				return StringName()
 
-        var chosen_state: StringName = valid_states.pick_random()
-        _anim_state.travel(chosen_state)
-        return chosen_state
+		var chosen_state: StringName = valid_states.pick_random()
+		_anim_state.travel(chosen_state)
+		return chosen_state
 
 ## Fades the mesh out smoothly over one second before freeing the node.  A tween
 ## is used so the fade keeps running even though normal processing has been
 ## disabled for the enemy.
 func _fade_out_and_queue_free() -> void:
-        if _mesh:
-                var tween := create_tween()
-                tween.tween_property(_mesh, "modulate", Color(_original_modulate.r, _original_modulate.g, _original_modulate.b, 0.0), 1.0)
-                await tween.finished
-        queue_free()
+	if _mesh and _mesh is MeshInstance3D:
+		var mat: Material = null
+
+		# Prefer a unique override material so we don't affect shared resources.
+		if _mesh.material_override:
+			mat = _mesh.material_override.duplicate()
+		elif _mesh.mesh and _mesh.mesh.get_surface_count() > 0:
+			var surf_mat := _mesh.mesh.surface_get_material(0)
+			if surf_mat:
+				mat = surf_mat.duplicate()
+
+		# Fall back to a fresh StandardMaterial3D if nothing found.
+		if mat == null:
+			mat = StandardMaterial3D.new()
+
+		# Install the unique material as the override.
+		_mesh.material_override = mat
+
+		# Handle BaseMaterial3D (Standard/ORM) vs ShaderMaterial.
+		if mat is BaseMaterial3D:
+			var bmat := mat as BaseMaterial3D
+			# Ensure alpha blending is on so changes to .a actually render.
+			bmat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			# Optional: keep depth write for nicer fade on top of itself
+			# bmat.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_ALPHA_PREPASS
+
+			var tween := create_tween()
+			# Tween the material resource's color alpha directly.
+			tween.tween_property(bmat, "albedo_color:a", 0.0, 1.0)
+			await tween.finished
+
+		elif mat is ShaderMaterial:
+			var sm := mat as ShaderMaterial
+			# Expect a Color uniform to drive opacity; try a few common names.
+			var uniform_names := ["tint", "albedo", "color", "albedo_color"]
+			var found_name := ""
+			for name in uniform_names:
+				if sm.get_shader_parameter(name) is Color:
+					found_name = name
+					break
+
+			if found_name != "":
+				var start_col: Color = sm.get_shader_parameter(found_name)
+				var tween := create_tween()
+				# Tween via a setter function to only change alpha.
+				tween.tween_method(
+					func(a: float) -> void:
+						var c = sm.get_shader_parameter(found_name)
+						c.a = a
+						sm.set_shader_parameter(found_name, c),
+					start_col.a, 0.0, 1.0
+				)
+				await tween.finished
+			else:
+				# As a fallback, just free without fade.
+				push_warning("No Color uniform found to fade; freeing without fade.")
+	else:
+		# No mesh available; just free.
+		pass
+
+	queue_free()
 
 func _drop_loot() -> void:
 		var drop_scene := preload("res://scenes/item_drop.tscn")

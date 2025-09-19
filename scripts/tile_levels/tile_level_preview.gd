@@ -20,17 +20,17 @@ func _run() -> void:
 	var generator := TileLevelGenerator.new()
 	var root := generator.generate(settings)
 
-	print("Attempting to pack scene...")
+	#print("Attempting to pack scene...")
 	var t0 := Time.get_ticks_msec()
 	var packed := PackedScene.new()
 	var err2 := packed.pack(root)
 	var dt := Time.get_ticks_msec() - t0
-	print("pack %s took %sms" % [err2, dt])
+	#print("pack %s took %sms" % [err2, dt])
 	if err2 != OK:
 		push_error("Could not pack scene")
 		return
-	print("Scene packed!")
-	print("Attempting to save scene...")
+	#print("Scene packed!")
+	#print("Attempting to save scene...")
 	var err = ResourceSaver.save(packed, output_path)
 	if err == OK:
 		print("Saved generated level to %s" % output_path)

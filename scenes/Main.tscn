@@ -1,6 +1,6 @@
 [gd_scene load_steps=72 format=3 uid="uid://dduutvhpgaapk"]
 
-[ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cieo8o73ixbiv" path="res://scripts/skills/skill.gd" id="2_kmb1v"]
 [ext_resource type="Resource" uid="uid://dmwf23aptr5pd" path="res://resources/skills/debug/holy_smite.tres" id="3_5he1u"]
 [ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="3_dp3eg"]

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cvan37760vcrj"
-path="res://.godot/imported/armor_workspace.glb-163c6359b664d883486f666e25767e92.scn"
+uid="uid://bpsaaccve0jcv"
+path="res://.godot/imported/base_human_hopefully.glb-57fcc29bdb091c4fd310a3095a579575.scn"
 
 [deps]
 
-source_file="res://models/imports/armor_workspace.glb"
-dest_files=["res://.godot/imported/armor_workspace.glb-163c6359b664d883486f666e25767e92.scn"]
+source_file="res://models/imports/base_human_hopefully.glb"
+dest_files=["res://.godot/imported/base_human_hopefully.glb-57fcc29bdb091c4fd310a3095a579575.scn"]
 
 [params]
 

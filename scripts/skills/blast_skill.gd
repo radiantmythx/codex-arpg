@@ -61,6 +61,6 @@ func _explode(origin: Vector3, parent, world, dmg_map, buff_snapshot, mult, is_p
 
 	if explosion_effect:
 			var e = explosion_effect.instantiate()
+			parent.add_child(e)
 			e.global_transform.origin = origin
 			e.scale = Vector3.ONE * radius * mult
-			parent.add_child(e)

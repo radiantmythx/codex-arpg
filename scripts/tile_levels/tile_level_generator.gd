@@ -21,13 +21,13 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	enemies and a boss. All coordinates are kept within
 	`settings.level_size`.
 	"""
-	print("Starting tile generator...")
+	#print("Starting tile generator...")
 	var rng := RandomNumberGenerator.new()
 	if settings.seed != 0:
 			rng.seed = settings.seed
 	else:
 			rng.randomize()
-	print("Seed: ", rng)
+	#print("Seed: ", rng)
 	var tiles := {}
 	var rooms: Array[Rect2i] = []
 	# Track specific tile categories for later decoration/enemy placement.
@@ -43,7 +43,7 @@ func generate(settings: TileLevelSettings) -> Node3D:
 			_fill_rect(rect, tiles, settings.level_size)
 			_fill_rect(rect, room_tiles, settings.level_size)
 	
-	print(settings.room_count, " rooms filled")
+	#print(settings.room_count, " rooms filled")
 	
 	var width := _tunnel_width(settings.tunnel_size)
 	for i in range(1, rooms.size()):
@@ -51,13 +51,13 @@ func generate(settings: TileLevelSettings) -> Node3D:
 			var b := _rect_center(rooms[i])
 			_dig_corridor(a, b, width, tiles, settings.level_size, tunnel_tiles)
 
-	print("Corridors created")
+	#print("Corridors created")
 
 	if settings.obstacle_chance > 0.0:
 			_add_obstacles(tiles, settings.obstacle_chance, rng)
 			_ensure_connected(tiles)
 
-	print("Obstacles added, connections ensured")
+	#print("Obstacles added, connections ensured")
 
 		# Top-level node containing the entire generated level. Naming it
 		# `GeneratedLevel` allows gameplay code to easily find and replace the
@@ -69,7 +69,7 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	var default_positions: Array[Vector2i] = []
 	var outside_rects: Array[Rect2] = []
 	
-	print("Placing tiles...")
+	#print("Placing tiles...")
 	
 	for pos in tiles.keys():
 		var scene := _select_tile_scene(pos, tiles, settings.tiles)
@@ -89,9 +89,9 @@ func generate(settings: TileLevelSettings) -> Node3D:
 			print("Spawning default tiles...")
 			default_positions = _spawn_default_tiles(root, tiles, settings.default_tile, settings.level_size, settings.tile_size)
 	if settings.draw_default_tiles_outside_level and settings.default_tile:
-			print("Spawning default tiles outside of level...")
+			#print("Spawning default tiles outside of level...")
 			outside_rects = _spawn_outside_default_tiles(root, settings.default_tile, settings.level_size, settings.tile_size, settings.default_tile_outside_scale)
-	print("Spawning default decorations...")
+	#print("Spawning default decorations...")
 	_spawn_default_decorations(root, default_positions, outside_rects, settings.default_decorations, rng, settings.tile_size)
 		# Split room tiles into player/boss rooms and generic rooms.
 	var start_room := rooms[0]
@@ -109,15 +109,15 @@ func generate(settings: TileLevelSettings) -> Node3D:
 					if not start_room.has_point(p) and not furthest_room.has_point(p):
 									generic_room_positions.append(p)
 
-	print("Spawning room decorations...")
+	#print("Spawning room decorations...")
 	_spawn_decorations(root, generic_room_positions, settings.room_decorations, rng, settings.tile_size)
 	_spawn_multimesh_decorations(root, generic_room_positions, settings.room_multimesh_decorations, rng, settings.tile_size)
 
-	print("Spawning tunnel decorations...")
+	#print("Spawning tunnel decorations...")
 	_spawn_decorations(root, tunnel_tiles.keys(), settings.tunnel_decorations, rng, settings.tile_size)
 	_spawn_multimesh_decorations(root, tunnel_tiles.keys(), settings.tunnel_multimesh_decorations, rng, settings.tile_size)
 
-	print("Spawning player room decorations...")
+	#print("Spawning player room decorations...")
 	var player_scene_decos: Array[LevelDecoration] = []
 	player_scene_decos.append_array(settings.player_room_decorations)
 	if settings.player_inherit_room_decorations:
@@ -165,7 +165,7 @@ func generate(settings: TileLevelSettings) -> Node3D:
 		#_set_owner_recursive(boss, root)
 		root.add_child(boss, true)
 		boss.owner = root
-		print("Added boss scene")
+		#print("Added boss scene")
 	else:
 		var boss_spawn := Node3D.new()
 		boss_spawn.name = "BossSpawn"
@@ -175,7 +175,7 @@ func generate(settings: TileLevelSettings) -> Node3D:
 	
 	# Enemy population. Only spawn on center tiles to keep within bounds.
 	if settings.enemy_density > 0.0:
-					print("Spawning enemies")
+					#print("Spawning enemies")
 					var player_boss := {player_pos: true, boss_pos: true}
 					# Room enemies
 					if not settings.room_enemy_scenes.is_empty():

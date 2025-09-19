@@ -47,13 +47,13 @@ func _ready() -> void:
 	if skeleton:
 			for slot in SLOT_BONES.keys():
 				var bone_find := skeleton.find_bone(SLOT_BONES[slot])
-				if bone_find == -1:
-					print("COULD NOT FIND SKELETON")
+				#if bone_find == -1:
+					#print("COULD NOT FIND SKELETON")
 				var bone_name: String = SLOT_BONES[slot]
 				var attach := BoneAttachment3D.new()
 				attach.bone_name = bone_name
 				skeleton.add_child(attach)
-				print("Set up attach slot for slot: ", slot)
+				#print("Set up attach slot for slot: ", slot)
 				_attachments[slot] = attach
 				# Attach the optional hair model to the specified bone.
 				if hair_scene:
@@ -73,7 +73,7 @@ func _on_slot_changed(slot: String, index: int, item: Item) -> void:
 		if slot == "armor":
 				_equip_armor(instance, key)
 		elif slot in SLOT_BONES:
-						print("equipping ", item.item_name, " in ", slot, " slot")
+						#print("equipping ", item.item_name, " in ", slot, " slot")
 						_attachments[slot].add_child(instance)
 						var local_xform := Transform3D(Basis.from_euler(item.equip_rotation_rads), item.equip_position)
 						instance.transform = local_xform
@@ -97,7 +97,7 @@ func _clear_slot(slot: String) -> void:
 func _equip_armor(root: Node3D, key: String) -> void:
 		## Attach an armour model by retargeting all MeshInstance3D nodes to the
 		## player's skeleton. The original scene is freed after extraction.
-		print("equipping armor?")
+		#print("equipping armor?")
 		var meshes: Array = []
 		_collect_meshes(root, meshes)
 		for m in meshes:

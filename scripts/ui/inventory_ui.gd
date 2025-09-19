@@ -140,7 +140,7 @@ func _on_slot_pressed(index: int) -> void:
 	if not _inventory:
 		return
 	if _cursor_item:
-		print("cursor item")
+		#print("cursor item")
 		var leftover = _inventory.place_item(index, _cursor_item, _cursor_amount)
 		if leftover:
 			_cursor_item = leftover["item"]
@@ -158,20 +158,20 @@ func _on_slot_pressed(index: int) -> void:
 
 
 func _on_slot_right_clicked(index: int) -> void:
-	print("right clicked index ", index)
+	#print("right clicked index ", index)
 	if not _inventory:
 		return
 
 	var data = _inventory.get_slot(index)
 	var item: Item = data["item"]
 	if _cursor_item and item:
-			print("Cursor item is", _cursor_item.item_name)
+			#print("Cursor item is", _cursor_item.item_name)
 			var success := false
 			match _cursor_item.item_name:
 					"Chaos Jewel":
 							success = item.reroll_affixes()
 					"Temper Jewel":
-							print("Trying to apply temper jewel")
+							#print("Trying to apply temper jewel")
 							success = item.temper_random_affix()
 					"Culling Jewel":
 							success = item.remove_random_affix()

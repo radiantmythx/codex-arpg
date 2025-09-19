@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bsb2cgc3dtamt"
-path="res://.godot/imported/shield.glb-ffba0ebcaba714be60365d58eb420a69.scn"
+uid="uid://de3vaufe2u77j"
+path="res://.godot/imported/aura_beam.glb-f12dbe9f3d1f54107b1f1c24c0b31502.scn"
 
 [deps]
 
-source_file="res://models/imports/shield.glb"
-dest_files=["res://.godot/imported/shield.glb-ffba0ebcaba714be60365d58eb420a69.scn"]
+source_file="res://models/imports/aura_beam.glb"
+dest_files=["res://.godot/imported/aura_beam.glb-f12dbe9f3d1f54107b1f1c24c0b31502.scn"]
 
 [params]
 

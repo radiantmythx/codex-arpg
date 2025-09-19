@@ -75,8 +75,8 @@ func _on_projectile_body_entered(body, projectile):
 						var eff = on_hit_effect.instantiate()
 						var p = body.global_transform.origin
 						p.y = mid_y_of_body(body)
-						eff.global_transform.origin = p
 						body.get_tree().current_scene.add_child(eff)
+						eff.global_transform.origin = p
 	if(is_player and body.is_in_group("player")):
 		return
 	_explode(projectile)
@@ -110,7 +110,7 @@ func _explode(projectile):
 			var body = result.get("collider")
 			if body and body.has_method("take_damage"):
 					if (is_player and body.is_in_group("enemy")) or (not is_player and body.is_in_group("player")):
-							print(dmg_map)
+							#print(dmg_map)
 							for dt in dmg_map.keys():
 									var dmg = dmg_map[dt]
 									if dmg > 0:
@@ -126,9 +126,9 @@ func _explode(projectile):
 									
 	if explosion_effect:
 			var e = explosion_effect.instantiate()
+			projectile.get_parent().add_child(e)
 			e.global_transform.origin = origin
 			e.scale = Vector3.ONE * explosion_radius * mult
-			projectile.get_parent().add_child(e)
 			
 # --- Bounds helpers (Godot 4) ---
 
