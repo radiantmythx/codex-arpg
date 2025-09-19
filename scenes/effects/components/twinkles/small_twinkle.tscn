@@ -1,0 +1,47 @@
+[gd_scene load_steps=9 format=3 uid="uid://bt5tlplptm5eb"]
+
+[ext_resource type="Texture2D" uid="uid://dpsva24kxqp4q" path="res://images/particles/solid_star.png" id="1_n5h6l"]
+
+[sub_resource type="Curve" id="Curve_kqsdw"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.374631, -360), 0.0, 0.0, 0, 0, Vector2(0.743363, 288.925), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_jv3lu"]
+curve = SubResource("Curve_kqsdw")
+
+[sub_resource type="Curve" id="Curve_snt4e"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.19174, 1), 0.0, 0.0, 0, 0, Vector2(0.39528, 0.00525701), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_qoyvq"]
+curve = SubResource("Curve_snt4e")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yft74"]
+emission_shape = 1
+emission_sphere_radius = 4.48
+angle_curve = SubResource("CurveTexture_jv3lu")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_qoyvq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cka15"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_n5h6l")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_uua71"]
+material = SubResource("StandardMaterial3D_cka15")
+
+[node name="SmallTwinkle" type="GPUParticles3D"]
+emitting = false
+amount = 128
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_yft74")
+draw_pass_1 = SubResource("QuadMesh_uua71")

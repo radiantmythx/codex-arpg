@@ -1,4 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://dqdqgrjuotqv2"]
+[gd_scene load_steps=7 format=4 uid="uid://dqdqgrjuotqv2"]
+
+[ext_resource type="Shader" uid="uid://b2co80h40apxb" path="res://shaders/visual/energy/dynamic_energy.tres" id="1_1o3i1"]
+[ext_resource type="Texture2D" uid="uid://eeqm8ssd58f3" path="res://images/noise_vfx/Turbulence/Turbulence 13 - 128x128.png" id="2_1o3i1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3v32b"]
 
@@ -32,10 +35,15 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_0gxvp")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jx1f1"]
-cull_mode = 2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3i6p"]
+render_priority = 0
+shader = ExtResource("1_1o3i1")
+shader_parameter/Energy_Color = Color(0.957659, 0.60643, 0, 1)
+shader_parameter/Vector2Parameter = Vector2(1, 0)
+shader_parameter/Texture2DParameter = ExtResource("2_1o3i1")
+shader_parameter/EnergyPower = 0.2
 
 [node name="AuraBeam" type="MeshInstance3D"]
 mesh = SubResource("ArrayMesh_n62bx")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_jx1f1")
+surface_material_override/0 = SubResource("ShaderMaterial_l3i6p")

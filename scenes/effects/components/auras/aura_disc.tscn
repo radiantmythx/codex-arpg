@@ -1,4 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://brh1ufgrukhyb"]
+[gd_scene load_steps=7 format=4 uid="uid://brh1ufgrukhyb"]
+
+[ext_resource type="Shader" uid="uid://b2co80h40apxb" path="res://shaders/visual/energy/dynamic_energy.tres" id="1_bqqe5"]
+[ext_resource type="Texture2D" uid="uid://c4jbv1fcn6ix5" path="res://images/noise_vfx/Grainy/Grainy 3 - 128x128.png" id="2_drav1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wybfw"]
 
@@ -32,10 +35,15 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_r4ojj")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnndi"]
-cull_mode = 2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fq3ms"]
+render_priority = 0
+shader = ExtResource("1_bqqe5")
+shader_parameter/Energy_Color = Color(2, 2, 0.1, 1)
+shader_parameter/Vector2Parameter = Vector2(0.4, 0)
+shader_parameter/Texture2DParameter = ExtResource("2_drav1")
+shader_parameter/EnergyPower = 0.5
 
 [node name="AuraDisc" type="MeshInstance3D"]
 mesh = SubResource("ArrayMesh_vepb5")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_dnndi")
+surface_material_override/0 = SubResource("ShaderMaterial_fq3ms")
