@@ -109,10 +109,11 @@ func _ready() -> void:
 	buff_manager.stats = stats
 	add_child(buff_manager)
 	_player = get_tree().get_root().find_child("Player", true, false)
-	if animation_tree_path != NodePath():
-			_anim_tree = get_node_or_null(animation_tree_path)
-			if _anim_tree:
-					_anim_state = _anim_tree.get("parameters/playback")
+        if animation_tree_path != NodePath():
+                        _anim_tree = get_node_or_null(animation_tree_path)
+                        if _anim_tree:
+                                        _anim_tree.active = true
+                                        _anim_state = _anim_tree.get("parameters/playback")
 	_mesh = mesh
 	if _mesh:
 			_original_material = _mesh.material_override
@@ -170,23 +171,8 @@ func _process_attack(delta: float, player_pos: Vector3) -> void:
 						_attacking_timer = 0.0
 				if _attacking_timer <= 0.0 and _anim_state:
 						_anim_state.travel("move")
-		elif player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
-				var speed = stats.get_attack_speed()
-				print("I am an enemy and I have an attack speed of ", speed)
-				_attack_timer = main_skill.cooldown / max(speed, 0.001)
-				_attacking_timer = main_skill.duration / max(speed, 0.001)
-				_attack_progress = 0.0
-				_attack_execute_time = main_skill.attack_time / max(speed, 0.001)
-				_attack_cancel_time = main_skill.cancel_time / max(speed, 0.001)
-				_attack_performed = false
-				if _anim_state and main_skill.animation_name != &"":
-						print(main_skill.animation_name)
-						_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
-						_anim_state.travel(String(main_skill.animation_name))
-				else:
-						main_skill.perform(self)
-						_attack_performed = true
-						_attacking_timer = 0.0
+                elif player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
+                                _start_attack(main_skill)
 
 func _process_regen(delta: float) -> void:
 	max_energy_shield = stats.get_max_energy_shield()
@@ -255,8 +241,8 @@ func _get_player_position() -> Vector3:
 	return Vector3()
 
 func add_buff(buff: Buff) -> void:
-	if buff_manager:
-		buff_manager.apply_buff(buff)
+        if buff_manager:
+                buff_manager.apply_buff(buff)
 
 func remove_buff(buff: Buff) -> void:
 	if buff_manager:
@@ -266,11 +252,28 @@ func remove_buff(buff: Buff) -> void:
 # DamageType.  Skill scripts call this so the values are merged with the
 # skill's own base damage when attacks are performed.
 func get_base_damage_dict(_tags := []) -> Dictionary:
-		var dict: Dictionary = {}
-		var mult = TIER_DAMAGE_MULT.get(tier, 1.0)
-		for dt in base_damage_types:
-				dict[dt] = Vector2(base_damage_low * mult, base_damage_high * mult)
-		return dict
+                var dict: Dictionary = {}
+                var mult = TIER_DAMAGE_MULT.get(tier, 1.0)
+                for dt in base_damage_types:
+                                dict[dt] = Vector2(base_damage_low * mult, base_damage_high * mult)
+                return dict
+
+func _start_attack(skill: Skill) -> void:
+                var speed := stats.get_attack_speed_tagged(skill.tags) if stats else 1.0
+                var scaled_speed := max(speed, 0.001)
+                _attack_timer = skill.cooldown / scaled_speed
+                _attacking_timer = skill.duration / scaled_speed
+                _attack_progress = 0.0
+                _attack_execute_time = skill.attack_time / scaled_speed
+                _attack_cancel_time = skill.cancel_time / scaled_speed
+                _attack_performed = false
+                if _anim_state and skill.animation_name != &"":
+                                _anim_tree.set("parameters/%s/TimeScale/scale" % str(skill.animation_name), speed)
+                                _anim_state.start(String(skill.animation_name), true)
+                else:
+                                skill.perform(self)
+                                _attack_performed = true
+                                _attacking_timer = 0.0
 
 func take_damage(amount: float, damage_type: Stats.DamageType = Stats.DamageType.PHYSICAL) -> void:
 	if is_dead:
