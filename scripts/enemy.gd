@@ -172,6 +172,7 @@ func _process_attack(delta: float, player_pos: Vector3) -> void:
 						_anim_state.travel("move")
 		elif player_pos and global_transform.origin.distance_to(player_pos) <= attack_range and _attack_timer <= 0.0 and main_skill:
 				var speed = stats.get_attack_speed()
+				print("I am an enemy and I have an attack speed of ", speed)
 				_attack_timer = main_skill.cooldown / max(speed, 0.001)
 				_attacking_timer = main_skill.duration / max(speed, 0.001)
 				_attack_progress = 0.0
@@ -179,6 +180,7 @@ func _process_attack(delta: float, player_pos: Vector3) -> void:
 				_attack_cancel_time = main_skill.cancel_time / max(speed, 0.001)
 				_attack_performed = false
 				if _anim_state and main_skill.animation_name != &"":
+						print(main_skill.animation_name)
 						_anim_tree.set("parameters/%s/TimeScale/scale" % str(main_skill.animation_name), speed)
 						_anim_state.travel(String(main_skill.animation_name))
 				else:

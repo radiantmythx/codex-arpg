@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("2_yf1hm")
-range = 1.0
+range = 1.2
 angle = 45.0
 on_hit_effect = ExtResource("1_kwj4y")
 name = "Punch"

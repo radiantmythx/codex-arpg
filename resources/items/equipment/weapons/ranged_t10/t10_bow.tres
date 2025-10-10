@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=8 format=3 uid="uid://epq8vnb2nry6"]
+
+[ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_b4nt3"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_vl8yu"]
+[ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_0o3ve"]
+[ext_resource type="Script" uid="uid://d34nu4qiyhmri" path="res://scripts/items/weapon.gd" id="4_oi57f"]
+[ext_resource type="Resource" uid="uid://cybbwi7twq84j" path="res://resources/skills/default/shoot_arrow.tres" id="4_yhj6f"]
+[ext_resource type="Texture2D" uid="uid://dubs44xxfnaas" path="res://images/items/equipment/rangedt10/bow.png" id="7_23sun"]
+[ext_resource type="PackedScene" uid="uid://pblfdp83fxnt" path="res://scenes/items/equipment/weapons/ranged_t10/t10bow.tscn" id="8_wuw2e"]
+
+[resource]
+script = ExtResource("4_oi57f")
+base_damage_low = 1.0
+base_damage_high = 2.0
+damage_type = 0
+speed = 1.0
+weapon_type = 1
+default_skill = ExtResource("4_yhj6f")
+base_evasion = 0.0
+base_block = 0.0
+base_damage_reduction = 0.0
+base_energy_shield = 0.0
+item_name = "Bow"
+description = "A shortbow"
+icon = ExtResource("7_23sun")
+max_stack = 1
+item_type = "weapon"
+equip_slot = "weapon"
+req_body = 0
+req_mind = 0
+req_soul = 0
+req_luck = 0
+hide_hair = false
+affix_pool = Array[ExtResource("2_vl8yu")]([])
+affix_groups = Array[ExtResource("1_b4nt3")]([])
+affixes = Array[ExtResource("3_0o3ve")]([])
+model = ExtResource("8_wuw2e")
+equip_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+equip_position = Vector3(-0.0707187, 0.127709, 0.103074)
+equip_rotation_rads = Vector3(-0.091814, 1.5107, -1.46089)
+metadata/_custom_type_script = "uid://d34nu4qiyhmri"

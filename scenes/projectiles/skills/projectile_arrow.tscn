@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci18gqun3dxd5"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_avmjx"]
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.75
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_avmjx"]
+size = Vector3(0.750488, 0.10614, 0.137451)
+
+[node name="ProjectileArrow" type="Area3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_avmjx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0012207, 0.0270691, 0.0106201)
+shape = SubResource("BoxShape3D_avmjx")
