@@ -70,6 +70,11 @@ func _on_slot_changed(slot: String, index: int, item: Item) -> void:
 								_update_hair_visibility()
 								return
 		var instance: Node3D = item.model.instantiate()
+		
+		if item.hand_reverse and slot == "weapon":
+			slot = "offhand"
+		
+		
 		if slot == "armor":
 				_equip_armor(instance, key)
 		elif slot in SLOT_BONES:

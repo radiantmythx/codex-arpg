@@ -26,6 +26,7 @@ icon = ExtResource("7_23sun")
 max_stack = 1
 item_type = "weapon"
 equip_slot = "weapon"
+hand_reverse = true
 req_body = 0
 req_mind = 0
 req_soul = 0

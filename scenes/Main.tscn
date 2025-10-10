@@ -1,7 +1,8 @@
-[gd_scene load_steps=53 format=3 uid="uid://dduutvhpgaapk"]
+[gd_scene load_steps=54 format=3 uid="uid://dduutvhpgaapk"]
 
 [ext_resource type="Shader" uid="uid://35a12d7kwfy7" path="res://shaders/post-process/postprocess.gdshader" id="1_jscy8"]
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://df6cnus8lydc2" path="res://scenes/enemy/undead/undead_walker.tscn" id="1_og1vs"]
 [ext_resource type="Script" uid="uid://cieo8o73ixbiv" path="res://scripts/skills/skill.gd" id="2_kmb1v"]
 [ext_resource type="Script" uid="uid://bl5appere3xsh" path="res://scripts/util/follow_target.gd" id="2_y6deb"]
 [ext_resource type="Resource" uid="uid://dmwf23aptr5pd" path="res://resources/skills/debug/holy_smite.tres" id="3_5he1u"]
@@ -222,6 +223,9 @@ radius = 1.88656
 
 [node name="WorldRoot" type="Node3D"]
 
+[node name="Enemy" parent="." instance=ExtResource("1_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8672, 0, 0)
+
 [node name="PostProcess" type="CanvasLayer" parent="."]
 layer = 0
 
@@ -262,6 +266,7 @@ current = true
 fov = 37.8493
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
+base_attack_speed = 3.0
 debug_known_skills = Array[ExtResource("2_kmb1v")]([ExtResource("3_5poiv"), ExtResource("4_5poiv"), ExtResource("3_5he1u"), ExtResource("6_chjal")])
 inventory_ui_path = NodePath("../InventoryUI")
 inventory_camera_path = NodePath("../IsoTestCamera")

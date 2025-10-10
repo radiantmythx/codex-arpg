@@ -18,6 +18,7 @@ const MAX_AFFIXES := 6
 # Name of the equipment slot this item fits in. Leave empty for non-equipable
 # items such as consumables.  Example values: "weapon", "armor", "ring".
 @export var equip_slot: String = ""
+@export var hand_reverse:bool = false
 
 # Attribute requirements needed to equip this item.  These are compared
 # against the wearer's main stats and default to zero so items are freely
