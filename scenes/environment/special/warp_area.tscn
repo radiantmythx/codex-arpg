@@ -1,0 +1,130 @@
+[gd_scene load_steps=18 format=4 uid="uid://b5pylyppnh78j"]
+
+[ext_resource type="Shader" uid="uid://b2co80h40apxb" path="res://shaders/visual/energy/dynamic_energy.tres" id="1_0w344"]
+[ext_resource type="Script" uid="uid://bhchbiwygqian" path="res://scripts/zones/warp_area.gd" id="1_7hw4v"]
+[ext_resource type="Texture2D" uid="uid://diiqosas630xx" path="res://images/noise_vfx/Craters/Craters 9 - 128x128.png" id="3_83t5k"]
+[ext_resource type="Texture2D" uid="uid://by076vw8obpos" path="res://images/particles/solid_circle.png" id="4_6uwoi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_83t5k"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_6uwoi"]
+radius = 5.55302
+
+[sub_resource type="Curve" id="Curve_kqsdw"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.374631, -360), 0.0, 0.0, 0, 0, Vector2(0.743363, 288.925), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_jv3lu"]
+curve = SubResource("Curve_kqsdw")
+
+[sub_resource type="Curve" id="Curve_snt4e"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.19174, 1), 0.0, 0.0, 0, 0, Vector2(0.39528, 0.00525701), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_qoyvq"]
+curve = SubResource("Curve_snt4e")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_11j3v"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+angle_curve = SubResource("CurveTexture_jv3lu")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_qoyvq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cka15"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_6uwoi")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_nh605"]
+material = SubResource("StandardMaterial3D_cka15")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tqht5"]
+resource_name = "Material"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xd5d1"]
+_surfaces = [{
+"aabb": AABB(-0.01, -0.01, 0, 0.02, 0.02, 0.00540026),
+"format": 34359742465,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAgAEAAAAAQAFAAMABgAAAAQABwADAAUABQAGAAcABAAHAAYA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("CtcjvArXI7yt9LA7CtcjPArXI7yt9LA7CtcjPArXI7wAAAAACtcjPArXIzwAAAAACtcjvArXI7wAAAAACtcjPArXIzyt9LA7CtcjvArXIzyt9LA7CtcjvArXIzwAAAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_s2rq6"]
+resource_name = "Cube"
+_surfaces = [{
+"aabb": AABB(-0.01, -0.01, 0, 0.02, 0.02, 0.00540026),
+"attribute_data": PackedByteArray("AAAgPwAAAAAAACA/AACAPgAAAD8AAIA+AAAAPwAAAAAAACA/AABAPwAAID8AAIA/AAAAPwAAgD8AAAA/AABAPwAAID8AAIA+AAAgPwAAAD8AAAA/AAAAPwAAAD8AAIA+AAAgPwAAAD8AACA/AABAPwAAAD8AAEA/AAAAPwAAAD8="),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwA"),
+"material": SubResource("StandardMaterial3D_tqht5"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("CtcjvArXI7yt9LA7CtcjPArXI7yt9LA7CtcjPArXI7wAAAAACtcjvArXI7wAAAAACtcjvArXIzyt9LA7CtcjvArXI7yt9LA7CtcjvArXI7wAAAAACtcjvArXIzwAAAAACtcjPArXI7yt9LA7CtcjPArXIzyt9LA7CtcjPArXIzwAAAAACtcjPArXI7wAAAAACtcjPArXIzyt9LA7CtcjvArXIzyt9LA7CtcjvArXIzwAAAAACtcjPArXIzwAAAAA/38AAP9//7//fwAA/3//v/9/AAD/f/+//38AAP9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v////3//f/+/////f/9//7////9//3//v////3//f/+//3////9//7//f////3//v/9/////f/+//3////9//78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_xd5d1")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11j3v"]
+render_priority = 0
+shader = ExtResource("1_0w344")
+shader_parameter/Energy_Color = Color(1.4, 1.4, 0.664, 1)
+shader_parameter/Vector2Parameter = Vector2(0.5, 0)
+shader_parameter/Texture2DParameter = ExtResource("3_83t5k")
+shader_parameter/EnergyPower = 0.1
+
+[node name="WarpArea" type="Node3D" node_paths=PackedStringArray("warp_vfx", "warp_vfx_mesh")]
+script = ExtResource("1_7hw4v")
+warp_vfx = NodePath("WarpVFX")
+warp_vfx_mesh = NodePath("WarpEnergyVFX")
+
+[node name="WarpTrigger" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WarpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_83t5k")
+
+[node name="EnergyTrigger" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnergyTrigger"]
+shape = SubResource("SphereShape3D_6uwoi")
+
+[node name="WarpVFX" type="Node3D" parent="."]
+
+[node name="SmallTwinkle" type="GPUParticles3D" parent="WarpVFX"]
+amount = 16
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_11j3v")
+draw_pass_1 = SubResource("QuadMesh_nh605")
+
+[node name="WarpEnergyVFX" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0, 0, 0)
+mesh = SubResource("ArrayMesh_s2rq6")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_11j3v")
+
+[connection signal="body_entered" from="WarpTrigger" to="." method="_on_warp_trigger_body_entered"]
+[connection signal="body_entered" from="EnergyTrigger" to="." method="_on_energy_trigger_body_entered"]
+[connection signal="body_exited" from="EnergyTrigger" to="." method="_on_energy_trigger_body_exited"]

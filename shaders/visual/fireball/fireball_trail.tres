@@ -4,6 +4,7 @@
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_qhpmq"]
 texture = ExtResource("1_yntki")
+texture_type = 1
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_26et0"]
 
@@ -21,6 +22,7 @@ parameter_name = "Trail_Speed"
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_i6e0h"]
 parameter_name = "Color_Texture"
 texture_type = 1
+texture_filter = 1
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_21ygb"]
 expanded_output_ports = [0]
@@ -33,9 +35,9 @@ operator = 2
 code = "shader_type spatial;
 render_mode blend_add, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled, fog_disabled;
 
-uniform sampler2D Color_Texture : source_color;
+uniform sampler2D Color_Texture : source_color, filter_nearest;
 uniform vec2 Trail_Speed;
-uniform sampler2D tex_frg_2;
+uniform sampler2D tex_frg_2 : source_color;
 
 
 
@@ -67,9 +69,13 @@ void fragment() {
 	vec4 n_out2p0 = texture(tex_frg_2, n_out3p0);
 
 
+// FloatOp:9
+	float n_out9p0 = n_out8p4 * n_out2p0.x;
+
+
 // Output:0
 	ALBEDO = vec3(n_out8p0.xyz);
-	ALPHA = n_out2p0.x;
+	ALPHA = n_out9p0;
 
 
 }
@@ -97,4 +103,4 @@ nodes/fragment/8/node = SubResource("VisualShaderNodeTexture_21ygb")
 nodes/fragment/8/position = Vector2(240, 80)
 nodes/fragment/9/node = SubResource("VisualShaderNodeFloatOp_djg33")
 nodes/fragment/9/position = Vector2(300, 420)
-nodes/fragment/connections = PackedInt32Array(4, 0, 5, 0, 5, 0, 3, 2, 3, 0, 2, 0, 6, 0, 5, 1, 7, 0, 8, 2, 8, 0, 0, 0, 8, 4, 9, 0, 2, 0, 9, 1, 2, 0, 0, 1)
+nodes/fragment/connections = PackedInt32Array(4, 0, 5, 0, 5, 0, 3, 2, 3, 0, 2, 0, 6, 0, 5, 1, 7, 0, 8, 2, 8, 0, 0, 0, 8, 4, 9, 0, 2, 0, 9, 1, 9, 0, 0, 1)

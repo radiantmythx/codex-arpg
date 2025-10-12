@@ -1,0 +1,301 @@
+[gd_scene load_steps=29 format=3 uid="uid://cnul2t3hvwdpd"]
+
+[ext_resource type="Script" uid="uid://bl5appere3xsh" path="res://scripts/util/follow_target.gd" id="1_j6pt8"]
+[ext_resource type="Script" uid="uid://bxboqsrgq2xod" path="res://scripts/player/player_container.gd" id="1_vtu4o"]
+[ext_resource type="Script" uid="uid://owfljmtypdyg" path="res://scripts/util/spring_arm_3d.gd" id="2_vtu4o"]
+[ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player/player.tscn" id="3_yqvrv"]
+[ext_resource type="Script" uid="uid://cieo8o73ixbiv" path="res://scripts/skills/skill.gd" id="4_kaoqo"]
+[ext_resource type="Resource" uid="uid://c6vfxp44eef8n" path="res://resources/skills/unequip/unequip_punch.tres" id="5_lld7h"]
+[ext_resource type="Resource" uid="uid://dbpb46a7kta7x" path="res://resources/skills/debug/fireball.tres" id="6_lofpf"]
+[ext_resource type="Resource" uid="uid://dmwf23aptr5pd" path="res://resources/skills/debug/holy_smite.tres" id="7_lb7mu"]
+[ext_resource type="Resource" uid="uid://mqpc1mqg5rqw" path="res://resources/skills/debug/haste.tres" id="8_tulue"]
+[ext_resource type="Script" uid="uid://depd4ivprvjp1" path="res://scripts/ui/minimap.gd" id="9_fd1j0"]
+[ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="10_mv1jo"]
+[ext_resource type="Script" uid="uid://bodjkipcd4jj7" path="res://scripts/ui/components/health_orb.gd" id="11_o24y8"]
+[ext_resource type="PackedScene" uid="uid://cuaf4c562utg5" path="res://scenes/ui/components/skill_icon.tscn" id="12_cjw2f"]
+[ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="13_1fco1"]
+[ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="14_61y5h"]
+[ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="15_k3p7a"]
+[ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="16_2lj18"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sd2ls"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5al6o"]
+noise = SubResource("FastNoiseLite_sd2ls")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_u88a6"]
+frequency = 0.0137
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sd2ls"]
+seamless = true
+noise = SubResource("FastNoiseLite_u88a6")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v45cj"]
+shader = ExtResource("10_mv1jo")
+shader_parameter/health_ratio = 1.0
+shader_parameter/tilt = 2.375e-08
+shader_parameter/sloshing_amp = 0.005
+shader_parameter/sloshing_speed = 1.47
+shader_parameter/edge_softness = 0.05
+shader_parameter/foam_thickness = 0.001
+shader_parameter/foam_speed = 0.4
+shader_parameter/glass_rim_intensity = 0.791
+shader_parameter/glass_rim_width = 3.911
+shader_parameter/rim_offset = Vector2(0.5, 0.5)
+shader_parameter/aspect = 1.0
+shader_parameter/liquid_color = Color(0.9, 0.08, 0.08, 1)
+shader_parameter/foam_color = Color(0.698806, 0.597911, 0.550599, 1)
+shader_parameter/glass_normal = SubResource("NoiseTexture2D_5al6o")
+shader_parameter/use_glass_normal = false
+shader_parameter/glass_normal_tiling = Vector2(3, 3)
+shader_parameter/liquid_noise = SubResource("NoiseTexture2D_sd2ls")
+shader_parameter/use_liquid_noise = true
+shader_parameter/liquid_noise_tiling = Vector2(1, 1)
+shader_parameter/liquid_noise_scroll = Vector2(0.01, -0.04)
+shader_parameter/liquid_noise_intensity = 0.45
+
+[sub_resource type="Gradient" id="Gradient_5uxjj"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5al6o"]
+frequency = 0.0292
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1hw2b"]
+width = 128
+height = 128
+generate_mipmaps = false
+normalize = false
+color_ramp = SubResource("Gradient_5uxjj")
+noise = SubResource("FastNoiseLite_5al6o")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7qawa"]
+frequency = 0.0057
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b6wld"]
+seamless = true
+noise = SubResource("FastNoiseLite_7qawa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5uxjj"]
+shader = ExtResource("10_mv1jo")
+shader_parameter/health_ratio = 1.0
+shader_parameter/tilt = 2.375e-08
+shader_parameter/sloshing_amp = 0.005
+shader_parameter/sloshing_speed = 1.47
+shader_parameter/edge_softness = 0.05
+shader_parameter/foam_thickness = 0.001
+shader_parameter/foam_speed = 0.4
+shader_parameter/glass_rim_intensity = 0.791
+shader_parameter/glass_rim_width = 3.911
+shader_parameter/rim_offset = Vector2(0.5, 0.5)
+shader_parameter/aspect = 1.0
+shader_parameter/liquid_color = Color(0, 0.513539, 0.78285, 1)
+shader_parameter/foam_color = Color(0.698806, 0.597911, 0.550599, 1)
+shader_parameter/glass_normal = SubResource("NoiseTexture2D_5al6o")
+shader_parameter/use_glass_normal = false
+shader_parameter/glass_normal_tiling = Vector2(3, 3)
+shader_parameter/liquid_noise = SubResource("NoiseTexture2D_b6wld")
+shader_parameter/use_liquid_noise = true
+shader_parameter/liquid_noise_tiling = Vector2(1, 1)
+shader_parameter/liquid_noise_scroll = Vector2(0.03, 0.03)
+shader_parameter/liquid_noise_intensity = 0.45
+
+[node name="PlayerContainer" type="Node3D" node_paths=PackedStringArray("player")]
+script = ExtResource("1_vtu4o")
+player = NodePath("Player")
+
+[node name="CameraRoot" type="Node3D" parent="." node_paths=PackedStringArray("look_camera")]
+script = ExtResource("1_j6pt8")
+follow_target_path = NodePath("../Player")
+look_camera = NodePath("SpringArm3D/Camera3D")
+pos_smooth_time = 0.005
+aim_smooth_time = 0.005
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.27109, 0)
+script = ExtResource("2_vtu4o")
+max_zoom = 100.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraRoot/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 0.950548, 0.310577, 0, -0.310577, 0.950548, 0, 0, 0)
+current = true
+fov = 37.8493
+far = 200.0
+
+[node name="Player" parent="." instance=ExtResource("3_yqvrv")]
+base_attack_speed = 3.0
+debug_known_skills = Array[ExtResource("4_kaoqo")]([ExtResource("5_lld7h"), ExtResource("6_lofpf"), ExtResource("7_lb7mu"), ExtResource("8_tulue")])
+inventory_ui_path = NodePath("../InventoryUI")
+inventory_camera_path = NodePath("../IsoTestCamera")
+skills_ui_path = NodePath("../SkillsUI")
+target_display_path = NodePath("../CanvasLayer/EnemyTargetDisplay")
+health_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/HealthOrb")
+mana_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/ManaOrb")
+experience_bar_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/ExperienceBar")
+base_body = 5
+base_mind = 5
+base_soul = 5
+base_luck = 5
+
+[node name="IsoTestCamera" type="Camera3D" parent="." node_paths=PackedStringArray("look_camera")]
+transform = Transform3D(0.707107, -0.425547, 0.564721, 0, 0.798636, 0.601814, -0.707107, -0.425547, 0.564721, 12.7672, 15.493, 13.8541)
+visible = false
+fov = 40.0
+size = 19.613
+near = 0.005
+far = 3779.05
+script = ExtResource("1_j6pt8")
+follow_target_path = NodePath("../Player")
+look_camera = NodePath(".")
+
+[node name="Minimap" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="Minimap"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 224.0
+offset_bottom = 224.0
+script = ExtResource("9_fd1j0")
+player_path = NodePath("../../Player")
+map_scale = 1.0
+reveal_radius = 10
+
+[node name="PlayerUI" type="CanvasLayer" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="PlayerUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="PlayerUI/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+size_2d_override = Vector2i(1152, 648)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerUI/SubViewportContainer/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HealthOrb" type="TextureRect" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control"]
+material = SubResource("ShaderMaterial_v45cj")
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -153.0
+offset_right = 128.0
+offset_bottom = -25.0
+grow_vertical = 0
+texture = SubResource("NoiseTexture2D_1hw2b")
+script = ExtResource("11_o24y8")
+
+[node name="ManaOrb" type="TextureRect" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control"]
+material = SubResource("ShaderMaterial_5uxjj")
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -153.0
+offset_bottom = -25.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = SubResource("NoiseTexture2D_1hw2b")
+script = ExtResource("11_o24y8")
+
+[node name="ExperienceBar" type="ProgressBar" parent="PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer" type="HBoxContainer" parent="PlayerUI/SubViewportContainer/SubViewport"]
+offset_left = 474.0
+offset_top = 560.0
+offset_right = 678.0
+offset_bottom = 608.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="Skill1" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+button_label = "R-Click"
+
+[node name="Skill2" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 1
+button_label = "Q"
+
+[node name="Skill3" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 2
+button_label = "E"
+
+[node name="Skill4" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 3
+button_label = "R"
+
+[node name="Skill5" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+visible = false
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 4
+
+[node name="Skill6" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+visible = false
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 5
+
+[node name="Skill7" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+visible = false
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 6
+
+[node name="Skill8" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
+visible = false
+layout_mode = 2
+player_path = NodePath("../../../../../Player")
+slot_index = 7
+
+[node name="ItemTagLayer" type="CanvasLayer" parent="."]
+script = ExtResource("13_1fco1")
+
+[node name="InventoryUI" parent="." instance=ExtResource("14_61y5h")]
+camera_path = NodePath("../IsoTestCamera")
+camera_shift = 0.0
+
+[node name="SkillsUI" parent="." instance=ExtResource("15_k3p7a")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("16_2lj18")]

@@ -24,6 +24,7 @@ icon = ExtResource("9_fvm0h")
 max_stack = 1
 item_type = ""
 equip_slot = "helmet"
+hand_reverse = false
 req_body = 3
 req_mind = 0
 req_soul = 0

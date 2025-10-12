@@ -10,6 +10,7 @@ extends TextureButton
 @export var cooldown_progress_path: NodePath
 @export var active_overlay_path: NodePath
 @export var mana_overlay_path: NodePath
+@export var button_label: String
 
 var _player
 var _cooldown_progress: Range
@@ -25,6 +26,10 @@ func _ready() -> void:
 		_active_overlay = get_node(active_overlay_path)
 	if mana_overlay_path != NodePath():
 		_mana_overlay = get_node(mana_overlay_path)
+	if button_label:
+		$Label.text = button_label
+	else:
+		$Label.visible = false
 	set_process(true)
 
 func _process(_delta: float) -> void:
@@ -33,6 +38,7 @@ func _process(_delta: float) -> void:
 	var skill: Skill = _player.get_skill_slot(slot_index)
 	#print("trying to get skill")
 	texture_normal = skill.icon if skill else null
+	$Container.visible = false if skill and skill.icon else true
 	if skill:
 		tooltip_text = "%s\n%s" % [skill.name, skill.description]
 	else:

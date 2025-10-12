@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://dm231lknbvrok"]
+
+[ext_resource type="Texture2D" uid="uid://b51hvrgkkw600" path="res://images/textures/seamless/stone/floortile_resize.png" id="1_t0426"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oso3o"]
+size = Vector2(4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4wi3s"]
+albedo_texture = ExtResource("1_t0426")
+texture_filter = 0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_oso3o")
+surface_material_override/0 = SubResource("StandardMaterial3D_4wi3s")

@@ -9,39 +9,70 @@ class_name ProjectileSkill
 @export var explosion_effect: PackedScene # Effect placed at explosion center
 @export var on_hit_buff: Buff # Buff or debuff applied to bodies hit
 
+# Flattens any vector onto the XZ plane (removes vertical component).
+func _flat_xz(v: Vector3) -> Vector3:
+	return v - v.project(Vector3.UP)  # same as Vector3(v.x, 0, v.z)
+
 func perform(user):
 	if user == null:
-			return
-	var direction: Vector3
+		return
+
+	# 1) Get raw aim, then flatten it to XZ and normalize.
+	var raw_dir: Vector3
 	if user.has_method("_get_click_direction"):
-			direction = user._get_click_direction()
+		raw_dir = user._get_click_direction()
 	else:
-		direction = -user.global_transform.basis.z
-	user.look_at(user.global_transform.origin + direction, Vector3.UP)
+		raw_dir = -user.global_transform.basis.z
+
+	var dir := _flat_xz(raw_dir)
+	if dir.length_squared() < 1e-6:
+		dir = _flat_xz(-user.global_transform.basis.z)
+	if dir.length_squared() < 1e-6:
+		return
+	dir = dir.normalized()
+
+	# 2) Face only around Y (no pitching).
+	var user_pos = user.global_position
+	var look_target := Vector3(user_pos.x + dir.x, user_pos.y, user_pos.z + dir.z)
+	user.look_at(look_target, Vector3.UP)
+
+	# 3) Spawn and orient the projectile using the flat direction.
 	var projectile = _create_projectile()
-	   # Snapshot all values needed so the projectile can resolve damage even if the user dies
+
+	# --- snapshot damage state (unchanged) ---
 	var base_dict = _build_base_damage_dict(user)
 	var dmg_map = user.stats.compute_damage(base_dict, tags)
 	var buff_snapshot
 	if on_hit_buff:
-			buff_snapshot = on_hit_buff.duplicate(true)
-			if buff_snapshot is DamageOverTimeBuff:
-					var dot_dict = {buff_snapshot.damage_type: Vector2(buff_snapshot.base_damage_low, buff_snapshot.base_damage_high)}
-					var dot_map = user.stats.compute_damage(dot_dict, tags)
-					buff_snapshot.damage_per_second = dot_map[buff_snapshot.damage_type]
+		buff_snapshot = on_hit_buff.duplicate(true)
+		if buff_snapshot is DamageOverTimeBuff:
+			var dot_dict = {buff_snapshot.damage_type: Vector2(buff_snapshot.base_damage_low, buff_snapshot.base_damage_high)}
+			var dot_map = user.stats.compute_damage(dot_dict, tags)
+			buff_snapshot.damage_per_second = dot_map[buff_snapshot.damage_type]
+
 	projectile.set_meta("dmg_map", dmg_map)
 	projectile.set_meta("buff_snapshot", buff_snapshot)
 	projectile.set_meta("aoe_mult", user.stats.get_aoe_multiplier())
 	projectile.set_meta("is_player", user.is_in_group("player"))
 	projectile.body_entered.connect(_on_projectile_body_entered.bind(projectile))
+
 	user.get_parent().add_child(projectile)
-	projectile.global_transform.origin = user.global_transform.origin + direction
-	projectile.position.y += 2
-	var look_target = projectile.global_transform.origin + direction
-	projectile.look_at(look_target, Vector3.UP)
-	var travel_time = range / speed
+
+	# Optional: a small forward spawn offset so it doesn’t clip the user.
+	var spawn_offset := 1.0
+	projectile.global_position = user_pos + dir * spawn_offset
+	projectile.position.y += 2.0  # keep your height offset
+
+	# Keep the projectile’s look horizontal too.
+	var ppos = projectile.global_position
+	projectile.look_at(Vector3(ppos.x + dir.x, ppos.y, ppos.z + dir.z), Vector3.UP)
+
+	# 4) Move purely in XZ while preserving speed (v = range / time).
+	var travel_time := range / speed
+	var target = ppos + dir * range
+
 	var tween = projectile.create_tween()
-	tween.tween_property(projectile, "global_transform:origin", user.global_transform.origin + direction * range, travel_time)
+	tween.tween_property(projectile, "global_position", target, travel_time)
 	tween.connect("finished", Callable(self, "_on_projectile_finished").bind(projectile))
 
 func _create_projectile():

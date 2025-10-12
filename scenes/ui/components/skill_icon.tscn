@@ -10,6 +10,15 @@ cooldown_progress_path = NodePath("TextureProgressBar")
 active_overlay_path = NodePath("ActiveOverlay")
 mana_overlay_path = NodePath("ManaLackOverlay")
 
+[node name="Container" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.244776, 0.244776, 0.244776, 1)
+
 [node name="TextureProgressBar" type="ProgressBar" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -42,3 +51,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.756, 0, 0.142, 0.669)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 57.78
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 2
