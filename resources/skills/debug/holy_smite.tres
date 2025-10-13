@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="HolySmiteSkill" load_steps=4 format=3 uid="uid://dmwf23aptr5pd"]
+[gd_resource type="Resource" script_class="HolySmiteSkill" load_steps=5 format=3 uid="uid://dmwf23aptr5pd"]
 
 [ext_resource type="Script" uid="uid://puo8dhupuxl5" path="res://scripts/skills/holy_smite_skill.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="1_kir4m"]
 [ext_resource type="PackedScene" uid="uid://dd0q57wmkho1s" path="res://scenes/effects/skills/effect_smite.tscn" id="1_yn8mg"]
+[ext_resource type="Texture2D" uid="uid://cxnkiksr7bcs2" path="res://images/skills/smite.png" id="2_ak40a"]
 
 [resource]
 script = ExtResource("1")
@@ -11,6 +12,7 @@ on_hit_effect = ExtResource("1_kir4m")
 explosion_effect = ExtResource("1_yn8mg")
 name = "Holy Smite"
 description = ""
+icon = ExtResource("2_ak40a")
 mana_cost = 8.0
 cooldown = 0.2
 duration = 1.2

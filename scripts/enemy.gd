@@ -319,8 +319,8 @@ func _update_animation() -> void:
 # =========================
 func _apply_lod(player_pos: Vector3) -> void:
 	var d2 := global_position.distance_squared_to(player_pos)
-	var r_active2 := pow(detection_range * 1.5, 2.0)
-	var r_idle2   := pow(detection_range * 5.0, 2.0)
+	var r_active2 := pow(detection_range * 5, 2.0)
+	var r_idle2   := pow(detection_range * 10.0, 2.0)
 
 	if d2 <= r_active2:
 		_set_active()

@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://crurvf0ua8b7g"]
+
+[ext_resource type="Texture2D" uid="uid://ci2fwv7woh6bp" path="res://images/textures/seamless/grass/grass-tile.png" id="1_oysvd"]
+
+[resource]
+albedo_texture = ExtResource("1_oysvd")
+metallic_specular = 0.0
+uv1_scale = Vector3(10, 10, 10)
+texture_filter = 0

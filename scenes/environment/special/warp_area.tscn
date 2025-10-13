@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://b5pylyppnh78j"]
+[gd_scene load_steps=20 format=4 uid="uid://b5pylyppnh78j"]
 
 [ext_resource type="Shader" uid="uid://b2co80h40apxb" path="res://shaders/visual/energy/dynamic_energy.tres" id="1_0w344"]
 [ext_resource type="Script" uid="uid://bhchbiwygqian" path="res://scripts/zones/warp_area.gd" id="1_7hw4v"]
@@ -47,58 +47,62 @@ billboard_keep_scale = true
 [sub_resource type="QuadMesh" id="QuadMesh_nh605"]
 material = SubResource("StandardMaterial3D_cka15")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tqht5"]
-resource_name = "Material"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 0.0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_xd5d1"]
-_surfaces = [{
-"aabb": AABB(-0.01, -0.01, 0, 0.02, 0.02, 0.00540026),
-"format": 34359742465,
-"index_count": 24,
-"index_data": PackedByteArray("AAABAAIAAwACAAEAAgAEAAAAAQAFAAMABgAAAAQABwADAAUABQAGAAcABAAHAAYA"),
-"name": "Material",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 8,
-"vertex_data": PackedByteArray("CtcjvArXI7yt9LA7CtcjPArXI7yt9LA7CtcjPArXI7wAAAAACtcjPArXIzwAAAAACtcjvArXI7wAAAAACtcjPArXIzyt9LA7CtcjvArXIzyt9LA7CtcjvArXIzwAAAAA")
-}]
-blend_shape_mode = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_s2rq6"]
-resource_name = "Cube"
-_surfaces = [{
-"aabb": AABB(-0.01, -0.01, 0, 0.02, 0.02, 0.00540026),
-"attribute_data": PackedByteArray("AAAgPwAAAAAAACA/AACAPgAAAD8AAIA+AAAAPwAAAAAAACA/AABAPwAAID8AAIA/AAAAPwAAgD8AAAA/AABAPwAAID8AAIA+AAAgPwAAAD8AAAA/AAAAPwAAAD8AAIA+AAAgPwAAAD8AACA/AABAPwAAAD8AAEA/AAAAPwAAAD8="),
-"format": 34359742487,
-"index_count": 24,
-"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwA"),
-"material": SubResource("StandardMaterial3D_tqht5"),
-"name": "Material",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 16,
-"vertex_data": PackedByteArray("CtcjvArXI7yt9LA7CtcjPArXI7yt9LA7CtcjPArXI7wAAAAACtcjvArXI7wAAAAACtcjvArXIzyt9LA7CtcjvArXI7yt9LA7CtcjvArXI7wAAAAACtcjvArXIzwAAAAACtcjPArXI7yt9LA7CtcjPArXIzyt9LA7CtcjPArXIzwAAAAACtcjPArXI7wAAAAACtcjPArXIzyt9LA7CtcjvArXIzyt9LA7CtcjvArXIzwAAAAACtcjPArXIzwAAAAA/38AAP9//7//fwAA/3//v/9/AAD/f/+//38AAP9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v////3//f/+/////f/9//7////9//3//v////3//f/+//3////9//7//f////3//v/9/////f/+//3////9//78=")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_xd5d1")
+[sub_resource type="CylinderMesh" id="CylinderMesh_83t5k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11j3v"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_0w344")
-shader_parameter/Energy_Color = Color(1.4, 1.4, 0.664, 1)
+shader_parameter/Energy_Color = Color(1.5, 1.5, 1, 1)
 shader_parameter/Vector2Parameter = Vector2(0.5, 0)
 shader_parameter/Texture2DParameter = ExtResource("3_83t5k")
-shader_parameter/EnergyPower = 0.1
+shader_parameter/EnergyPower = 0.01
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3v32b"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0gxvp"]
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 4.16802, 2),
+"format": 34896613377,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIAAwAFAAEABAACAAYAAwAHAAUACAAEAAYABwAJAAUACAAGAAoABwALAAkADAAIAAoACwANAAkADAAKAA4ACwAPAA0AEAAMAA4ADwARAA0AEAAOABIADwATABEAFAAQABIAEwAVABEAFAASABYAEwAXABUAGAAUABYAFwAZABUAGAAWABoAFwAbABkAHAAYABoAGwAdABkAHAAaAB4AGwAfAB0AIAAcAB4AHwAhAB0AIAAeACIAHwAjACEAJAAgACIAIwAlACEAJAAiACYAIwAnACUAKAAkACYAJwApACUAKAAmACoAJwArACkALAAoACoAKwAtACkALAAqAC4AKwAvAC0AMAAsAC4ALwAxAC0AMAAuADIALwAzADEANAAwADIAMwA1ADEANAAyADYAMwA3ADUAOAA0ADYANwA5ADUAOAA2ADoANwA7ADkAPAA4ADoAOwA9ADkAPAA6AD4AOwA/AD0APwA8AD4APwA+AD0A"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 64,
+"vertex_data": PackedByteArray("/38AAAAAAAD4mP//dQIAAP9///8AAAAA+JgAAHUCAAAGZwAAdQIAAPuw//++CQAABmf//3UCAAD7sAAAvgkAAANPAAC+CQAAHMf//5IVAAADT///vgkAABzHAACSFQAA4jgAAJIVAACB2v//fSUAAOI4//+SFQAAgdoAAH0lAAB9JQAAfSUAAGzq///iOAAAfSX//30lAABs6gAA4jgAAJIVAADiOAAAQPb//wNPAACSFf//4jgAAED2AAADTwAAvgkAAANPAACJ/f//BmcAAL4J//8DTwAAif0AAAZnAAB1AgAABmcAAP//////fwAAdQL//wZnAAD//wAA/38AAAAAAAD/fwAAif3///iYAAAAAP///38AAIn9AAD4mAAAdQIAAPiYAABA9v//+7AAAHUC///4mAAAQPYAAPuwAAC+CQAA+7AAAGzq//8cxwAAvgn///uwAABs6gAAHMcAAJIVAAAcxwAAgdr//4HaAACSFf//HMcAAIHaAACB2gAAfSUAAIHaAAAcx///bOoAAH0l//+B2gAAHMcAAGzqAADiOAAAbOoAAPuw//9A9gAA4jj//2zqAAD7sAAAQPYAAANPAABA9gAA+Jj//4n9AAADT///QPYAAPiYAACJ/QAABmcAAIn9AAD/f/////8AAAZn//+J/QAA/38AAP//AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_n62bx"]
+resource_name = "aura_beam_Cylinder"
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 4.16802, 2),
+"attribute_data": PackedByteArray("////f//3AAD//wAA//f/f//3/3//7wAA//cAAP/v/3//7/9//+cAAP/vAAD/5/9//+f/f//fAAD/5wAA/9//f//f/3//1wAA/98AAP/X/3//1/9//88AAP/XAAD/z/9//8//f//HAAD/zwAA/8f/f//H/3//vwAA/8cAAP+//3//v/9//7cAAP+/AAD/t/9//7f/f/+vAAD/twAA/6//f/+v/3//pwAA/68AAP+n/3//p/9//58AAP+nAAD/n/9//5//f/+XAAD/nwAA/5f/f/+X/3//jwAA/5cAAP+P/3//j/9//4cAAP+PAAD/h/9//4f/f/9/AAD/hwAA/3//f/9//3//dwAA/38AAP93/3//d/9//28AAP93AAD/b/9//2//f/9nAAD/bwAA/2f/f/9n/3//XwAA/2cAAP9f/3//X/9//1cAAP9fAAD/V/9//1f/f/9PAAD/VwAA/0//f/9P/3//RwAA/08AAP9H/3//R/9//z8AAP9HAAD/P/9//z//f/83AAD/PwAA/zf/f/83/3//LwAA/zcAAP8v/3//L/9//ycAAP8vAAD/J/9//yf/f/8fAAD/JwAA/x//f/8f/3//FwAA/x8AAP8X/3//F/9//w8AAP8XAAD/D/9//w//f/8HAAD/DwAA/wf/f/8H/38AAAAA/wcAAAAA/38="),
+"format": 34896613399,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUAGAAZABoAGAAbABkAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEAJAAlACYAJAAnACUAKAApACoAKAArACkALAAtAC4ALAAvAC0AMAAxADIAMAAzADEANAA1ADYANAA3ADUAOAA5ADoAOAA7ADkAPAA9AD4APAA/AD0AQABBAEIAQABDAEEARABFAEYARABHAEUASABJAEoASABLAEkATABNAE4ATABPAE0AUABRAFIAUABTAFEAVABVAFYAVABXAFUAWABZAFoAWABbAFkAXABdAF4AXABfAF0AYABhAGIAYABjAGEAZABlAGYAZABnAGUAaABpAGoAaABrAGkAbABtAG4AbABvAG0AcABxAHIAcABzAHEAdAB1AHYAdAB3AHUAeAB5AHoAeAB7AHkAfAB9AH4AfAB/AH0A"),
+"material": SubResource("StandardMaterial3D_3v32b"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 128,
+"vertex_data": PackedByteArray("/38AAAAA//v4mP//dQL/+/9///8AAP/7+JgAAHUC//v4mAAAdQL+8/uw//++Cf7z+Jj//3UC/vP7sAAAvgn+8/uwAAC+Cf7rHMf//5IV/uv7sP//vgn+6xzHAACSFf7rHMcAAJIV/uOB2v//fSX+4xzH//+SFf7jgdoAAH0l/uOB2gAAfSX/22zq///iOP/bgdr//30l/9ts6gAA4jj/22zqAADiOP/TQPb//wNP/9Ns6v//4jj/00D2AAADT//TQPYAAANP/8uJ/f//Bmf/y0D2//8DT//Lif0AAAZn/8uJ/QAABmf/w///////f//Dif3//wZn/8P//wAA/3//w///AAD/f/+7if3///iY/7v//////3//u4n9AAD4mP+7if0AAPiY/7NA9v//+7D/s4n9///4mP+zQPYAAPuw/7NA9gAA+7D/q2zq//8cx/+rQPb///uw/6ts6gAAHMf/q2zqAAAcx/+jgdr//4Ha/6Ns6v//HMf/o4HaAACB2v+jgdoAAIHa/5scx///bOr/m4Ha//+B2v+bHMcAAGzq/5scxwAAbOr/k/uw//9A9v+THMf//2zq/5P7sAAAQPb/k/uwAABA9v+L+Jj//4n9/4v7sP//QPb/i/iYAACJ/f+L+JgAAIn9/4P/f///////g/iY//+J/f+D/38AAP///4P/fwAA////gwZn//+J/f+D/3///////4MGZwAAif3/gwZnAACJ/f+LA0///0D2/4sGZ///if3/iwNPAABA9v+LA08AAED2/5PiOP//bOr/kwNP//9A9v+T4jgAAGzq/5PiOAAAbOr/m30l//+B2v+b4jj//2zq/5t9JQAAgdr/m30lAACB2v+jkhX//xzH/6N9Jf//gdr/o5IVAAAcx/+jkhUAABzH/6u+Cf//+7D/q5IV//8cx/+rvgkAAPuw/6u+CQAA+7D/s3UC///4mP+zvgn///uw/7N1AgAA+Jj/s3UCAAD4mP+7AAD///9//7t1Av//+Jj/uwAAAAD/f/+7AAAAAP9//8N1Av//Bmf/wwAA////f//DdQIAAAZn/8N1AgAABmf/y74J//8DT//LdQL//wZn/8u+CQAAA0//y74JAAADT//TkhX//+I4/9O+Cf//A0//05IVAADiOP/TkhUAAOI4/9t9Jf//fSX/25IV///iOP/bfSUAAH0l/9t9JQAAfSX+4+I4//+SFf7jfSX//30l/uPiOAAAkhX+4+I4AACSFf7rA0///74J/uviOP//khX+6wNPAAC+Cf7rA08AAL4J/vMGZ///dQL+8wNP//++Cf7zBmcAAHUC/vMGZwAAdQL/+/9///8AAP/7Bmf//3UC//v/fwAAAAD/+/9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_0gxvp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_83t5k"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_0w344")
+shader_parameter/Energy_Color = Color(1.5, 1.5, 1, 1)
+shader_parameter/Vector2Parameter = Vector2(0.5, 0)
+shader_parameter/Texture2DParameter = ExtResource("3_83t5k")
+shader_parameter/EnergyPower = 1.0
 
 [node name="WarpArea" type="Node3D" node_paths=PackedStringArray("warp_vfx", "warp_vfx_mesh")]
 script = ExtResource("1_7hw4v")
 warp_vfx = NodePath("WarpVFX")
-warp_vfx_mesh = NodePath("WarpEnergyVFX")
+warp_vfx_mesh = NodePath("WarpEnergyVFX2")
 
 [node name="WarpTrigger" type="Area3D" parent="."]
 
@@ -120,10 +124,22 @@ process_material = SubResource("ParticleProcessMaterial_11j3v")
 draw_pass_1 = SubResource("QuadMesh_nh605")
 
 [node name="WarpEnergyVFX" type="MeshInstance3D" parent="."]
-transform = Transform3D(100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0, 0, 0)
-mesh = SubResource("ArrayMesh_s2rq6")
+visible = false
+mesh = SubResource("CylinderMesh_83t5k")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_11j3v")
+
+[node name="WarpEnergyVFX2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.81077, 0)
+mesh = SubResource("ArrayMesh_n62bx")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_11j3v")
+
+[node name="WarpEnergyVFX3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.07, 0, 0, 0, 1, 0, -0.0884479, 0)
+mesh = SubResource("ArrayMesh_n62bx")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_83t5k")
 
 [connection signal="body_entered" from="WarpTrigger" to="." method="_on_warp_trigger_body_entered"]
 [connection signal="body_entered" from="EnergyTrigger" to="." method="_on_energy_trigger_body_entered"]

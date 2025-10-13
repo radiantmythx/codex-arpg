@@ -1,9 +1,25 @@
-[gd_scene load_steps=11 format=3 uid="uid://cfqw1nskvjgow"]
+[gd_scene load_steps=20 format=3 uid="uid://cfqw1nskvjgow"]
 
 [ext_resource type="Texture2D" uid="uid://ci2fwv7woh6bp" path="res://images/textures/seamless/grass/grass-tile.png" id="1_4ghj7"]
+[ext_resource type="Script" uid="uid://bita5i116knip" path="res://scripts/zones/gridLevel.gd" id="1_myc2q"]
 [ext_resource type="ArrayMesh" uid="uid://bkvoa4lc61crv" path="res://meshes/environ/trees/pine_01.mesh" id="2_j7q4n"]
+[ext_resource type="Script" uid="uid://c8lcmay4n03hh" path="res://resources/gridLevels/levelmeta.gd" id="2_wndl2"]
 [ext_resource type="PackedScene" uid="uid://b5pylyppnh78j" path="res://scenes/environment/special/warp_area.tscn" id="3_myc2q"]
 [ext_resource type="ArrayMesh" uid="uid://cq013g4gvfgu0" path="res://meshes/environ/grass/grass_bush.mesh" id="4_j7q4n"]
+[ext_resource type="Shader" uid="uid://w7i64xdgoqb8" path="res://shaders/spatial/dirt.gdshader" id="4_kld27"]
+[ext_resource type="Texture2D" uid="uid://dmpcbu5ktqe15" path="res://images/textures/seamless/dirt/dirt_resized.png" id="5_6dol4"]
+[ext_resource type="Texture2D" uid="uid://bmfw47oxllin6" path="res://images/noise_vfx/Grainy/Grainy 4 - 128x128.png" id="5_fl6mg"]
+[ext_resource type="PackedScene" uid="uid://dbvs1711t1a0" path="res://scenes/enemy/goblin/basic_goblin.tscn" id="10_tbipv"]
+
+[sub_resource type="Resource" id="Resource_kld27"]
+script = ExtResource("2_wndl2")
+title = "Unknown Area"
+subtitle = ""
+biome = ""
+difficulty = 1
+seed = 0
+notes = ""
+metadata/_custom_type_script = "uid://c8lcmay4n03hh"
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_78ruu"]
 size = Vector2(50, 50)
@@ -13,6 +29,24 @@ albedo_texture = ExtResource("1_4ghj7")
 metallic_specular = 0.0
 uv1_scale = Vector3(10, 10, 10)
 texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kld27"]
+size = Vector2(15, 50)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6dol4"]
+render_priority = -10
+shader = ExtResource("4_kld27")
+shader_parameter/road_tex = ExtResource("5_6dol4")
+shader_parameter/edge_noise_tex = ExtResource("5_fl6mg")
+shader_parameter/uv_scale_x = 2.5
+shader_parameter/uv_scale_y = 10.0
+shader_parameter/tint = Vector3(1, 1, 1)
+shader_parameter/roughness_override = 1.0
+shader_parameter/edge_width_uv = 0.039
+shader_parameter/edge_softness = 1.73
+shader_parameter/edge_noise_scale = 0.325
+shader_parameter/edge_noise_strength = 0.775
+shader_parameter/lift_mm = 2.0
 
 [sub_resource type="MultiMesh" id="MultiMesh_7g1qm"]
 transform_format = 1
@@ -42,6 +76,8 @@ fog_sky_affect = 0.0
 volumetric_fog_anisotropy = 0.42
 
 [node name="BaseLevel" type="Node3D"]
+script = ExtResource("1_myc2q")
+meta = SubResource("Resource_kld27")
 
 [node name="Main" type="Node3D" parent="."]
 
@@ -49,6 +85,11 @@ volumetric_fog_anisotropy = 0.42
 mesh = SubResource("PlaneMesh_78ruu")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_o6b1p")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Main"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0303106, 0)
+mesh = SubResource("PlaneMesh_kld27")
+surface_material_override/0 = SubResource("ShaderMaterial_6dol4")
 
 [node name="Background" type="Node3D" parent="."]
 
@@ -172,3 +213,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 0)
 
 [node name="FromNorth" type="Marker3D" parent="Spawn"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19)
+
+[node name="Enemy" parent="." instance=ExtResource("10_tbipv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.262, 0, 7.56413)

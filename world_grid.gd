@@ -7,6 +7,15 @@ var level_container: Node3D
 var player: PlayerContainer
 var _loading := false
 
+var _warp_enabled := true
+
+func can_accept_warp() -> bool:
+	return _warp_enabled and not _loading
+
+func _temp_disable_warp(seconds := 0.12) -> void:
+	_warp_enabled = false
+	get_tree().create_timer(seconds).timeout.connect(func(): _warp_enabled = true)
+
 func _level_path(cell: Vector2i) -> String:
 	return "res://scenes/gridLevels/%d_%d.tscn" % [cell.x, cell.y]
 	
@@ -18,7 +27,7 @@ func load_level(cell: Vector2i, spawn_from_dir: String = "") -> void:
 	if _loading:
 		return
 	_loading = true
-
+	_temp_disable_warp(0.25)  # blocks any re-entrance during load and right after
 	var path := _level_path(cell)
 	if not FileAccess.file_exists(path):
 		print("No level found!")
@@ -73,13 +82,15 @@ func load_level(cell: Vector2i, spawn_from_dir: String = "") -> void:
 
 	# Optional: fade in, resume input
 	# await _fade_in()
-
+	await get_tree().physics_frame  # let transforms settle one frame
+	_temp_disable_warp(0.12)        # short grace window after spawn
 	_loading = false
 
 func request_warp(offset: Vector2i, enter_from: String) -> void:
-	var target := current_cell + offset
-	print("Attempting to warp to ", target)
-	load_level(target, enter_from)
+	if(!_loading):
+		var target := current_cell + offset
+		print("We are in ", current_cell, " and attempting to warp to ", target)
+		load_level(target, enter_from)
 	
 func _face_player_for_entry(enter_from: String) -> void:
 	if not player:

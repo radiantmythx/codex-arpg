@@ -10,13 +10,16 @@ var _energy_mat:Material
 var active_energy:bool = false
 var _player
 
+var burn_warp = false
+
 
 func _ready():
+	burn_warp = false
 	warp_vfx.visible=false
 	_energy_mat = warp_vfx_mesh.get_active_material(0)
 	if _energy_mat and _energy_mat is ShaderMaterial:
 		_energy_mat = _energy_mat as ShaderMaterial
-		_energy_mat.set_shader_parameter("Energy Power", 0.1)
+		_energy_mat.set_shader_parameter("Energy Power", 0.01)
 	if cell_offset == Vector2i():
 		match direction:
 			"North": cell_offset = Vector2i(0, 1)
@@ -34,7 +37,9 @@ func _process(delta):
 
 
 func _on_warp_trigger_body_entered(body):
+	print("Body has entered!")
 	if(body.is_in_group("player")):
+		if not WorldGrid.can_accept_warp(): return
 		WorldGrid.request_warp(cell_offset, direction)
 
 func _on_energy_trigger_body_entered(body):
@@ -42,11 +47,11 @@ func _on_energy_trigger_body_entered(body):
 		warp_vfx.visible = true
 		active_energy = true
 		_player = body
-		_energy_mat.set_shader_parameter("EnergyPower", 0.1)
+		_energy_mat.set_shader_parameter("EnergyPower", 0.01)
 
 
 func _on_energy_trigger_body_exited(body):
 	if(body.is_in_group("player")):
 		warp_vfx.visible = false
 		active_energy = false
-		_energy_mat.set_shader_parameter("EnergyPower", 0.1)
+		_energy_mat.set_shader_parameter("EnergyPower", 0.01)

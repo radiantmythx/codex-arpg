@@ -115,6 +115,11 @@ cam_orbit={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="Player-General"
+3d_physics/layer_2="Camera"
+
 [run]
 
 main_scene="res://scenes/Main.tscn"

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="BasicMeleeAttackSkill" load_steps=3 format=3 uid="uid://c6vfxp44eef8n"]
+[gd_resource type="Resource" script_class="BasicMeleeAttackSkill" load_steps=4 format=3 uid="uid://c6vfxp44eef8n"]
 
 [ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="1_kwj4y"]
+[ext_resource type="Texture2D" uid="uid://cimjyee5mmkh1" path="res://images/skills/punch.png" id="1_yf1hm"]
 [ext_resource type="Script" uid="uid://b6mncmd6v4xbk" path="res://scripts/skills/basic_melee_attack_skill.gd" id="2_yf1hm"]
 
 [resource]
@@ -10,6 +11,7 @@ angle = 45.0
 on_hit_effect = ExtResource("1_kwj4y")
 name = "Punch"
 description = ""
+icon = ExtResource("1_yf1hm")
 mana_cost = 0.0
 cooldown = 1.0
 duration = 1.0

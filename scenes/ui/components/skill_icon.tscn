@@ -4,6 +4,7 @@
 
 [node name="Skill1" type="TextureButton"]
 process_mode = 3
+texture_filter = 1
 custom_minimum_size = Vector2(48, 48)
 script = ExtResource("1_ak7h1")
 cooldown_progress_path = NodePath("TextureProgressBar")
