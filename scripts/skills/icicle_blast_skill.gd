@@ -2,7 +2,7 @@ extends ProjectileSkill
 class_name IcicleBlastSkill
 
 const BuffInst = preload("res://scripts/skills/buff.gd")
-const StatsInst = preload("res://scripts/stats.gd")
+const StatsInst = preload("res://scripts/player/stats.gd")
 
 func _init():
 	on_hit_buff = BuffInst.new()

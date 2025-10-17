@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="DropTable" load_steps=7 format=3 uid="uid://b20hhmr07q8nx"]
 
-[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/drop_table.gd" id="1"]
+[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/enemy/drop_table.gd" id="1"]
 [ext_resource type="Resource" uid="uid://c0n8red0j2huk" path="res://resources/items/equipment/armor/iron_test/Iron_Helmet.tres" id="2_qpwau"]
 [ext_resource type="Resource" uid="uid://cwwkpoowfo5u6" path="res://resources/items/equipment/armor/iron_test/Iron_Platebody.tres" id="3_8q48i"]
 [ext_resource type="Resource" uid="uid://dqt40e75y6d5r" path="res://resources/items/equipment/armor/iron_test/Iron_Platelegs.tres" id="4_lqisg"]

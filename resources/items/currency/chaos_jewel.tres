@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_bvx6a"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="1_nbuw5"]
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_6rvwu"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_6rvwu"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_wd3ld"]
 [ext_resource type="Texture2D" uid="uid://c6b0jffiv5j14" path="res://images/items/currency/chaos_jewel.png" id="4_bvx6a"]
 

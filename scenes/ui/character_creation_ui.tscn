@@ -1,0 +1,370 @@
+[gd_scene load_steps=24 format=3 uid="uid://0m5qyp2kmvlh"]
+
+[ext_resource type="Script" uid="uid://bapd74qlbypxc" path="res://scripts/ui/character_creation_ui.gd" id="1_6jk6x"]
+[ext_resource type="StyleBox" uid="uid://c0bokaeuihfjf" path="res://ui_themes/conversation_dialog_panel.tres" id="1_7nphp"]
+[ext_resource type="FontFile" uid="uid://dcqsossrbmy6p" path="res://fonts/Bayone.ttf" id="2_mx5pt"]
+[ext_resource type="PackedScene" uid="uid://bxnn0o7i12kxo" path="res://scenes/ui/components/scroll_button.tscn" id="3_iwjqs"]
+[ext_resource type="PackedScene" uid="uid://c5t5b73hjll6j" path="res://scenes/ui/components/race_select_button.tscn" id="3_wawec"]
+[ext_resource type="Texture2D" uid="uid://xl0iscee30i2" path="res://images/textures/seamless/wood/planks_resize.png" id="4_4blbd"]
+[ext_resource type="PackedScene" uid="uid://cvq3sgcgldbf0" path="res://scenes/player/race/elf_ears.tscn" id="5_wawec"]
+[ext_resource type="FontFile" uid="uid://bgbggtda0ung3" path="res://fonts/Isenheim_Regulier.otf" id="6_5t4fb"]
+[ext_resource type="PackedScene" uid="uid://c4gh2syifbhaf" path="res://scenes/player/race/gnome_hat.tscn" id="6_6jk6x"]
+[ext_resource type="PackedScene" uid="uid://ws5uqw6u4rdm" path="res://scenes/player/race/goblin_ears.tscn" id="7_xlej6"]
+[ext_resource type="PackedScene" uid="uid://btr8gsy6va1hp" path="res://scenes/player/race/goblin_nose.tscn" id="8_310wj"]
+[ext_resource type="PackedScene" uid="uid://f0t8th6wfgvc" path="res://scenes/ui/components/gem_select_button.tscn" id="10_310wj"]
+[ext_resource type="PackedScene" uid="uid://br5vd55phq8wi" path="res://scenes/ui/components/body_mod_slider.tscn" id="11_5aegf"]
+[ext_resource type="Texture2D" uid="uid://dflbs6oxc7o3p" path="res://images/items/gems/str_gem.png" id="12_byk28"]
+[ext_resource type="Texture2D" uid="uid://bnfht0a5jy4hi" path="res://images/items/gems/int_gem.png" id="13_4blbd"]
+[ext_resource type="Texture2D" uid="uid://dyj5r5lp0dpf1" path="res://images/items/gems/dex_gem.png" id="14_5aegf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5aegf"]
+texture = ExtResource("4_4blbd")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alo7k"]
+bg_color = Color(0.230101, 0.242208, 0.224086, 0.326)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.435235, 0.330058, 0.0916872, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmc46"]
+bg_color = Color(0.6, 0.6, 0.6, 0.249)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s8h4e"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mx5pt"]
+font = ExtResource("2_mx5pt")
+font_size = 32
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ad4my"]
+bg_color = Color(0.464, 0.394, 0.209, 0.309)
+
+[sub_resource type="LabelSettings" id="LabelSettings_iwjqs"]
+font = ExtResource("2_mx5pt")
+font_size = 32
+font_color = Color(0.975766, 0.966948, 0.865573, 1)
+outline_size = 1
+outline_color = Color(0.360711, 0.0316252, 0.0100429, 1)
+
+[node name="CharacterCreationUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6jk6x")
+
+[node name="CreationContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreationHBox" type="HBoxContainer" parent="CreationContainer"]
+layout_mode = 2
+
+[node name="CharCreate_LeftPanel" type="PanelContainer" parent="CreationContainer/CreationHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("1_7nphp")
+
+[node name="MarginContainer" type="MarginContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TabContainer" type="TabContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mx5pt")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/tabbar_background = SubResource("StyleBoxTexture_5aegf")
+theme_override_styles/panel = SubResource("StyleBoxFlat_alo7k")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tmc46")
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_s8h4e")
+current_tab = 1
+
+[node name="Character" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Spacer" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="NameRow" type="HBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character"]
+layout_mode = 2
+
+[node name="Spacer2" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/NameRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/NameRow"]
+texture_filter = 1
+layout_mode = 2
+text = "Name:"
+label_settings = SubResource("LabelSettings_mx5pt")
+
+[node name="Spacer3" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/NameRow"]
+visible = false
+custom_minimum_size = Vector2(7.53, 32)
+layout_mode = 2
+
+[node name="TextEdit" type="TextEdit" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/NameRow"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/background_color = Color(0.309842, 0.246584, 0.179205, 1)
+theme_override_fonts/font = ExtResource("2_mx5pt")
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Character Name"
+scroll_fit_content_height = true
+
+[node name="Spacer4" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/NameRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="Spacer4" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="RaceGroup" type="PanelContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ad4my")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup"]
+layout_mode = 2
+
+[node name="RaceSelectHuman" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+button_pressed = true
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Human"
+hover_text = "Capable of nearly anything they set their mind to, humans are the most varied race within The Great Dream. \\n\\nHumans can be found in a variety of societies, professions, and trades, and seem to get along with nearly all other diplomatic races to some degree. \\n\\nHumans make excellent warriors, mages, archers, or any combination of the three. \\n\\nHumanity's capacity is its greatest boon and threat, and their lust for conquest has cemented them as the de-facto race in Eldrath."
+
+[node name="RaceSelectHuman2" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Elf"
+hover_text = "Previously uniting Eldrath under one kingdom, Elves are known for their cunning dexterity and craftsmanship. Elves move slightly faster than all other races, but lack in physical strength.\\n\\nElves make excellent archers and are known to rely on magic in sticky situations."
+added_race_visuals = Array[PackedScene]([ExtResource("5_wawec")])
+
+[node name="RaceSelectHuman3" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Orc"
+hover_text = "Hailing from the southern mountain ranges of Eldrath, Orcs are steadfast, sturdy, and strong. Orcs favor physical strength above all else, and care little for magic and archery.\\n\\nOrcs make phenomenal warriors, and despite moving slightly slower than other races, also take a percentage less damage from all sources."
+
+[node name="RaceSelectHuman4" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Lich"
+hover_text = "Either through divine punishment or necromantic sorcery, a Lich is an undead Human capable of powerful magic.\\n\\nLich's are known for having weak elemental defense, but are nearly immune to physical damage. Sources of fire damage will quickly evaporate a Lich."
+
+[node name="RaceSelectHuman5" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Gnome"
+hover_text = "Hailing from the Northern Gnomish Fields of Eldrath, Gnomes are a fickle race who would prefer to stay out of worldly matters.\\n\\nGnomes primarily defend their territory through ranged attacks, and highly favor both archery and magic as methods of offense and defense.\\n\\nGnomes are also smaller than all other races, and therefore harder to hit. They refuse to remove their hats."
+added_race_visuals = Array[PackedScene]([ExtResource("6_6jk6x")])
+
+[node name="RaceSelectHuman6" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Dwarf"
+hover_text = "A stoutly race with a keen ability for finding valuable items. Dwarves move slightly slower than some other races, but are considered masters of explosive magic on top of possessing unnatural strength for their stature."
+
+[node name="RaceSelectHuman7" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
+layout_mode = 2
+information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+label_text = "Goblin"
+hover_text = "While typically considered fodder by some other races, Goblins are surprisingly tactile creatures, possessing surprising amounts of strength and dexterity for their percieved peskiness.\\n\\nGoblins are also known to make extremely dangerous foes when properly trained and prepared, and have known to be some of the most fierce warriors and archers when they are driven by those with superior intellect."
+added_race_visuals = Array[PackedScene]([ExtResource("7_xlej6"), ExtResource("8_310wj")])
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+alignment = 1
+
+[node name="NextButton" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/HBoxContainer" instance=ExtResource("3_iwjqs")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+label_text = "Next"
+
+[node name="Spacer3" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="Body" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+layout_mode = 2
+alignment = 1
+metadata/_tab_index = 1
+
+[node name="BodyModSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Tits"
+shape_key_mod_string = "ChestSize"
+
+[node name="BodyModSlider2" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Ass"
+shape_key_mod_string = "ButtSize"
+
+[node name="BodyModSlider3" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Waist"
+shape_key_mod_string = "WaistSize"
+
+[node name="BodyModSlider4" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Head"
+shape_key_mod_string = "HeadSize"
+
+[node name="BodyModSlider5" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Leg Thicc"
+shape_key_mod_string = "LegThick"
+
+[node name="BodyModSlider6" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Arm Thicc"
+shape_key_mod_string = "ArmSize"
+
+[node name="BodyModSlider7" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Foot Fetish"
+shape_key_mod_string = "FootSize"
+
+[node name="Gem" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="GemSelectBody" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem" node_paths=PackedStringArray("information_text_area") instance=ExtResource("10_310wj")]
+layout_mode = 2
+size_flags_horizontal = 1
+information_text_area = NodePath("../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+button_image = ExtResource("12_byk28")
+hover_text = "The Body Gem is imbued with the power of strength.\\n\\nChoosing this gem will select Fighter as your starting class."
+
+[node name="GemSelectMind" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem" node_paths=PackedStringArray("information_text_area") instance=ExtResource("10_310wj")]
+layout_mode = 2
+size_flags_horizontal = 1
+information_text_area = NodePath("../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+button_image = ExtResource("13_4blbd")
+hover_text = "The Mind Gem is imbued with the power of intelligence.\\n\\nChoosing this gem will select Spellslinger as your starting class."
+
+[node name="GemSelectSoul" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem" node_paths=PackedStringArray("information_text_area") instance=ExtResource("10_310wj")]
+layout_mode = 2
+size_flags_horizontal = 1
+information_text_area = NodePath("../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
+button_image = ExtResource("14_5aegf")
+hover_text = "The Soul Gem is imbued with the power of swiftness and cunning.\\n\\nChoosing this gem will select Bowman as your starting class."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+alignment = 1
+
+[node name="NextButton" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem/HBoxContainer" instance=ExtResource("3_iwjqs")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+label_text = "Next"
+
+[node name="Spacer3" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="Spacer" type="TextureRect" parent="CreationContainer/CreationHBox"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Spacer2" type="TextureRect" parent="CreationContainer/CreationHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CharCreate_RightPanel" type="PanelContainer" parent="CreationContainer/CreationHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("1_7nphp")
+
+[node name="MarginContainer" type="MarginContainer" parent="CreationContainer/CreationHBox/CharCreate_RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CharCreationTitle" type="Label" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+text = "~ Information ~"
+label_settings = SubResource("LabelSettings_iwjqs")
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 16.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_alo7k")
+
+[node name="MarginContainer" type="MarginContainer" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="InformationTextArea" type="RichTextLabel" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("6_5t4fb")
+text = "If I type a ton of text into this box, I'm kind of hoping that the text automatically wraps around like this."
+fit_content = true
+
+[node name="Spacer4" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="PlayButton" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer" instance=ExtResource("3_iwjqs")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+label_text = "Play"
+
+[node name="Spacer3" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[connection signal="pressed" from="CreationContainer/CreationHBox/CharCreate_RightPanel/MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

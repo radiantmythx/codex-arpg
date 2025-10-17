@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_jexwy"]
 [ext_resource type="Resource" uid="uid://ci4rw5dhgg83j" path="res://resources/affix_groups/boots.tres" id="2_6q6wb"]
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_jwcw5"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_jwcw5"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_6q6wb"]
 [ext_resource type="Resource" uid="uid://dlkbvo4xa0non" path="res://resources/affixes/holy_damage_melee_inc.tres" id="3_jwcw5"]
 [ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="4_k17q1"]

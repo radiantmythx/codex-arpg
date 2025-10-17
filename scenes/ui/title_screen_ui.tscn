@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://704vvp6mbtki"]
+
+[ext_resource type="Texture2D" uid="uid://bkmf26md0twq0" path="res://images/ui/ARPGLogo.png" id="1_rncvu"]
+[ext_resource type="Script" uid="uid://dq5du0cmcjb5j" path="res://scripts/ui/title_screen_ui.gd" id="1_yb6v0"]
+[ext_resource type="PackedScene" uid="uid://bkn4uhigx0l7n" path="res://scenes/specialLevels/character_creation.tscn" id="2_sk444"]
+[ext_resource type="PackedScene" uid="uid://bxnn0o7i12kxo" path="res://scenes/ui/components/scroll_button.tscn" id="4_sk444"]
+
+[node name="TitleScreenUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yb6v0")
+character_creation_scene = ExtResource("2_sk444")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+size_flags_stretch_ratio = 2.32
+texture = ExtResource("1_rncvu")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+alignment = 1
+
+[node name="NewGameButton" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_sk444")]
+layout_mode = 2
+label_text = "New"
+
+[node name="spacer" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="LoadGameButton" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_sk444")]
+layout_mode = 2
+label_text = "Load"
+
+[node name="spacer2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="NewGameButton3" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_sk444")]
+layout_mode = 2
+label_text = "Settings"
+
+[node name="spacer3" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="NewGameButton4" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_sk444")]
+layout_mode = 2
+label_text = "Quit"
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Version: 0.01A"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/LoadGameButton" to="." method="_on_load_game_button_pressed"]

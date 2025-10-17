@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://by2r3chpnqgnh" path="res://resources/items/currency/culling_jewel.tres" id="3_bhce0"]
 [ext_resource type="Resource" uid="uid://du6v6hhtgimgw" path="res://resources/items/currency/elevating_jewel.tres" id="4_sen6g"]
 [ext_resource type="Resource" uid="uid://b82ml78f12266" path="res://resources/items/currency/tempering_jewel.tres" id="5_kxo36"]
-[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/drop_table.gd" id="6_kh700"]
+[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/enemy/drop_table.gd" id="6_kh700"]
 
 [resource]
 script = ExtResource("6_kh700")

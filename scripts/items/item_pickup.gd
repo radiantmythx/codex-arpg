@@ -18,11 +18,20 @@ func _ready() -> void:
 	connect("mouse_exited", _on_mouse_exited)
 	connect("input_event", _on_input_event)
 
-	_layer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
+	if(item):
+		set_new_item(item)
 
+	_notifier = VisibleOnScreenNotifier3D.new()
+	add_child(_notifier)
+	_notifier.connect("screen_exited", Callable(self, "_on_screen_exited"))
+	_notifier.connect("screen_entered", Callable(self, "_on_screen_entered"))
+
+func set_new_item(newItem:Item):
+	item=newItem
+	_layer = get_tree().get_root().get_node_or_null(item_tag_layer_path)
 	_tag = ItemTag.new()
 	_tag.target = self
-	_tag.set_item(item)
+	_tag.set_item(newItem)
 	await get_tree().process_frame
 	if _layer:
 		_layer.add_tag(_tag)
@@ -31,11 +40,6 @@ func _ready() -> void:
 		add_child(_tag) # fallback so tag still appears during testing
 		_tag_visible = true
 	_tag.connect("pressed", Callable(self, "_collect"))
-
-	_notifier = VisibleOnScreenNotifier3D.new()
-	add_child(_notifier)
-	_notifier.connect("screen_exited", Callable(self, "_on_screen_exited"))
-	_notifier.connect("screen_entered", Callable(self, "_on_screen_entered"))
 
 func _on_body_entered(body: Node) -> void:
 	if body.has_method("add_item"):

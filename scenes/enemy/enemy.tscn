@@ -1,8 +1,8 @@
 [gd_scene load_steps=47 format=4 uid="uid://d3epfdpy5wkx5"]
 
-[ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="1_gl05p"]
+[ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy/enemy.gd" id="1_gl05p"]
 [ext_resource type="Resource" uid="uid://dimoq3yt1wxxo" path="res://resources/skills/rune_skills/rune_strike.tres" id="2_cwlon"]
-[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/drop_table.gd" id="3_nbhyu"]
+[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/enemy/drop_table.gd" id="3_nbhyu"]
 [ext_resource type="Resource" uid="uid://b20hhmr07q8nx" path="res://resources/drop_tables/basic.tres" id="4_13gj6"]
 [ext_resource type="Script" uid="uid://b8wt33xi4jv8a" path="res://scripts/ui/healthbar.gd" id="5_4efjx"]
 

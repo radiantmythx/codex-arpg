@@ -7,9 +7,9 @@
 [ext_resource type="Script" uid="uid://cieo8o73ixbiv" path="res://scripts/skills/skill.gd" id="4_kaoqo"]
 [ext_resource type="Resource" uid="uid://c6vfxp44eef8n" path="res://resources/skills/unequip/unequip_punch.tres" id="5_lld7h"]
 [ext_resource type="Resource" uid="uid://dbpb46a7kta7x" path="res://resources/skills/debug/fireball.tres" id="6_lofpf"]
-[ext_resource type="Resource" uid="uid://dmwf23aptr5pd" path="res://resources/skills/debug/holy_smite.tres" id="7_lb7mu"]
 [ext_resource type="Resource" uid="uid://mqpc1mqg5rqw" path="res://resources/skills/debug/haste.tres" id="8_tulue"]
 [ext_resource type="Script" uid="uid://depd4ivprvjp1" path="res://scripts/ui/minimap.gd" id="9_fd1j0"]
+[ext_resource type="Resource" uid="uid://bmwetudyv7ddi" path="res://resources/skills/debug/debug_frostblink.tres" id="9_lld7h"]
 [ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="10_mv1jo"]
 [ext_resource type="Script" uid="uid://bodjkipcd4jj7" path="res://scripts/ui/components/health_orb.gd" id="11_o24y8"]
 [ext_resource type="PackedScene" uid="uid://cuaf4c562utg5" path="res://scenes/ui/components/skill_icon.tscn" id="12_cjw2f"]
@@ -105,9 +105,12 @@ shader_parameter/liquid_noise_intensity = 0.45
 
 [sub_resource type="LabelSettings" id="LabelSettings_lofpf"]
 
-[node name="PlayerContainer" type="Node3D" node_paths=PackedStringArray("player")]
+[node name="PlayerContainer" type="Node3D" node_paths=PackedStringArray("player", "player_cam", "player_springarm", "ui_nodes")]
 script = ExtResource("1_vtu4o")
 player = NodePath("Player")
+player_cam = NodePath("CameraRoot/SpringArm3D/Camera3D")
+player_springarm = NodePath("CameraRoot/SpringArm3D")
+ui_nodes = [NodePath("Minimap"), NodePath("PlayerUI"), NodePath("ItemTagLayer"), NodePath("EnemyTargetLayer")]
 
 [node name="CameraRoot" type="Node3D" parent="." node_paths=PackedStringArray("look_camera")]
 script = ExtResource("1_j6pt8")
@@ -119,7 +122,10 @@ aim_smooth_time = 0.005
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraRoot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.27109, 0)
 collision_mask = 2
+spring_length = 10.0
 script = ExtResource("2_vtu4o")
+min_pitch_deg = -73.0
+max_pitch_deg = -2.7
 max_zoom = 100.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraRoot/SpringArm3D"]
@@ -129,11 +135,10 @@ fov = 37.8493
 far = 200.0
 
 [node name="Player" parent="." instance=ExtResource("3_yqvrv")]
-debug_known_skills = Array[ExtResource("4_kaoqo")]([ExtResource("5_lld7h"), ExtResource("6_lofpf"), ExtResource("7_lb7mu"), ExtResource("8_tulue")])
+debug_known_skills = Array[ExtResource("4_kaoqo")]([ExtResource("5_lld7h"), ExtResource("6_lofpf"), ExtResource("8_tulue"), ExtResource("9_lld7h")])
 inventory_ui_path = NodePath("../InventoryUI")
-inventory_camera_path = NodePath("../IsoTestCamera")
 skills_ui_path = NodePath("../SkillsUI")
-target_display_path = NodePath("../CanvasLayer/EnemyTargetDisplay")
+target_display_path = NodePath("../EnemyTargetLayer/EnemyTargetDisplay")
 health_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/HealthOrb")
 mana_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/ManaOrb")
 experience_bar_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/ExperienceBar")
@@ -141,17 +146,6 @@ base_body = 5
 base_mind = 5
 base_soul = 5
 base_luck = 5
-
-[node name="IsoTestCamera" type="Camera3D" parent="." node_paths=PackedStringArray("look_camera")]
-transform = Transform3D(0.707107, -0.425547, 0.564721, 0, 0.798636, 0.601814, -0.707107, -0.425547, 0.564721, 12.7672, 15.493, 13.8541)
-visible = false
-fov = 40.0
-size = 19.613
-near = 0.005
-far = 3779.05
-script = ExtResource("1_j6pt8")
-follow_target_path = NodePath("../Player")
-look_camera = NodePath(".")
 
 [node name="Minimap" type="CanvasLayer" parent="."]
 
@@ -332,12 +326,11 @@ slot_index = 7
 script = ExtResource("13_1fco1")
 
 [node name="InventoryUI" parent="." instance=ExtResource("14_61y5h")]
-camera_path = NodePath("../IsoTestCamera")
 camera_shift = 0.0
 
 [node name="SkillsUI" parent="." instance=ExtResource("15_k3p7a")]
 visible = false
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="EnemyTargetLayer" type="CanvasLayer" parent="."]
 
-[node name="EnemyTargetDisplay" parent="CanvasLayer" instance=ExtResource("16_2lj18")]
+[node name="EnemyTargetDisplay" parent="EnemyTargetLayer" instance=ExtResource("16_2lj18")]

@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://br5vd55phq8wi"]
+
+[ext_resource type="Script" uid="uid://d2jra07awvltc" path="res://scripts/ui/components/body_mod_slider.gd" id="1_qreqa"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rw3pj"]
+
+[node name="BodyModSlider" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_qreqa")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Mod Text"
+label_settings = SubResource("LabelSettings_rw3pj")
+horizontal_alignment = 1
+
+[node name="Spacer2" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="HSlider" type="HSlider" parent="."]
+custom_minimum_size = Vector2(181.14, 0)
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+page = 0.1
+
+[node name="Spacer" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]

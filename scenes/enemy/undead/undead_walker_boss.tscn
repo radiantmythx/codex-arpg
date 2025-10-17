@@ -1,8 +1,8 @@
 [gd_scene load_steps=48 format=4 uid="uid://duwdxcbr6u8wn"]
 
-[ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy.gd" id="1_3tdt5"]
+[ext_resource type="Script" uid="uid://ksacv1pfwael" path="res://scripts/enemy/enemy.gd" id="1_3tdt5"]
 [ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="2_b8u7y"]
-[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/drop_table.gd" id="3_syp5f"]
+[ext_resource type="Script" uid="uid://366sxm6ne2o" path="res://scripts/enemy/drop_table.gd" id="3_syp5f"]
 [ext_resource type="Resource" uid="uid://b20hhmr07q8nx" path="res://resources/drop_tables/basic.tres" id="4_yr84n"]
 [ext_resource type="Script" uid="uid://b8wt33xi4jv8a" path="res://scripts/ui/healthbar.gd" id="5_rb22c"]
 

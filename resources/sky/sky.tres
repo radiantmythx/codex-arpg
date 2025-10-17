@@ -1,0 +1,13 @@
+[gd_resource type="Sky" load_steps=4 format=3 uid="uid://b105vkjlkt2kx"]
+
+[ext_resource type="Shader" uid="uid://w31bwit4botx" path="res://shaders/visual/sky.tres" id="1_3dhrv"]
+[ext_resource type="Texture2D" uid="uid://bni0vj53o6uw5" path="res://images/textures/sky/SkyBumpy.png" id="2_qtk38"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rve68"]
+shader = ExtResource("1_3dhrv")
+shader_parameter/FloatParameter = 3.0
+shader_parameter/SkyTexture = ExtResource("2_qtk38")
+shader_parameter/RGB_Intensity = Vector3(0.5, 0.5, 1)
+
+[resource]
+sky_material = SubResource("ShaderMaterial_rve68")

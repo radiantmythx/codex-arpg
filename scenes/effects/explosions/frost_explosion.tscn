@@ -1,7 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ch443litmxd3n"]
+[gd_scene load_steps=19 format=3 uid="uid://ch443litmxd3n"]
 
 [ext_resource type="Texture2D" uid="uid://d1us2khg6rwt1" path="res://images/particles/flake.png" id="1_2mvvo"]
 [ext_resource type="Script" uid="uid://bof67xrx4hr7p" path="res://scenes/effects/skills/OneShotParticle.gd" id="2_4qtrf"]
+[ext_resource type="Shader" uid="uid://btjqwxm2vbpmg" path="res://shaders/visual/simple_texture_and_color_no_billboard.tres" id="3_ytqv1"]
+[ext_resource type="Texture2D" uid="uid://cdawoaggonyim" path="res://images/particles/circle_04.png" id="4_4hf1n"]
 
 [sub_resource type="Gradient" id="Gradient_bvs1k"]
 offsets = PackedFloat32Array(0, 0.56869)
@@ -42,12 +44,57 @@ billboard_mode = 1
 [sub_resource type="QuadMesh" id="QuadMesh_fqp3x"]
 material = SubResource("StandardMaterial3D_gwgro")
 
-[node name="GPUParticles3D" type="GPUParticles3D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gwgro"]
+render_priority = 0
+shader = ExtResource("3_ytqv1")
+shader_parameter/VisualTexture = ExtResource("4_4hf1n")
+
+[sub_resource type="Gradient" id="Gradient_ov3py"]
+offsets = PackedFloat32Array(0, 0.501597, 0.865815)
+colors = PackedColorArray(0.120358, 0.782651, 0.950521, 0, 3, 3, 4, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_whsec"]
+gradient = SubResource("Gradient_ov3py")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_to01m"]
+_limits = [0.0, 2.4, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 2.4), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hpqhn"]
+curve = SubResource("Curve_to01m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nbenb"]
+gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 6.0
+scale_curve = SubResource("CurveTexture_hpqhn")
+color_ramp = SubResource("GradientTexture1D_whsec")
+
+[sub_resource type="QuadMesh" id="QuadMesh_aempf"]
+orientation = 1
+
+[node name="Node3D" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 emitting = false
 amount = 10
-lifetime = 1.23
+lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_4hf1n")
 draw_pass_1 = SubResource("QuadMesh_fqp3x")
+script = ExtResource("2_4qtrf")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
+material_override = SubResource("ShaderMaterial_gwgro")
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_nbenb")
+draw_pass_1 = SubResource("QuadMesh_aempf")
 script = ExtResource("2_4qtrf")

@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dci003l7q6b7t"]
+
+[ext_resource type="Shader" uid="uid://cf3um002x4x1" path="res://shaders/visual/aura/mesh_aura.tres" id="1_f78wk"]
+[ext_resource type="Texture2D" uid="uid://bomiwj1lul3f1" path="res://images/noise_vfx/FireNoise1.tga" id="2_dv75j"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_f78wk")
+shader_parameter/Auraintensity = 4.44
+shader_parameter/AuraColor = Color(0.329803, 0.590239, 0.687463, 0.431)
+shader_parameter/AuraScale = Vector2(0.1, 1)
+shader_parameter/AuraSpeed = Vector2(1, 0)
+shader_parameter/AuraShape = ExtResource("2_dv75j")

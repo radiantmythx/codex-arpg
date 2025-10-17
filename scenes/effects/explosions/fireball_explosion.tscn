@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://c34abngl2eyqu"]
 
 [ext_resource type="Material" uid="uid://nl55uohaymhm" path="res://scenes/effects/prefabs/shaders/m_fire_explode_ball.tres" id="1_0vkl0"]
-[ext_resource type="Script" uid="uid://c3vd20mhgnm2s" path="res://scripts/OneShotAnimationSystem.gd" id="1_05la0"]
+[ext_resource type="Script" uid="uid://c3vd20mhgnm2s" path="res://scripts/util/OneShotAnimationSystem.gd" id="1_05la0"]
 
 [sub_resource type="Curve" id="Curve_4mjrr"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.265487, 0.0432243), 0.0, 0.0, 0, 0, Vector2(0.873156, 0.992407), 0.0, 0.0, 0, 0]

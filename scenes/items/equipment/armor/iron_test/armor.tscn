@@ -409,5 +409,6 @@ bind/125/bone = -1
 bind/125/pose = Transform3D(1, 0, 0, 0, 1, -1.19209e-07, 0, 0, 1, 0.208008, -0.983424, -1.48078)
 
 [node name="PlateBody" type="MeshInstance3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_dyrha")
 skin = SubResource("Skin_0f1lv")

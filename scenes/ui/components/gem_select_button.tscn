@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://f0t8th6wfgvc"]
+
+[ext_resource type="Script" uid="uid://bgvmw5pkssq15" path="res://scripts/ui/components/gem_select_button.gd" id="1_5rjv6"]
+[ext_resource type="ButtonGroup" uid="uid://b2jsh03vgr7o6" path="res://ui_groups/gem_button_group.tres" id="1_8foim"]
+[ext_resource type="Texture2D" uid="uid://dflbs6oxc7o3p" path="res://images/items/gems/str_gem.png" id="2_8foim"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rmpno"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p230c"]
+bg_color = Color(0.6, 0.6, 0.6, 0.475)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lerrh"]
+bg_color = Color(0.404511, 0.404511, 0.404511, 0.685)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v431k"]
+
+[node name="GemSelectBody" type="Button"]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rmpno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_p230c")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lerrh")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_v431k")
+toggle_mode = true
+button_group = ExtResource("1_8foim")
+script = ExtResource("1_5rjv6")
+
+[node name="GemImage" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_8foim")
+stretch_mode = 5
+
+[connection signal="mouse_entered" from="GemImage" to="." method="_on_gem_image_mouse_entered"]
+[connection signal="mouse_exited" from="GemImage" to="." method="_on_gem_image_mouse_exited"]

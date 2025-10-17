@@ -1,4 +1,10 @@
 extends SpringArm3D
+class_name PlayerSpringArmCamera
+
+var IS_LOCKED:bool
+func set_is_locked(setting:bool):
+	IS_LOCKED = setting
+
 
 @export var horizontal_sensitivity: float = 0.15
 @export var vertical_sensitivity: float = 0.15
@@ -34,62 +40,64 @@ func _ready() -> void:
 	spring_length = clampf(spring_length, min_zoom, max_zoom)
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Start/stop orbit mode with middle mouse (or cam_orbit action)
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE:
-		if event.pressed and not _orbiting:
-			_orbiting = true
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		elif not event.pressed and _orbiting:
-			_orbiting = false
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if(!IS_LOCKED):
+		# Start/stop orbit mode with middle mouse (or cam_orbit action)
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE:
+			if event.pressed and not _orbiting:
+				_orbiting = true
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			elif not event.pressed and _orbiting:
+				_orbiting = false
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	# Zoom with mouse wheel
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
-			spring_length = clampf(spring_length - zoom_speed, min_zoom, max_zoom)
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
-			spring_length = clampf(spring_length + zoom_speed, min_zoom, max_zoom)
+		# Zoom with mouse wheel
+		if event is InputEventMouseButton:
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+				spring_length = clampf(spring_length - zoom_speed, min_zoom, max_zoom)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+				spring_length = clampf(spring_length + zoom_speed, min_zoom, max_zoom)
 
-	# Mouse look while orbiting
-	if _orbiting and event is InputEventMouseMotion:
-		_yaw_deg -= event.relative.x * horizontal_sensitivity
-		var dy = event.relative.y * vertical_sensitivity
-		if invert_y:
-			_pitch_deg += dy
-		else:
-			_pitch_deg -= dy
-		_pitch_deg = clamp(_pitch_deg, min_pitch_deg, max_pitch_deg)
-		_apply_rot()
+		# Mouse look while orbiting
+		if _orbiting and event is InputEventMouseMotion:
+			_yaw_deg -= event.relative.x * horizontal_sensitivity
+			var dy = event.relative.y * vertical_sensitivity
+			if invert_y:
+				_pitch_deg += dy
+			else:
+				_pitch_deg -= dy
+			_pitch_deg = clamp(_pitch_deg, min_pitch_deg, max_pitch_deg)
+			_apply_rot()
 
 	# Reset camera orientation (optional)
 	#if event.is_action_pressed("cam_reset"):
 	#	_start_reset_to_player_forward()
 
 func _physics_process(delta: float) -> void:
-	# Optional: support controller right stick look even without middle mouse.
-	var look_x := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left", true)
-	var look_y := Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down", true)
-	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
-		_yaw_deg -= look_x * gamepad_look_speed * delta
-		if invert_y:
-			_pitch_deg += look_y
-		else:
-			_pitch_deg -= look_y
-		_pitch_deg = clamp(_pitch_deg, min_pitch_deg, max_pitch_deg)
-		_apply_rot()
+	if(!IS_LOCKED):
+		# Optional: support controller right stick look even without middle mouse.
+		var look_x := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left", true)
+		var look_y := Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down", true)
+		if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+			_yaw_deg -= look_x * gamepad_look_speed * delta
+			if invert_y:
+				_pitch_deg += look_y
+			else:
+				_pitch_deg -= look_y
+			_pitch_deg = clamp(_pitch_deg, min_pitch_deg, max_pitch_deg)
+			_apply_rot()
 
-	# Smooth reset if triggered
-	if _resetting:
-		_reset_time += delta
-		var t := clampf(_reset_time / max(smooth_reset_time, 0.001), 0.0, 1.0)
-		var slerped := _reset_from_basis.slerp(_reset_to_basis, t)
-		global_transform.basis = slerped
-		if t >= 1.0:
-			_resetting = false
-			# Re-derive yaw/pitch from the final orientation
-			var e = global_transform.basis.get_euler()
-			_yaw_deg = rad_to_deg(e.y)
-			_pitch_deg = clamp(rad_to_deg(e.x), min_pitch_deg, max_pitch_deg)
+		# Smooth reset if triggered
+		if _resetting:
+			_reset_time += delta
+			var t := clampf(_reset_time / max(smooth_reset_time, 0.001), 0.0, 1.0)
+			var slerped := _reset_from_basis.slerp(_reset_to_basis, t)
+			global_transform.basis = slerped
+			if t >= 1.0:
+				_resetting = false
+				# Re-derive yaw/pitch from the final orientation
+				var e = global_transform.basis.get_euler()
+				_yaw_deg = rad_to_deg(e.y)
+				_pitch_deg = clamp(rad_to_deg(e.x), min_pitch_deg, max_pitch_deg)
 
 func _apply_rot() -> void:
 	# We rotate ONLY this SpringArm node in place. Because it’s a child

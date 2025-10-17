@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://b4sew88h4dgr8"]
+
+[ext_resource type="Shader" uid="uid://2tjtfdggd88n" path="res://shaders/spatial/water.gdshader" id="1_4lgl7"]
+[ext_resource type="Texture2D" uid="uid://bwc5fiw62txpx" path="res://images/noise_vfx/Grainy/Grainy 11 - 128x128.png" id="2_6tan1"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_4lgl7")
+shader_parameter/albedo_tex = ExtResource("2_6tan1")
+shader_parameter/amplitude = 0.05
+shader_parameter/frequency = 0.6
+shader_parameter/speed = 1.2
+shader_parameter/flow_dir = Vector2(1, 1)
+shader_parameter/scroll_uv = true
+shader_parameter/uv_speed = 0.01
+shader_parameter/tint = Vector3(0.695, 0.925, 1.31)
+shader_parameter/roughness = 0.705
+shader_parameter/metallic = 0.785
+shader_parameter/fresnel_pow = 4.511
+shader_parameter/fresnel_str = 0.455
+shader_parameter/fresnel_col = Vector3(0.5, 0.8, 1)

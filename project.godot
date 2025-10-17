@@ -17,7 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-WorldGrid="*res://world_grid.gd"
+WorldGrid="*res://scripts/global_handlers/world_grid.gd"
+GlobalPlayerHandler="*res://scripts/global_handlers/global_player_handler.gd"
 
 [gui]
 

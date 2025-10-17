@@ -1,12 +1,11 @@
-[gd_scene load_steps=24 format=4 uid="uid://bemssxajb0trc"]
+[gd_scene load_steps=22 format=4 uid="uid://bemssxajb0trc"]
 
 [ext_resource type="Material" uid="uid://crurvf0ua8b7g" path="res://materials/grass.tres" id="1_em01l"]
 [ext_resource type="Material" uid="uid://d3uie6hh0ok3l" path="res://materials/stone.tres" id="2_e78d2"]
 [ext_resource type="ArrayMesh" uid="uid://bkvoa4lc61crv" path="res://meshes/environ/trees/pine_01.mesh" id="2_em01l"]
-[ext_resource type="Shader" uid="uid://2tjtfdggd88n" path="res://shaders/spatial/water.gdshader" id="3_4a6qq"]
+[ext_resource type="Material" uid="uid://b4sew88h4dgr8" path="res://materials/water.tres" id="3_4a6qq"]
 [ext_resource type="PackedScene" uid="uid://b5pylyppnh78j" path="res://scenes/environment/special/warp_area.tscn" id="3_e78d2"]
 [ext_resource type="ArrayMesh" uid="uid://cq013g4gvfgu0" path="res://meshes/environ/grass/grass_bush.mesh" id="4_4a6qq"]
-[ext_resource type="Texture2D" uid="uid://bwc5fiw62txpx" path="res://images/noise_vfx/Grainy/Grainy 11 - 128x128.png" id="4_exdtk"]
 [ext_resource type="Texture2D" uid="uid://xl0iscee30i2" path="res://images/textures/seamless/wood/planks_resize.png" id="5_exdtk"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_78ruu"]
@@ -88,23 +87,6 @@ size = Vector2(32, 32)
 subdivide_width = 16
 subdivide_depth = 16
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_exdtk"]
-render_priority = 0
-shader = ExtResource("3_4a6qq")
-shader_parameter/albedo_tex = ExtResource("4_exdtk")
-shader_parameter/amplitude = 0.15
-shader_parameter/frequency = 0.6
-shader_parameter/speed = 1.2
-shader_parameter/flow_dir = Vector2(1, 0)
-shader_parameter/scroll_uv = true
-shader_parameter/uv_speed = 0.02
-shader_parameter/tint = Vector3(0.695, 0.925, 1.31)
-shader_parameter/roughness = 0.201
-shader_parameter/metallic = 0.0
-shader_parameter/fresnel_pow = 4.451
-shader_parameter/fresnel_str = 0.145
-shader_parameter/fresnel_col = Vector3(0.5, 0.8, 1)
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_dwm80"]
 lightmap_size_hint = Vector2i(52, 152)
 size = Vector2(10, 22.03)
@@ -168,7 +150,7 @@ surface_material_override/1 = ExtResource("2_e78d2")
 [node name="Water" type="MeshInstance3D" parent="Main"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, -8)
 mesh = SubResource("PlaneMesh_4a6qq")
-surface_material_override/0 = SubResource("ShaderMaterial_exdtk")
+surface_material_override/0 = ExtResource("3_4a6qq")
 
 [node name="Bridge" type="MeshInstance3D" parent="Main"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0667038, 6)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=4 uid="uid://dd0q57wmkho1s"]
 
-[ext_resource type="Script" uid="uid://c3vd20mhgnm2s" path="res://scripts/OneShotAnimationSystem.gd" id="1_e4krh"]
+[ext_resource type="Script" uid="uid://c3vd20mhgnm2s" path="res://scripts/util/OneShotAnimationSystem.gd" id="1_e4krh"]
 [ext_resource type="Shader" uid="uid://b2co80h40apxb" path="res://shaders/visual/energy/dynamic_energy.tres" id="2_hish3"]
 [ext_resource type="Texture2D" uid="uid://eeqm8ssd58f3" path="res://images/noise_vfx/Turbulence/Turbulence 13 - 128x128.png" id="3_heb5i"]
 [ext_resource type="Texture2D" uid="uid://dg44f8q0r3f85" path="res://images/noise_vfx/Turbulence/Turbulence 3 - 128x128.png" id="4_8ms8u"]

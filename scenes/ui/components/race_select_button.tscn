@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5t5b73hjll6j"]
+
+[ext_resource type="ButtonGroup" uid="uid://d0r2whhlfweq2" path="res://ui_groups/race_button_group.tres" id="1_hvnay"]
+[ext_resource type="Texture2D" uid="uid://dn4b1nhdpmaw2" path="res://images/ui/progress_bar.png" id="1_le8r3"]
+[ext_resource type="Texture2D" uid="uid://chuwdxfo4qgi6" path="res://images/ui/progress_bar_dark.png" id="2_fhq6b"]
+[ext_resource type="Script" uid="uid://bg03x25w1y0f0" path="res://scripts/ui/components/race_select_button.gd" id="3_fhq6b"]
+[ext_resource type="FontFile" uid="uid://dcqsossrbmy6p" path="res://fonts/Bayone.ttf" id="3_hvnay"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ocrud"]
+font = ExtResource("3_hvnay")
+font_size = 28
+outline_size = 1
+outline_color = Color(0.954472, 0.77046, 0, 1)
+
+[node name="RaceSelectButton" type="TextureButton"]
+texture_filter = 1
+size_flags_horizontal = 4
+toggle_mode = true
+button_group = ExtResource("1_hvnay")
+texture_normal = ExtResource("1_le8r3")
+texture_pressed = ExtResource("2_fhq6b")
+script = ExtResource("3_fhq6b")
+label_text = null
+hover_text = null
+added_race_visuals = null
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Placeholder"
+label_settings = SubResource("LabelSettings_ocrud")
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="toggled" from="." to="." method="_on_toggled"]

@@ -9,6 +9,7 @@
 script = ExtResource("1_ie7mv")
 phase_through = true
 stop_on_collision = false
+max_distance = 10.0
 damage_radius = 3.0
 on_cast_effect = ExtResource("2_ulsh7")
 on_arrival_effect = ExtResource("2_ulsh7")
@@ -19,7 +20,7 @@ icon = ExtResource("2_52kqa")
 mana_cost = 5.0
 cooldown = 2.0
 duration = 1.0
-move_multiplier = 10.0
+move_multiplier = 100.0
 damage_type = 0
 base_damage_low = 0.0
 base_damage_high = 0.0

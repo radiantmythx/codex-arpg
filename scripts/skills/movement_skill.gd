@@ -14,6 +14,8 @@ extends Skill
 # If true the movement ends early when the body collides with something.
 @export var stop_on_collision: bool = true
 
+@export var max_distance:float = 20.0
+
 # Radius of damage applied around the user while moving.  Zero disables
 # damage and the expensive overlap queries.
 @export var damage_radius: float = 0.0
@@ -32,17 +34,21 @@ func perform(user):
 		target = user._get_click_position()
 	else:
 		return
-	var origin: Vector3 = user.global_transform.origin
+	var origin: Vector3 = user.global_position
 	var direction: Vector3 = target - origin
 	var distance: float = direction.length()
 	if distance <= 0.01:
 		return
 	direction = direction.normalized()
+	print("Target: ", target, " Origin: ", origin, " Direction: ", direction)
 	var dmg_map: Dictionary = {}
 	if damage_radius > 0.0 and user.stats:
 		var base_dict = _build_base_damage_dict(user)
 		dmg_map = user.stats.compute_damage(base_dict, tags)
 	# Delegate the actual motion to the user so it can integrate with
 	# existing movement code.
+
+	
+	
 	if user.has_method("start_movement_skill"):
 		user.start_movement_skill(self, direction, distance, dmg_map)

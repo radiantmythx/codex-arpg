@@ -78,12 +78,19 @@ func _on_slot_changed(slot: String, index: int, item: Item) -> void:
 		if slot == "armor":
 				_equip_armor(instance, key)
 		elif slot in SLOT_BONES:
-						#print("equipping ", item.item_name, " in ", slot, " slot")
+						print("equipping ", item.item_name, " in ", slot, " slot")
 						_attachments[slot].add_child(instance)
-						var local_xform := Transform3D(Basis.from_euler(item.equip_rotation_rads), item.equip_position)
+						var local_xform := Transform3D(
+							Basis.from_euler(item.equip_rotation_rads)
+						#		* Basis(Vector3.UP, PI)
+								.scaled(Vector3(1, 1, -1)),
+							item.equip_position
+						)
 						instance.transform = local_xform
 						_models[key] = instance
 		else:
+						instance.position = Vector3(0, 0 ,0)
+						instance.rotation = Vector3(0, deg_to_rad(180), 0)
 						skeleton.add_child(instance)
 						_models[key] = instance
 		_update_hair_visibility()
@@ -102,7 +109,7 @@ func _clear_slot(slot: String) -> void:
 func _equip_armor(root: Node3D, key: String) -> void:
 		## Attach an armour model by retargeting all MeshInstance3D nodes to the
 		## player's skeleton. The original scene is freed after extraction.
-		#print("equipping armor?")
+		print("equipping armor?")
 		var meshes: Array = []
 		_collect_meshes(root, meshes)
 		for m in meshes:
@@ -111,6 +118,8 @@ func _equip_armor(root: Node3D, key: String) -> void:
 				m.global_transform = global_xform
 				m.skeleton = m.get_path_to(skeleton)
 				m.scale = Vector3(100, 100, 100)
+				m.position = Vector3(0, 0, 0)
+				m.rotation = Vector3(deg_to_rad(0), deg_to_rad(180), deg_to_rad(0))
 		root.queue_free()
 		_models[key] = meshes
 

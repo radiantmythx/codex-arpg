@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://bg0dh7nw4q823"]
+[gd_scene load_steps=14 format=3 uid="uid://c0g46v1qkbpxm"]
 
 [ext_resource type="Texture2D" uid="uid://ci2fwv7woh6bp" path="res://images/textures/seamless/grass/grass-tile.png" id="1_118wl"]
 [ext_resource type="ArrayMesh" uid="uid://bkvoa4lc61crv" path="res://meshes/environ/trees/pine_01.mesh" id="2_dc7u6"]
 [ext_resource type="PackedScene" uid="uid://b5pylyppnh78j" path="res://scenes/environment/special/warp_area.tscn" id="3_io474"]
 [ext_resource type="PackedScene" uid="uid://df6cnus8lydc2" path="res://scenes/enemy/undead/undead_walker.tscn" id="4_dc7u6"]
 [ext_resource type="ArrayMesh" uid="uid://cq013g4gvfgu0" path="res://meshes/environ/grass/grass_bush.mesh" id="4_io474"]
+[ext_resource type="Material" uid="uid://bow4ap0cxyha0" path="res://materials/attack_woosh.tres" id="6_jr0ma"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_78ruu"]
 size = Vector2(50, 50)
@@ -41,6 +42,8 @@ fog_sun_scatter = 0.2
 fog_density = 0.097
 fog_sky_affect = 0.0
 volumetric_fog_anisotropy = 0.42
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jr0ma"]
 
 [node name="BaseLevel" type="Node3D"]
 
@@ -182,3 +185,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.57701, 0, -6.33219)
 
 [node name="Walker3" parent="." instance=ExtResource("4_dc7u6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.7359, 0, 10.9507)
+
+[node name="WooshTestMesh" type="MeshInstance3D" parent="."]
+visible = false
+material_override = ExtResource("6_jr0ma")
+mesh = SubResource("CylinderMesh_jr0ma")

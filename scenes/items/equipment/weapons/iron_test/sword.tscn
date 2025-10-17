@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=4 uid="uid://ctgav8eh68yuy"]
+[gd_scene load_steps=7 format=4 uid="uid://ctgav8eh68yuy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hc6nk"]
 resource_name = "Material"
@@ -68,8 +68,20 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_wphd7")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6ayfo"]
+albedo_color = Color(0.851769, 0.851769, 0.851769, 1)
+metallic = 1.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_egd51"]
+albedo_color = Color(0.824858, 0.664206, 0, 1)
+metallic = 0.3
+roughness = 0.8
+
 [node name="Node3D" type="Node3D"]
 
 [node name="Sword" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_6w3od")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_6ayfo")
+surface_material_override/1 = SubResource("StandardMaterial3D_egd51")

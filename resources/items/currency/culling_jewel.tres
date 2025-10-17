@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://by2r3chpnqgnh"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_k7cvp"]
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_0v62y"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_0v62y"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_reehp"]
 [ext_resource type="Texture2D" uid="uid://bo72e6uwavnos" path="res://images/items/currency/culling_jewel.png" id="4_k7cvp"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="5_2nxlw"]

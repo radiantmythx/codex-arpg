@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://j7hg6462gkt1"]
 
 [ext_resource type="Script" uid="uid://bdradd6uy1v7m" path="res://scripts/items/affix_group.gd" id="1_05mjb"]
-[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/affix_definition.gd" id="2_kkm11"]
+[ext_resource type="Script" uid="uid://vpeh2dfoc6u8" path="res://scripts/items/affix_definition.gd" id="2_kkm11"]
 [ext_resource type="Script" uid="uid://3sprcysy2c2u" path="res://scripts/items/affix.gd" id="3_pttyd"]
 [ext_resource type="Texture2D" uid="uid://pb8pgm626dvi" path="res://images/items/currency/cleansing_jewel.png" id="4_05mjb"]
 [ext_resource type="Script" uid="uid://cy34tikq4w1km" path="res://scripts/items/item.gd" id="5_c7dcw"]

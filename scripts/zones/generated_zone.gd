@@ -7,7 +7,7 @@ extends Node3D
 
 var mods: Dictionary = {}
 
-const Stats = preload("res://scripts/stats.gd")
+const Stats = preload("res://scripts/player/stats.gd")
 
 func _ready() -> void:
 	_apply_mods()

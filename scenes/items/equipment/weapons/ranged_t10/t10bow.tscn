@@ -73,6 +73,5 @@ shadow_mesh = SubResource("ArrayMesh_p30xs")
 [node name="T10Bow" type="Node3D"]
 
 [node name="Bow" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_fae0d")
 skeleton = NodePath("")

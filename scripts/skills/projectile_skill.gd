@@ -33,7 +33,7 @@ func perform(user):
 
 	# 2) Face only around Y (no pitching).
 	var user_pos = user.global_position
-	var look_target := Vector3(user_pos.x + dir.x, user_pos.y, user_pos.z + dir.z)
+	var look_target := Vector3(user_pos.x - dir.x, user_pos.y, user_pos.z - dir.z)
 	user.look_at(look_target, Vector3.UP)
 
 	# 3) Spawn and orient the projectile using the flat direction.

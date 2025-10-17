@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bow4ap0cxyha0"]
+
+[ext_resource type="Shader" uid="uid://cj2w0s7uyd8nx" path="res://shaders/spatial/attack_woosh.gdshader" id="1_2ia53"]
+[ext_resource type="Texture2D" uid="uid://ynessekekw6h" path="res://images/noise_vfx/Grainy/Grainy 13 - 128x128.png" id="2_2ia53"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2ia53")
+shader_parameter/intensity = 1.0
+shader_parameter/fade = 1.0
+shader_parameter/rim_strength = 0.0
+shader_parameter/tint = Color(0, 0, 0, 0)
+shader_parameter/refract_strength = 0.023
+shader_parameter/noise_scale = 2.81
+shader_parameter/time_scale = 1.1
+shader_parameter/woosh_pulse = 1.0
+shader_parameter/woosh_amount = 0.05
+shader_parameter/noise_tex = ExtResource("2_2ia53")
