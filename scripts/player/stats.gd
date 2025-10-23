@@ -108,6 +108,9 @@ func remove_affix(affix: Affix) -> void:
 
 
 func _recalculate_bonuses() -> void:
+	if(_affixes):
+		for c in _affixes:
+			print(c.stat_bonuses)
 		# Rebuilds cached bonus dictionaries based on the current affix list.
 	_main_flat = {
 		MainStat.BODY: 0.0,

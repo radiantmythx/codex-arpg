@@ -1,19 +1,48 @@
-[gd_resource type="Resource" script_class="FireballSkill" load_steps=6 format=3 uid="uid://dbpb46a7kta7x"]
+[gd_resource type="Resource" script_class="FireballSkill" load_steps=10 format=3 uid="uid://dbpb46a7kta7x"]
 
 [ext_resource type="Script" uid="uid://cndualm0ptvrs" path="res://scripts/skills/fireball_skill.gd" id="1_ivvuh"]
 [ext_resource type="PackedScene" uid="uid://d1nhemyl30k8h" path="res://scenes/effects/explosions/fire_sparks.tscn" id="1_qym5n"]
 [ext_resource type="PackedScene" uid="uid://c34abngl2eyqu" path="res://scenes/effects/explosions/fireball_explosion.tscn" id="1_v0oc4"]
 [ext_resource type="Texture2D" uid="uid://bfdqueo0frg3n" path="res://images/skills/fireball.png" id="1_xiymk"]
-[ext_resource type="PackedScene" uid="uid://bx7spltxkpm6s" path="res://scenes/projectiles/skills/fireball.tscn" id="2_qym5n"]
+[ext_resource type="PackedScene" uid="uid://bx7spltxkpm6s" path="res://scenes/projectiles/skills/solar/fireball.tscn" id="2_qym5n"]
+[ext_resource type="PackedScene" uid="uid://dh4y0b81l35vr" path="res://scenes/effects/buffs/solar/smoking_on_fire.tscn" id="3_5x5jx"]
+[ext_resource type="Material" uid="uid://c4i03yy0jeiaq" path="res://materials/fire_overlay.tres" id="4_0usi0"]
+[ext_resource type="Script" uid="uid://cunkjx53ftdis" path="res://scripts/skills/buff.gd" id="4_73jev"]
+
+[sub_resource type="Resource" id="Resource_0usi0"]
+script = ExtResource("4_73jev")
+duration = 3.0
+main_stat_bonuses = {}
+stat_bonuses = {}
+flags = Array[String]([])
+fx_scene = ExtResource("3_5x5jx")
+overlay_material = ExtResource("4_0usi0")
+fx_attach_path = NodePath("")
+fx_local_offset = Vector3(0, 2, 0)
+metadata/_custom_type_script = "uid://cunkjx53ftdis"
 
 [resource]
 script = ExtResource("1_ivvuh")
 speed = 10.0
 range = 15.0
-explosion_radius = 1.0
+explosion_radius = 3.0
 projectile_scene = ExtResource("2_qym5n")
 on_hit_effect = ExtResource("1_qym5n")
 explosion_effect = ExtResource("1_v0oc4")
+on_hit_buff = SubResource("Resource_0usi0")
+explode_on_hit = true
+explode_on_finish = true
+fizzle_enabled = false
+chain_ignore_first_body_time = 0.08
+pattern = 0
+projectile_count = 1
+arc_spread_deg = 20.0
+shot_delay = 0.08
+yaw_jitter_deg = 2.5
+follow_user = true
+spawn_offset = 1.0
+spawn_height = 2.0
+keep_aim_live = false
 name = "Fireball"
 description = "Shoot da fuckin fireball"
 icon = ExtResource("1_xiymk")
@@ -25,6 +54,8 @@ damage_type = 1
 base_damage_low = 1.0
 base_damage_high = 1.0
 tags = Array[String](["Spell", "Projectile", "AoE"])
+speed_multiplier = 1.0
 animation_name = &"strike"
+additional_animations = Array[StringName]([])
 attack_time = 0.3
 cancel_time = 1.0

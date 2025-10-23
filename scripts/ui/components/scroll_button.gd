@@ -21,9 +21,6 @@ func _ready() -> void:
 		# Fall back to per-node override
 		label.add_theme_color_override("font_color", text_color)
 
-	# Connect hover signals per instance
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
 
 func _on_mouse_entered() -> void:
 	if label.label_settings:

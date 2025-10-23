@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cnul2t3hvwdpd"]
+[gd_scene load_steps=44 format=3 uid="uid://cnul2t3hvwdpd"]
 
 [ext_resource type="Script" uid="uid://bl5appere3xsh" path="res://scripts/util/follow_target.gd" id="1_j6pt8"]
 [ext_resource type="Script" uid="uid://bxboqsrgq2xod" path="res://scripts/player/player_container.gd" id="1_vtu4o"]
@@ -6,20 +6,29 @@
 [ext_resource type="PackedScene" uid="uid://dkh8qe5m4su07" path="res://scenes/player/player.tscn" id="3_yqvrv"]
 [ext_resource type="Script" uid="uid://cieo8o73ixbiv" path="res://scripts/skills/skill.gd" id="4_kaoqo"]
 [ext_resource type="Resource" uid="uid://c6vfxp44eef8n" path="res://resources/skills/unequip/unequip_punch.tres" id="5_lld7h"]
-[ext_resource type="Resource" uid="uid://dbpb46a7kta7x" path="res://resources/skills/debug/fireball.tres" id="6_lofpf"]
+[ext_resource type="Resource" uid="uid://dsa4ul8hs6gse" path="res://resources/skills/physical/crushing_blow.tres" id="6_61y5h"]
+[ext_resource type="Resource" uid="uid://dbpb46a7kta7x" path="res://resources/skills/debug/fireball.tres" id="7_lld7h"]
 [ext_resource type="Resource" uid="uid://mqpc1mqg5rqw" path="res://resources/skills/debug/haste.tres" id="8_tulue"]
 [ext_resource type="Script" uid="uid://depd4ivprvjp1" path="res://scripts/ui/minimap.gd" id="9_fd1j0"]
 [ext_resource type="Resource" uid="uid://bmwetudyv7ddi" path="res://resources/skills/debug/debug_frostblink.tres" id="9_lld7h"]
+[ext_resource type="Resource" uid="uid://0a3166e21fbf" path="res://resources/skills/debug/god_fireball.tres" id="10_cjw2f"]
 [ext_resource type="Shader" uid="uid://c1f5p0x1hydhy" path="res://shaders/health_orb_2.gdshader" id="10_mv1jo"]
+[ext_resource type="Resource" uid="uid://dmwf23aptr5pd" path="res://resources/skills/debug/holy_smite.tres" id="11_1fco1"]
 [ext_resource type="Script" uid="uid://bodjkipcd4jj7" path="res://scripts/ui/components/health_orb.gd" id="11_o24y8"]
+[ext_resource type="Resource" uid="uid://7yoti6ttn0ac" path="res://resources/skills/frost/icicle_blast.tres" id="12_61y5h"]
 [ext_resource type="PackedScene" uid="uid://cuaf4c562utg5" path="res://scenes/ui/components/skill_icon.tscn" id="12_cjw2f"]
 [ext_resource type="Script" uid="uid://pbrsjx4baji5" path="res://scripts/items/item_tag_layer.gd" id="13_1fco1"]
+[ext_resource type="Resource" uid="uid://c3iklnkywgran" path="res://resources/skills/default/default_sword_swing.tres" id="13_k3p7a"]
 [ext_resource type="Script" uid="uid://osaq1jjffqu5" path="res://scripts/ui/components/compass.gd" id="13_kaoqo"]
+[ext_resource type="Resource" uid="uid://cybbwi7twq84j" path="res://resources/skills/default/shoot_arrow.tres" id="14_2lj18"]
 [ext_resource type="PackedScene" uid="uid://dccbytm6erevq" path="res://scenes/ui/inventory_ui.tscn" id="14_61y5h"]
 [ext_resource type="Texture2D" uid="uid://dfyppws611qqs" path="res://images/ui/compass.png" id="14_lld7h"]
-[ext_resource type="PackedScene" uid="uid://rww2n56jhwcr" path="res://scenes/ui/skills_ui.tscn" id="15_k3p7a"]
+[ext_resource type="Resource" uid="uid://bxudxbhb3y2g2" path="res://resources/skills/solar/fire_barrage.tres" id="15_1fco1"]
 [ext_resource type="Texture2D" uid="uid://bgwlqb8w25btv" path="res://images/ui/bag_resized.png" id="15_lld7h"]
 [ext_resource type="PackedScene" uid="uid://c2l13btuuklkt" path="res://scenes/ui/enemy_target_display.tscn" id="16_2lj18"]
+[ext_resource type="PackedScene" uid="uid://ccfapvole8nrw" path="res://scenes/ui/skills_book_ui.tscn" id="19_lb7mu"]
+[ext_resource type="Script" uid="uid://dappw3xg6jelb" path="res://scripts/util/follow_target_offset.gd" id="21_lb7mu"]
+[ext_resource type="Shader" uid="uid://dfsvilte4070j" path="res://shaders/spatial/sky.gdshader" id="29_61y5h"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_sd2ls"]
 
@@ -105,6 +114,28 @@ shader_parameter/liquid_noise_intensity = 0.45
 
 [sub_resource type="LabelSettings" id="LabelSettings_lofpf"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k3p7a"]
+render_priority = 0
+shader = ExtResource("29_61y5h")
+shader_parameter/zenith_color = Color(0.141187, 0.451289, 0.468258, 1)
+shader_parameter/horizon_color = Color(0.373162, 0.769755, 0.847498, 1)
+shader_parameter/horizon_boost = 1.148
+shader_parameter/gradient_power = 0.707
+shader_parameter/sun_dir = Vector3(0, 0.6, 0.8)
+shader_parameter/sun_disk_deg = 2.0
+shader_parameter/sun_soft_deg = 1.8
+shader_parameter/sun_color = Color(1, 0.92, 0.78, 1)
+shader_parameter/sun_luma = 0.45
+shader_parameter/halo_strength = 0.35
+shader_parameter/halo_power = 3.0
+shader_parameter/base_luma = 1.11
+shader_parameter/zenith_darken = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_lofpf"]
+material = SubResource("ShaderMaterial_k3p7a")
+radius = 60.0
+height = 120.0
+
 [node name="PlayerContainer" type="Node3D" node_paths=PackedStringArray("player", "player_cam", "player_springarm", "ui_nodes")]
 script = ExtResource("1_vtu4o")
 player = NodePath("Player")
@@ -135,9 +166,10 @@ fov = 37.8493
 far = 200.0
 
 [node name="Player" parent="." instance=ExtResource("3_yqvrv")]
-debug_known_skills = Array[ExtResource("4_kaoqo")]([ExtResource("5_lld7h"), ExtResource("6_lofpf"), ExtResource("8_tulue"), ExtResource("9_lld7h")])
+debug_known_skills = Array[ExtResource("4_kaoqo")]([ExtResource("6_61y5h"), ExtResource("7_lld7h"), ExtResource("8_tulue"), ExtResource("9_lld7h")])
+all_known_skills = Array[ExtResource("4_kaoqo")]([ExtResource("9_lld7h"), ExtResource("7_lld7h"), ExtResource("10_cjw2f"), ExtResource("8_tulue"), ExtResource("11_1fco1"), ExtResource("12_61y5h"), ExtResource("13_k3p7a"), ExtResource("14_2lj18"), ExtResource("5_lld7h"), ExtResource("15_1fco1"), ExtResource("6_61y5h")])
 inventory_ui_path = NodePath("../InventoryUI")
-skills_ui_path = NodePath("../SkillsUI")
+skillbook_ui_path = NodePath("../SkillsBookUI")
 target_display_path = NodePath("../EnemyTargetLayer/EnemyTargetDisplay")
 health_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/HealthOrb")
 mana_orb_node_path = NodePath("../PlayerUI/SubViewportContainer/SubViewport/MarginContainer/Control/ManaOrb")
@@ -277,50 +309,46 @@ size_flags_vertical = 8
 
 [node name="Skill1" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 button_label = "R-Click"
 
 [node name="Skill2" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 1
 button_label = "Q"
 
 [node name="Skill3" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 2
 button_label = "E"
 
 [node name="Skill4" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 3
 button_label = "R"
 
 [node name="Skill5" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 visible = false
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 4
+button_label = "Shft+RClick"
 
 [node name="Skill6" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 visible = false
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 5
+button_label = "Shift+Q"
 
 [node name="Skill7" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 visible = false
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 6
+button_label = "Shift+E"
 
 [node name="Skill8" parent="PlayerUI/SubViewportContainer/SubViewport/PanelContainer" instance=ExtResource("12_cjw2f")]
 visible = false
 layout_mode = 2
-player_path = NodePath("../../../../../Player")
 slot_index = 7
+button_label = "Shift+R"
 
 [node name="ItemTagLayer" type="CanvasLayer" parent="."]
 script = ExtResource("13_1fco1")
@@ -328,9 +356,27 @@ script = ExtResource("13_1fco1")
 [node name="InventoryUI" parent="." instance=ExtResource("14_61y5h")]
 camera_shift = 0.0
 
-[node name="SkillsUI" parent="." instance=ExtResource("15_k3p7a")]
-visible = false
+[node name="SkillsBookUI" parent="." instance=ExtResource("19_lb7mu")]
 
 [node name="EnemyTargetLayer" type="CanvasLayer" parent="."]
 
 [node name="EnemyTargetDisplay" parent="EnemyTargetLayer" instance=ExtResource("16_2lj18")]
+
+[node name="OcculsionSphere" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.27109, 0)
+script = ExtResource("21_lb7mu")
+follow_target_path = NodePath("../Player")
+
+[node name="OcculsionMesh" type="MeshInstance3D" parent="OcculsionSphere"]
+visible = false
+mesh = SubResource("SphereMesh_lofpf")
+
+[node name="OcculsionMesh2" type="MeshInstance3D" parent="OcculsionSphere"]
+mesh = SubResource("SphereMesh_lofpf")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+shadow_bias = 0.075
+shadow_opacity = 0.62
+shadow_blur = 5.35

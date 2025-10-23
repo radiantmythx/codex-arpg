@@ -5,21 +5,21 @@ extends TextureButton
 # Designed to be attached to a TextureButton in the editor. Child nodes
 # referenced via the exported NodePaths are optional and allow custom visuals.
 
-@export var player_path: NodePath
 @export var slot_index: int = 0
 @export var cooldown_progress_path: NodePath
 @export var active_overlay_path: NodePath
 @export var mana_overlay_path: NodePath
 @export var button_label: String
 
-var _player
+var _player:PlayerCharacter
 var _cooldown_progress: Range
 var _active_overlay: CanvasItem
 var _mana_overlay: CanvasItem
 
 func _ready() -> void:
-	if player_path != NodePath():
-		_player = get_node(player_path)
+	#if player_path != NodePath():
+	#	_player = get_node(player_path)
+	_player = GlobalPlayerHandler.player
 	if cooldown_progress_path != NodePath():
 		_cooldown_progress = get_node(cooldown_progress_path)
 	if active_overlay_path != NodePath():
@@ -52,3 +52,8 @@ func _process(_delta: float) -> void:
 		_active_overlay.visible = _player.is_skill_active(slot_index)
 	if _mana_overlay and skill:
 		_mana_overlay.visible = _player.mana < skill.mana_cost
+
+
+func _on_pressed():
+	if(GlobalPlayerHandler.player_set_skill_choice):
+		_player.set_skill_slot(slot_index, GlobalPlayerHandler.player_set_skill_choice)

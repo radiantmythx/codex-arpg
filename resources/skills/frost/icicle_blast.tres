@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="IcicleBlastSkill" load_steps=7 format=3 uid="uid://7yoti6ttn0ac"]
+
+[ext_resource type="Texture2D" uid="uid://baaamabhlcjxy" path="res://images/skills/shoot_arrow.png" id="1_a05g1"]
+[ext_resource type="PackedScene" uid="uid://ch443litmxd3n" path="res://scenes/effects/explosions/frost_explosion.tscn" id="1_ghdt7"]
+[ext_resource type="Script" uid="uid://eo2onfcbf4wc" path="res://scripts/skills/damage_over_time_buff.gd" id="2_a05g1"]
+[ext_resource type="PackedScene" uid="uid://cqxoerncl4upc" path="res://scenes/projectiles/skills/frost/projectile_icicle.tscn" id="3_5nn56"]
+[ext_resource type="Script" uid="uid://k20x2lmx5uqe" path="res://scripts/skills/icicle_blast_skill.gd" id="4_qasld"]
+
+[sub_resource type="Resource" id="Resource_ghdt7"]
+script = ExtResource("2_a05g1")
+base_damage_low = 1.0
+base_damage_high = 2.0
+damage_type = 2
+duration = 3.0
+main_stat_bonuses = {}
+stat_bonuses = {}
+flags = Array[String]([])
+fx_attach_path = NodePath("")
+fx_local_offset = Vector3(0, 0, 0)
+metadata/_custom_type_script = "uid://eo2onfcbf4wc"
+
+[resource]
+script = ExtResource("4_qasld")
+speed = 12.0
+range = 20.0
+explosion_radius = 0.0
+projectile_scene = ExtResource("3_5nn56")
+explosion_effect = ExtResource("1_ghdt7")
+on_hit_buff = SubResource("Resource_ghdt7")
+explode_on_hit = true
+explode_on_finish = false
+fizzle_enabled = true
+chain_ignore_first_body_time = 0.08
+pattern = 1
+projectile_count = 3
+arc_spread_deg = 30.0
+shot_delay = 0.08
+yaw_jitter_deg = 2.5
+follow_user = true
+spawn_offset = 1.0
+spawn_height = 2.0
+keep_aim_live = false
+name = "Icicle Blast"
+description = ""
+icon = ExtResource("1_a05g1")
+mana_cost = 5.0
+cooldown = 1.2
+duration = 1.1
+move_multiplier = 0.1
+damage_type = 2
+base_damage_low = 2.0
+base_damage_high = 3.0
+tags = Array[String](["Spell", "Projectile"])
+speed_multiplier = 1.0
+animation_name = &"CastSpellQuick"
+additional_animations = Array[StringName]([])
+attack_time = 0.8
+cancel_time = 1.0

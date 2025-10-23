@@ -12,7 +12,9 @@ extends Resource
 @export var base_damage_low: float = 0.0
 @export var base_damage_high: float = 0.0
 @export var tags: Array[String] = []
+@export var speed_multiplier:float = 1.0
 @export var animation_name: StringName = &""
+@export var additional_animations: Array[StringName]
 @export var attack_time: float = 0.0 ## Seconds into the animation when the attack is applied.
 @export var cancel_time: float = 0.0 ## Seconds into the animation when the remainder can be cancelled.
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bkn4uhigx0l7n"]
+[gd_scene load_steps=11 format=3 uid="uid://bkn4uhigx0l7n"]
 
 [ext_resource type="Script" uid="uid://bmkt6cq7ey03d" path="res://scripts/zones/character_creation_handler.gd" id="1_7mfan"]
 [ext_resource type="Material" uid="uid://b4sew88h4dgr8" path="res://materials/water.tres" id="1_ygt6n"]
@@ -6,20 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://dnm48hmfvnki8" path="res://images/noise_vfx/Marble/Marble 6 - 128x128.png" id="3_7mfan"]
 [ext_resource type="Material" uid="uid://d3uie6hh0ok3l" path="res://materials/stone.tres" id="4_skg7u"]
 [ext_resource type="PackedScene" uid="uid://0m5qyp2kmvlh" path="res://scenes/ui/character_creation_ui.tscn" id="5_skg7u"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ygt6n"]
-sky_horizon_color = Color(0.711185, 0.751527, 0.791473, 1)
-ground_bottom_color = Color(0.164916, 0.257286, 0.321069, 1)
-ground_horizon_color = Color(0.711185, 0.751527, 0.791473, 1)
-
-[sub_resource type="Sky" id="Sky_skg7u"]
-sky_material = SubResource("ProceduralSkyMaterial_ygt6n")
-
-[sub_resource type="Environment" id="Environment_7mfan"]
-background_mode = 2
-sky = SubResource("Sky_skg7u")
-tonemap_mode = 2
-glow_enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_b6lwv"]
 size = Vector2(100, 100)
@@ -46,13 +32,6 @@ height = 4.0
 
 [node name="CharacterCreation" type="Node3D"]
 script = ExtResource("1_7mfan")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_7mfan")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
 
 [node name="Water" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_b6lwv")

@@ -1,19 +1,86 @@
-[gd_scene load_steps=3 format=3 uid="uid://ci18gqun3dxd5"]
+[gd_scene load_steps=16 format=3 uid="uid://ci18gqun3dxd5"]
+
+[ext_resource type="Shader" uid="uid://c704fvxgnnq44" path="res://GPUTrail-main/shaders/trail.gdshader" id="1_fuk7v"]
+[ext_resource type="Shader" uid="uid://7ay7yswch3id" path="res://GPUTrail-main/shaders/trail_draw_pass.gdshader" id="2_btdqx"]
+[ext_resource type="Script" uid="uid://ciq3q6eqcmohj" path="res://GPUTrail-main/GPUTrail3D.gd" id="3_mhe2x"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_avmjx"]
-top_radius = 0.01
-bottom_radius = 0.01
-height = 0.75
+top_radius = 0.02
+bottom_radius = 0.02
+height = 1.0
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_avmjx"]
+albedo_color = Color(0.477407, 0.283986, 0.106317, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_avmjx"]
-size = Vector3(0.750488, 0.10614, 0.137451)
+size = Vector3(1.0963, 0.10614, 0.137451)
+
+[sub_resource type="PrismMesh" id="PrismMesh_avmjx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxk0b"]
+albedo_color = Color(0.155667, 0.14869, 0.114462, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qmrdd"]
+shader = ExtResource("1_fuk7v")
+
+[sub_resource type="Gradient" id="Gradient_r73my"]
+colors = PackedColorArray(1, 1, 1, 0.492, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_48s8y"]
+gradient = SubResource("Gradient_r73my")
+
+[sub_resource type="Curve" id="Curve_y4e32"]
+_limits = [0.0, 0.184211, 0.0, 1.0]
+bake_resolution = 16
+_data = [Vector2(0, 0.0368781), 0.0, 0.0, 0, 0, Vector2(0.997389, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ievwc"]
+curve = SubResource("Curve_y4e32")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h547j"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_btdqx")
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_48s8y")
+shader_parameter/curve = SubResource("CurveTexture_ievwc")
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 44
+
+[sub_resource type="QuadMesh" id="QuadMesh_br0up"]
+material = SubResource("ShaderMaterial_h547j")
 
 [node name="ProjectileArrow" type="Area3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
 mesh = SubResource("CylinderMesh_avmjx")
+surface_material_override/0 = SubResource("StandardMaterial3D_avmjx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0012207, 0.0270691, 0.0106201)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0012207, 0.0270691, -0.0277024)
 shape = SubResource("BoxShape3D_avmjx")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.19729e-16, 3.10351e-09, -0.115, 0.115, -3.10351e-09, 0, -5.02681e-09, -0.071, -5.02681e-09, 0, 0, -0.528742)
+mesh = SubResource("PrismMesh_avmjx")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxk0b")
+
+[node name="GPUTrail3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.448944)
+amount = 47
+lifetime = 47.0
+explosiveness = 1.0
+fixed_fps = 143
+process_material = SubResource("ShaderMaterial_qmrdd")
+draw_pass_1 = SubResource("QuadMesh_br0up")
+script = ExtResource("3_mhe2x")
+length = 47
+length_seconds = 0.328671
+color_ramp = SubResource("GradientTexture1D_48s8y")
+curve = SubResource("CurveTexture_ievwc")
+billboard = true
+_defaults_have_been_set = true
+metadata/_custom_type_script = "uid://ciq3q6eqcmohj"

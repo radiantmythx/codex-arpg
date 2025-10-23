@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1uohu8hxxgur"]
+
+[ext_resource type="ButtonGroup" uid="uid://cgglq6c5ayktp" path="res://ui_groups/known_skills_group.tres" id="1_ayd5t"]
+[ext_resource type="Script" uid="uid://cp3h8jk8rv6c" path="res://scenes/ui/components/known_skills_button.gd" id="2_8hbgw"]
+[ext_resource type="Texture2D" uid="uid://bfdqueo0frg3n" path="res://images/skills/fireball.png" id="3_whbnh"]
+
+[node name="Control" type="Button"]
+custom_minimum_size = Vector2(48, 48)
+offset_right = 48.0
+offset_bottom = 48.0
+toggle_mode = true
+button_group = ExtResource("1_ayd5t")
+script = ExtResource("2_8hbgw")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_whbnh")
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]

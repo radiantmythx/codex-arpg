@@ -12,6 +12,8 @@ duration = 3.0
 main_stat_bonuses = {}
 stat_bonuses = {}
 flags = Array[String]([])
+fx_attach_path = NodePath("")
+fx_local_offset = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://eo2onfcbf4wc"
 
 [resource]
@@ -29,7 +31,9 @@ damage_type = 0
 base_damage_low = 0.0
 base_damage_high = 0.0
 tags = Array[String]([])
+speed_multiplier = 1.0
 animation_name = &""
+additional_animations = Array[StringName]([])
 attack_time = 0.0
 cancel_time = 0.0
 metadata/_custom_type_script = "uid://cikfgr3vo4xex"

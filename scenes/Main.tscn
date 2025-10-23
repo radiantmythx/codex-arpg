@@ -1,46 +1,27 @@
 [gd_scene load_steps=6 format=3 uid="uid://dduutvhpgaapk"]
 
-[ext_resource type="Shader" uid="uid://35a12d7kwfy7" path="res://shaders/post-process/postprocess.gdshader" id="1_jscy8"]
+[ext_resource type="Shader" uid="uid://k6vnojp7pg8v" path="res://shaders/post-process/postprocess-mmo2003.gdshader" id="1_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://cnul2t3hvwdpd" path="res://scenes/player/player_container.tscn" id="2_0wfyh"]
 [ext_resource type="Script" uid="uid://bfmkkrc4oat57" path="res://scripts/global_handlers/game_manager.gd" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c6l0x3g23qeyi" path="res://scenes/specialLevels/title_screen.tscn" id="3_jyhfs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pm3ni"]
-shader = ExtResource("1_jscy8")
-shader_parameter/contrast = 1.28
-shader_parameter/brightness = 1.14
-shader_parameter/gamma_corr = 0.99
-shader_parameter/enable_posterize = true
-shader_parameter/posterize_r = 6.0
-shader_parameter/posterize_g = 6.0
-shader_parameter/posterize_b = 6.0
-shader_parameter/enable_dither = true
-shader_parameter/dither_strength = 0.763
-shader_parameter/enable_pixelate = false
-shader_parameter/pixel_grid = Vector2(384, 256)
-shader_parameter/enable_fog = false
-shader_parameter/fog_color = Vector3(0.62, 0.7, 0.78)
-shader_parameter/fog_start = 0.0
-shader_parameter/fog_end = 0.8
-shader_parameter/enable_ca = false
-shader_parameter/ca_shift = 0.0
-shader_parameter/enable_grain = false
-shader_parameter/grain_intensity = 0.17
-shader_parameter/grain_motion = 1.3
-shader_parameter/enable_vignette = false
-shader_parameter/vignette_strength = 0.904
-shader_parameter/vignette_softness = 0.819
-shader_parameter/enable_sharpen = false
-shader_parameter/sharpen_amount = 0.015
-shader_parameter/saturation = 0.9
-shader_parameter/temperature = -0.1
-shader_parameter/tint = -0.05
+shader = ExtResource("1_jyhfs")
+shader_parameter/contrast = 1.08
+shader_parameter/saturation = 1.35
+shader_parameter/vibrance = 0.25
+shader_parameter/gamma_adjust = 1.0
+shader_parameter/posterize_steps = 0.0
+shader_parameter/bloom_threshold = 0.855
+shader_parameter/bloom_knee = 0.295
+shader_parameter/bloom_intensity = 1.4
+shader_parameter/bloom_radius_px = 2.5
+shader_parameter/bloom_rings = 3
 
 [node name="WorldRoot" type="Node3D"]
 
 [node name="PostProcess" type="CanvasLayer" parent="."]
 layer = 0
-visible = false
 
 [node name="PostProcess" type="ColorRect" parent="PostProcess"]
 material = SubResource("ShaderMaterial_pm3ni")

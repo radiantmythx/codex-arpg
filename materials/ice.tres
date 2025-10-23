@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dx0f5efoenomf"]
+
+[ext_resource type="Texture2D" uid="uid://bnu2bdj3mw0rs" path="res://images/noise_vfx/Marble/Marble 9 - 128x128.png" id="1_y5cve"]
+
+[resource]
+albedo_color = Color(0.71678, 0.894434, 0.998972, 1)
+albedo_texture = ExtResource("1_y5cve")
+albedo_texture_msdf = true
+metallic = 0.59
+metallic_specular = 0.7
+roughness_texture = ExtResource("1_y5cve")
+roughness_texture_channel = 2
+normal_enabled = true
+normal_texture = ExtResource("1_y5cve")

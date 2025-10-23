@@ -8,9 +8,10 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_e865n")
+shader_parameter/Deformation_Scale = 0.2
 shader_parameter/Deformation_Speed = Vector2(0, 1.145)
 shader_parameter/Deformation_Texture = ExtResource("2_1hgc4")
-shader_parameter/Deformation_Intensity = 0.43
+shader_parameter/Deformation_Intensity = 0.825
 shader_parameter/SmokeTexture = ExtResource("4_kegvi")
 shader_parameter/SmokeDisappearTexture = ExtResource("3_8mw3m")
 shader_parameter/EmissionColor = Color(0.813216, 0.125941, 0, 1)

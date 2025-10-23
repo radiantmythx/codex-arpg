@@ -53,7 +53,7 @@ shader_parameter/VisualTexture = ExtResource("4_4hf1n")
 offsets = PackedFloat32Array(0, 0.501597, 0.865815)
 colors = PackedColorArray(0.120358, 0.782651, 0.950521, 0, 3, 3, 4, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_whsec"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ytqv1"]
 gradient = SubResource("Gradient_ov3py")
 use_hdr = true
 
@@ -62,15 +62,15 @@ _limits = [0.0, 2.4, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 2.4), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_hpqhn"]
+[sub_resource type="CurveTexture" id="CurveTexture_4hf1n"]
 curve = SubResource("Curve_to01m")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nbenb"]
 gravity = Vector3(0, 0, 0)
 scale_min = 6.0
 scale_max = 6.0
-scale_curve = SubResource("CurveTexture_hpqhn")
-color_ramp = SubResource("GradientTexture1D_whsec")
+scale_curve = SubResource("CurveTexture_4hf1n")
+color_ramp = SubResource("GradientTexture1D_ytqv1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_aempf"]
 orientation = 1

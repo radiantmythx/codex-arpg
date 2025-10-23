@@ -1,7 +1,7 @@
 extends Node3D
 class_name PlayerContainer
 
-@export var player:CharacterBody3D
+@export var player:PlayerCharacter
 @export var player_cam:Camera3D
 @export var player_springarm:SpringArm3D
 @export var ui_nodes:Array[CanvasLayer]
@@ -38,7 +38,7 @@ func enable_player_ui():
 func add_player_race_visual(vis: PackedScene) -> void:
 	var visual := vis.instantiate()
 	player.get_race_visuals().add_child(visual) # must be in the same tree before resolving paths
-
+	visual.rotation.y = deg_to_rad(180)
 	var skel: Skeleton3D = player.get_skeleton()
 	_retarget_to_skeleton(visual, skel)
 
@@ -73,3 +73,6 @@ func force_player_oneshot_and_idle(animStateName:String):
 	
 func set_player_bodymesh_blendshape(blendShape:String, amount:float):
 	player.set_bodymesh_blendshape(blendShape, amount)
+	
+func set_player_hair(hairScene:PackedScene):
+	player.reset_hair(hairScene)

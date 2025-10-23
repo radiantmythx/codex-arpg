@@ -14,48 +14,51 @@ func _ready():
 	#slide_down_to_ground(drop_mesh)
 
 func _apply_item_model_mesh() -> void:
-	var model_res = pickup_area.item.model
-	if model_res == null:
-		print("no model")
-		return
-
-	# Case 1: model is already a Mesh resource
-	if model_res is Mesh:
-		print("Model is a mesh")
-		drop_mesh.mesh = model_res
-		return
-
-	# Case 2: model is a PackedScene (common)
-	if model_res is PackedScene:
-		print("Model is a packed scene")
-		var inst := (model_res as PackedScene).instantiate()
-		# Try root first…
-		var src := inst as MeshInstance3D
-		# …or search descendants if needed
-		if src == null:
-			src = _find_first_mesh(inst)
-
-		if src == null or src.mesh == null:
-			push_warning("Model scene has no MeshInstance3D with a mesh.")
-			inst.queue_free()
+	if(pickup_area.item):
+		var model_res = pickup_area.item.model
+		if model_res == null:
+			print("no model")
 			return
 
-		# Assign the mesh
-		print("Assigning mesh to drop")
-		drop_mesh.mesh = src.mesh
-		drop_mesh.transform = src.transform
+		# Case 1: model is already a Mesh resource
+		if model_res is Mesh:
+			print("Model is a mesh")
+			drop_mesh.mesh = model_res
+			return
 
-		# Optional: copy per-surface material overrides from the source instance
-		if drop_mesh.mesh:
-			var surf_count := drop_mesh.mesh.get_surface_count()
-			for i in range(surf_count):
-				var mat := src.get_surface_override_material(i)
-				if mat:
-					drop_mesh.set_surface_override_material(i, mat)
-		drop_mesh.position.y += 0.1
-		inst.queue_free()
-		return
-	push_warning("Unsupported model resource type: %s" % typeof(model_res))
+		# Case 2: model is a PackedScene (common)
+		if model_res is PackedScene:
+			print("Model is a packed scene")
+			var inst := (model_res as PackedScene).instantiate()
+			# Try root first…
+			var src := inst as MeshInstance3D
+			# …or search descendants if needed
+			if src == null:
+				src = _find_first_mesh(inst)
+
+			if src == null or src.mesh == null:
+				push_warning("Model scene has no MeshInstance3D with a mesh.")
+				inst.queue_free()
+				return
+
+			# Assign the mesh
+			print("Assigning mesh to drop")
+			drop_mesh.mesh = src.mesh
+			drop_mesh.transform = src.transform
+
+			# Optional: copy per-surface material overrides from the source instance
+			if drop_mesh.mesh:
+				var surf_count := drop_mesh.mesh.get_surface_count()
+				for i in range(surf_count):
+					var mat := src.get_surface_override_material(i)
+					if mat:
+						drop_mesh.set_surface_override_material(i, mat)
+			drop_mesh.position.y += 0.1
+			inst.queue_free()
+			return
+		push_warning("Unsupported model resource type: %s" % typeof(model_res))
+	else:
+		print("Pickup area has no item!")
 
 func _find_first_mesh(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:

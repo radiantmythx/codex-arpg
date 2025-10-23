@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="ProjectileSkill" load_steps=6 format=3 uid="uid://bxudxbhb3y2g2"]
+
+[ext_resource type="PackedScene" uid="uid://c34abngl2eyqu" path="res://scenes/effects/explosions/fireball_explosion.tscn" id="1_cguqv"]
+[ext_resource type="Script" uid="uid://g8f4qhb1fqur" path="res://scripts/skills/projectile_skill.gd" id="1_sk0av"]
+[ext_resource type="PackedScene" uid="uid://dibi40mcbke5n" path="res://scenes/projectiles/skills/solar/fire_barrage.tscn" id="1_wobwy"]
+[ext_resource type="PackedScene" uid="uid://d1nhemyl30k8h" path="res://scenes/effects/explosions/fire_sparks.tscn" id="2_0vf0c"]
+[ext_resource type="Texture2D" uid="uid://bfdqueo0frg3n" path="res://images/skills/fireball.png" id="3_0vf0c"]
+
+[resource]
+script = ExtResource("1_sk0av")
+speed = 30.0
+range = 30.0
+explosion_radius = 0.0
+projectile_scene = ExtResource("1_wobwy")
+on_hit_effect = ExtResource("2_0vf0c")
+explosion_effect = ExtResource("1_cguqv")
+explode_on_hit = true
+explode_on_finish = false
+fizzle_enabled = true
+fizzle_effect = ExtResource("2_0vf0c")
+chain_ignore_first_body_time = 0.08
+pattern = 2
+projectile_count = 10
+arc_spread_deg = 60.0
+shot_delay = 0.2
+yaw_jitter_deg = 5.0
+follow_user = false
+spawn_offset = 1.0
+spawn_height = 2.0
+keep_aim_live = false
+name = "Fire Barrage"
+description = "Shoot fire at dem boi"
+icon = ExtResource("3_0vf0c")
+mana_cost = 5.0
+cooldown = 3.0
+duration = 1.5
+move_multiplier = 0.3
+damage_type = 1
+base_damage_low = 2.0
+base_damage_high = 5.0
+tags = Array[String]([])
+speed_multiplier = 0.8
+animation_name = &"CastSpellAura"
+additional_animations = Array[StringName]([])
+attack_time = 1.2
+cancel_time = 1.4
+metadata/_custom_type_script = "uid://g8f4qhb1fqur"

@@ -67,7 +67,6 @@ func _unhandled_input(event: InputEvent) -> void:
 				_pitch_deg -= dy
 			_pitch_deg = clamp(_pitch_deg, min_pitch_deg, max_pitch_deg)
 			_apply_rot()
-
 	# Reset camera orientation (optional)
 	#if event.is_action_pressed("cam_reset"):
 	#	_start_reset_to_player_forward()

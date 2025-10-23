@@ -1,17 +1,35 @@
-[gd_resource type="Resource" script_class="FireballSkill" load_steps=5 format=3 uid="uid://0a3166e21fbf"]
+[gd_resource type="Resource" script_class="FireballSkill" load_steps=7 format=3 uid="uid://0a3166e21fbf"]
 
 [ext_resource type="PackedScene" uid="uid://d1nhemyl30k8h" path="res://scenes/effects/explosions/fire_sparks.tscn" id="1_4efqj"]
+[ext_resource type="PackedScene" uid="uid://c34abngl2eyqu" path="res://scenes/effects/explosions/fireball_explosion.tscn" id="1_8epdm"]
 [ext_resource type="Texture2D" uid="uid://bfdqueo0frg3n" path="res://images/skills/fireball.png" id="1_gmt24"]
-[ext_resource type="PackedScene" uid="uid://bx7spltxkpm6s" path="res://scenes/projectiles/skills/fireball.tscn" id="2_gmt24"]
+[ext_resource type="PackedScene" uid="uid://bx7spltxkpm6s" path="res://scenes/projectiles/skills/solar/fireball.tscn" id="2_gmt24"]
 [ext_resource type="Script" uid="uid://cndualm0ptvrs" path="res://scripts/skills/fireball_skill.gd" id="3_vwc5w"]
+[ext_resource type="Resource" uid="uid://cduff8xcgio61" path="res://resources/skills/solar/fire_nova_flower.tres" id="4_81ydk"]
 
 [resource]
 script = ExtResource("3_vwc5w")
 speed = 15.0
-range = 25.0
-explosion_radius = 5.0
+range = 15.0
+explosion_radius = 10.0
 projectile_scene = ExtResource("2_gmt24")
 on_hit_effect = ExtResource("1_4efqj")
+explosion_effect = ExtResource("1_8epdm")
+explode_on_hit = true
+explode_on_finish = false
+on_explode_skill = ExtResource("4_81ydk")
+fizzle_enabled = true
+fizzle_effect = ExtResource("1_4efqj")
+chain_ignore_first_body_time = 0.08
+pattern = 0
+projectile_count = 1
+arc_spread_deg = 20.0
+shot_delay = 0.08
+yaw_jitter_deg = 2.5
+follow_user = true
+spawn_offset = 1.0
+spawn_height = 2.0
+keep_aim_live = false
 name = "Fireball"
 description = "Shoot da fuckin fireball"
 icon = ExtResource("1_gmt24")
@@ -20,9 +38,11 @@ cooldown = 1.0
 duration = 1.0
 move_multiplier = 0.2
 damage_type = 1
-base_damage_low = 1.0
-base_damage_high = 2.0
+base_damage_low = 5.0
+base_damage_high = 10.0
 tags = Array[String](["Spell", "Projectile", "AoE"])
+speed_multiplier = 1.0
 animation_name = &"strike"
+additional_animations = Array[StringName]([])
 attack_time = 0.3
 cancel_time = 1.0

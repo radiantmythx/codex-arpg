@@ -13,6 +13,8 @@ stat_bonuses = {
 &"move_speed_inc": 20.0
 }
 flags = Array[String]([])
+fx_attach_path = NodePath("")
+fx_local_offset = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://cunkjx53ftdis"
 
 [resource]
@@ -31,6 +33,8 @@ damage_type = 0
 base_damage_low = 0.0
 base_damage_high = 0.0
 tags = Array[String](["Aura"])
+speed_multiplier = 1.0
 animation_name = &"CastSpellAura"
+additional_animations = Array[StringName]([])
 attack_time = 0.9
 cancel_time = 1.0

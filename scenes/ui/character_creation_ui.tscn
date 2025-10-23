@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://0m5qyp2kmvlh"]
+[gd_scene load_steps=29 format=3 uid="uid://0m5qyp2kmvlh"]
 
 [ext_resource type="Script" uid="uid://bapd74qlbypxc" path="res://scripts/ui/character_creation_ui.gd" id="1_6jk6x"]
 [ext_resource type="StyleBox" uid="uid://c0bokaeuihfjf" path="res://ui_themes/conversation_dialog_panel.tres" id="1_7nphp"]
@@ -8,14 +8,19 @@
 [ext_resource type="Texture2D" uid="uid://xl0iscee30i2" path="res://images/textures/seamless/wood/planks_resize.png" id="4_4blbd"]
 [ext_resource type="PackedScene" uid="uid://cvq3sgcgldbf0" path="res://scenes/player/race/elf_ears.tscn" id="5_wawec"]
 [ext_resource type="FontFile" uid="uid://bgbggtda0ung3" path="res://fonts/Isenheim_Regulier.otf" id="6_5t4fb"]
-[ext_resource type="PackedScene" uid="uid://c4gh2syifbhaf" path="res://scenes/player/race/gnome_hat.tscn" id="6_6jk6x"]
+[ext_resource type="PackedScene" uid="uid://bagjqm8g02u1m" path="res://scenes/player/race/gnome_hat_2.tscn" id="7_5aegf"]
 [ext_resource type="PackedScene" uid="uid://ws5uqw6u4rdm" path="res://scenes/player/race/goblin_ears.tscn" id="7_xlej6"]
 [ext_resource type="PackedScene" uid="uid://btr8gsy6va1hp" path="res://scenes/player/race/goblin_nose.tscn" id="8_310wj"]
 [ext_resource type="PackedScene" uid="uid://f0t8th6wfgvc" path="res://scenes/ui/components/gem_select_button.tscn" id="10_310wj"]
 [ext_resource type="PackedScene" uid="uid://br5vd55phq8wi" path="res://scenes/ui/components/body_mod_slider.tscn" id="11_5aegf"]
+[ext_resource type="PackedScene" uid="uid://bm8ncna3kl2kc" path="res://scenes/ui/components/hair_select_button.tscn" id="11_s8h4e"]
 [ext_resource type="Texture2D" uid="uid://dflbs6oxc7o3p" path="res://images/items/gems/str_gem.png" id="12_byk28"]
+[ext_resource type="PackedScene" uid="uid://bx0pnio5y4ubv" path="res://scenes/player/hair/hair_male_short.tscn" id="12_qokcy"]
 [ext_resource type="Texture2D" uid="uid://bnfht0a5jy4hi" path="res://images/items/gems/int_gem.png" id="13_4blbd"]
+[ext_resource type="PackedScene" uid="uid://ddfl6r2cdmno5" path="res://scenes/player/hair/hair_spiky.tscn" id="13_dh2g4"]
 [ext_resource type="Texture2D" uid="uid://dyj5r5lp0dpf1" path="res://images/items/gems/dex_gem.png" id="14_5aegf"]
+[ext_resource type="PackedScene" uid="uid://1chymab06fkk" path="res://scenes/player/hair/hair_orihime.tscn" id="14_u1uk5"]
+[ext_resource type="PackedScene" uid="uid://13wskaxdrodu" path="res://scenes/ui/components/color_picker_area.tscn" id="16_u1uk5"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5aegf"]
 texture = ExtResource("4_4blbd")
@@ -97,10 +102,9 @@ theme_override_styles/tabbar_background = SubResource("StyleBoxTexture_5aegf")
 theme_override_styles/panel = SubResource("StyleBoxFlat_alo7k")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tmc46")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_s8h4e")
-current_tab = 1
+current_tab = 0
 
 [node name="Character" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -182,7 +186,7 @@ layout_mode = 2
 information_text_area = NodePath("../../../../../../../CharCreate_RightPanel/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/InformationTextArea")
 label_text = "Gnome"
 hover_text = "Hailing from the Northern Gnomish Fields of Eldrath, Gnomes are a fickle race who would prefer to stay out of worldly matters.\\n\\nGnomes primarily defend their territory through ranged attacks, and highly favor both archery and magic as methods of offense and defense.\\n\\nGnomes are also smaller than all other races, and therefore harder to hit. They refuse to remove their hats."
-added_race_visuals = Array[PackedScene]([ExtResource("6_6jk6x")])
+added_race_visuals = Array[PackedScene]([ExtResource("7_5aegf")])
 
 [node name="RaceSelectHuman6" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Character/RaceGroup/VBoxContainer" node_paths=PackedStringArray("information_text_area") instance=ExtResource("3_wawec")]
 layout_mode = 2
@@ -213,50 +217,143 @@ label_text = "Next"
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="Body" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+[node name="Hair" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
-alignment = 1
 metadata/_tab_index = 1
 
-[node name="BodyModSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="Spacer" type="TextureRect" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-label_text = "Tits"
-shape_key_mod_string = "ChestSize"
 
-[node name="BodyModSlider2" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="Label" type="Label" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair"]
 layout_mode = 2
-label_text = "Ass"
-shape_key_mod_string = "ButtSize"
+text = "Hairstyles"
+horizontal_alignment = 1
 
-[node name="BodyModSlider3" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="HBoxContainer" type="HBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair"]
 layout_mode = 2
-label_text = "Waist"
-shape_key_mod_string = "WaistSize"
 
-[node name="BodyModSlider4" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="HairSelectButton" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair/HBoxContainer" instance=ExtResource("11_s8h4e")]
 layout_mode = 2
-label_text = "Head"
+button_label_text = "Bald"
+
+[node name="HairSelectButton2" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair/HBoxContainer" instance=ExtResource("11_s8h4e")]
+layout_mode = 2
+hair_scene = ExtResource("12_qokcy")
+button_label_text = "Short"
+
+[node name="HairSelectButton3" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair/HBoxContainer" instance=ExtResource("11_s8h4e")]
+layout_mode = 2
+hair_scene = ExtResource("13_dh2g4")
+button_label_text = "Spiky"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair"]
+layout_mode = 2
+
+[node name="HairSelectButton" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Hair/HBoxContainer2" instance=ExtResource("11_s8h4e")]
+layout_mode = 2
+size_flags_horizontal = 6
+hair_scene = ExtResource("14_u1uk5")
+button_label_text = "Orihime"
+
+[node name="Sliders" type="ScrollContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Body" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="HeadSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Head Size"
 shape_key_mod_string = "HeadSize"
 
-[node name="BodyModSlider5" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="NeckSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
 layout_mode = 2
-label_text = "Leg Thicc"
-shape_key_mod_string = "LegThick"
+label_text = "Neck Size"
+shape_key_mod_string = "NeckSize"
 
-[node name="BodyModSlider6" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="ChestSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
 layout_mode = 2
-label_text = "Arm Thicc"
+label_text = "Chest Size"
+shape_key_mod_string = "ChestSize"
+
+[node name="WaistSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Waist Size"
+shape_key_mod_string = "WaistSize"
+
+[node name="GroinSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Groin Size"
+shape_key_mod_string = "GroinSize"
+
+[node name="ButtSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Ass Size"
+shape_key_mod_string = "ButtSize"
+
+[node name="BoobSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Boob Size"
+shape_key_mod_string = "BoobSize"
+
+[node name="ArmSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Arm Size"
 shape_key_mod_string = "ArmSize"
 
-[node name="BodyModSlider7" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Body" instance=ExtResource("11_5aegf")]
+[node name="HandSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
 layout_mode = 2
-label_text = "Foot Fetish"
+label_text = "Hand Size"
+shape_key_mod_string = "HandSize"
+
+[node name="FootSizeSlider" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Sliders/Body" instance=ExtResource("11_5aegf")]
+layout_mode = 2
+label_text = "Foot Size"
 shape_key_mod_string = "FootSize"
+
+[node name="Colors" type="ScrollContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Colors"]
+layout_mode = 2
+
+[node name="ColorPickerArea5" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Colors/VBoxContainer" instance=ExtResource("16_u1uk5")]
+layout_mode = 2
+label_text = "Hair"
+player_material_name = "hair_main_color"
+
+[node name="ColorPickerArea" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Colors/VBoxContainer" instance=ExtResource("16_u1uk5")]
+layout_mode = 2
+label_text = "Skin"
+player_material_name = "skin_color"
+
+[node name="ColorPickerArea2" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Colors/VBoxContainer" instance=ExtResource("16_u1uk5")]
+layout_mode = 2
+label_text = "Shirt"
+player_material_name = "shirt_color"
+
+[node name="ColorPickerArea3" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Colors/VBoxContainer" instance=ExtResource("16_u1uk5")]
+layout_mode = 2
+label_text = "Pants"
+player_material_name = "pants_color"
+
+[node name="ColorPickerArea4" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Colors/VBoxContainer" instance=ExtResource("16_u1uk5")]
+layout_mode = 2
+label_text = "Shoes"
+player_material_name = "shoes_color"
 
 [node name="Gem" type="VBoxContainer" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
+metadata/_tab_index = 4
 
 [node name="GemSelectBody" parent="CreationContainer/CreationHBox/CharCreate_LeftPanel/MarginContainer/TabContainer/Gem" node_paths=PackedStringArray("information_text_area") instance=ExtResource("10_310wj")]
 layout_mode = 2

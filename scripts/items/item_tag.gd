@@ -34,10 +34,12 @@ func _ready() -> void:
 	clip_text = false
 
 func set_item(it: Item) -> void:
-		item = it
-		text = it.item_name
-		tooltip_text = it.get_display_text()
-		_apply_style()
+		if(it):
+			print("dropping item ", it)
+			item = it
+			text = it.item_name
+			tooltip_text = it.get_display_text()
+			_apply_style()
 
 func _apply_style() -> void:
 	var layer := get_parent()

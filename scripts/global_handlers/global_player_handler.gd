@@ -82,3 +82,15 @@ func force_player_oneshot_and_idle(animStateName):
 
 func set_player_blendshape(blendShape:String, amount:float):
 	player_container.set_player_bodymesh_blendshape(blendShape, amount)
+	
+func set_player_hair(hairScene:PackedScene):
+	player_container.set_player_hair(hairScene)
+
+var player_set_skill_choice:Skill
+
+func set_player_set_skill_choice(new_skill:Skill):
+	player_set_skill_choice = new_skill
+	print("Global player handler recognizes the new skill as ", new_skill.name)
+	
+func update_player_skill(new_skill, index):
+	player_container.player.set_skill_slot(index, new_skill)

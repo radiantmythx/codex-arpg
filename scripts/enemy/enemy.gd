@@ -78,6 +78,7 @@ var _player_detected: bool = false
 
 # AnimationTree path cache (Suggestion #4)
 const P_MOVE := &"parameters/move/blend_position"
+const R_MOVE := &"parameters/run/blend_position"
 
 # UI throttling (Suggestion #5)
 var _ui_visible_until_ms := 0
@@ -247,7 +248,7 @@ func _process_attack(dt: float, player_pos: Vector3) -> void:
 			_attacking_timer = 0.0
 
 		if _attacking_timer <= 0.0 and _anim_state:
-			_anim_state.travel("move")
+			_anim_state.travel("run")
 	elif player_pos != Vector3.ZERO \
 		and global_position.distance_squared_to(player_pos) <= attack_range * attack_range \
 		and _attack_timer <= 0.0 and main_skill:
@@ -291,7 +292,7 @@ func _chase_cached(player_pos: Vector3, self_pos: Vector3, delta: float) -> void
 	if _attacking_timer > 0.0:
 		velocity = Vector3.ZERO
 	else:
-		velocity = dir * move_speed
+		velocity = dir * clamp(stats.get_move_speed(), 0, 100000)
 
 	# Movement trim (Suggestion #6)
 	if velocity != Vector3.ZERO:
@@ -305,7 +306,10 @@ func _update_animation() -> void:
 	if _attacking_timer > 0.0:
 		return
 
-	_anim_state.travel("move")
+	if(_player_detected):
+		_anim_state.travel("run")
+	else:
+		_anim_state.travel("move")
 
 	# Cheap local velocity projection (Suggestion #4)
 	var world_vel := Vector3(velocity.x, 0.0, velocity.z)
@@ -313,6 +317,7 @@ func _update_animation() -> void:
 	var local_x := world_vel.dot(basis.x)
 	var local_y := world_vel.dot(-basis.z)
 	_anim_tree.set(P_MOVE, Vector2(local_x, local_y))
+	_anim_tree.set(R_MOVE, Vector2(local_x, local_y))
 
 # =========================
 # === LOD Management    ===
@@ -395,6 +400,7 @@ func _get_player_position() -> Vector3:
 # =========================
 func add_buff(buff: Buff) -> void:
 	if buff_manager:
+		print("applying buff")
 		buff_manager.apply_buff(buff)
 
 func remove_buff(buff: Buff) -> void:
@@ -556,14 +562,14 @@ func _drop_loot() -> void:
 	for entry in combined:
 		if randf() <= float(entry.get("chance", 1.0)):
 			var drop := drop_scene.instantiate()
-			var area := drop.get_node_or_null("Area3D")
+			var area := drop
 			if area and entry.has("item"):
 				var it: Item = entry["item"]
 				if it and it.max_stack <= 1:
-					area.item = it.duplicate(true)
+					area.item_to_spawn = it.duplicate(true)
 				else:
-					area.item = it
+					area.item_to_spawn = it
 			if area and entry.has("amount"):
-				area.amount = entry["amount"]
+				area.item_quant = entry["amount"]
 			get_parent().add_child(drop)
 			drop.global_position = global_position

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MeleeSkill" load_steps=4 format=3 uid="uid://c3iklnkywgran"]
+
+[ext_resource type="Texture2D" uid="uid://cg6j3jrb4h2bd" path="res://images/skills/default_attack.png" id="1_dng8o"]
+[ext_resource type="PackedScene" uid="uid://b3er6xewdlpeq" path="res://scenes/effects/skills/effect_smitetest.tscn" id="2_hm1wm"]
+[ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="3_lh76m"]
+
+[resource]
+script = ExtResource("3_lh76m")
+range = 2.0
+angle = 45.0
+on_hit_effect = ExtResource("2_hm1wm")
+name = "Sword Strike"
+description = ""
+icon = ExtResource("1_dng8o")
+mana_cost = 1.0
+cooldown = 0.05
+duration = 1.1
+move_multiplier = 0.2
+damage_type = 0
+base_damage_low = 2.0
+base_damage_high = 4.0
+tags = Array[String](["melee"])
+speed_multiplier = 1.0
+animation_name = &"strike"
+additional_animations = Array[StringName]([&"Strike2"])
+attack_time = 0.3
+cancel_time = 1.0
+metadata/_custom_type_script = "uid://cikfgr3vo4xex"

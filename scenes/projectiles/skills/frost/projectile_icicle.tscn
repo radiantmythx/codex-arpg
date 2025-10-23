@@ -1,0 +1,110 @@
+[gd_scene load_steps=17 format=4 uid="uid://cqxoerncl4upc"]
+
+[ext_resource type="Material" uid="uid://dx0f5efoenomf" path="res://materials/ice.tres" id="1_dcbsv"]
+[ext_resource type="Shader" uid="uid://c704fvxgnnq44" path="res://GPUTrail-main/shaders/trail.gdshader" id="1_i8m3u"]
+[ext_resource type="Shader" uid="uid://7ay7yswch3id" path="res://GPUTrail-main/shaders/trail_draw_pass.gdshader" id="2_56mh3"]
+[ext_resource type="Script" uid="uid://by4ugyr7kvfc3" path="res://scripts/util/rotate_in_place.gd" id="2_o0iqw"]
+[ext_resource type="Script" uid="uid://ciq3q6eqcmohj" path="res://GPUTrail-main/GPUTrail3D.gd" id="3_81qoj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_45xm6"]
+resource_name = "Icicle_Material"
+cull_mode = 2
+albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6xteo"]
+_surfaces = [{
+"aabb": AABB(-0.365417, -0.444387, -0.384222, 0.730833, 2.08009, 0.695064),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwABAAAAAwAAAAIAAQADAAQABAADAAIAAQAFAAIABQAEAAIAAQAEAAUA"),
+"name": "Icicle_Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("/38AAAAAAAD//wAAyGEAAP9///+CjQAAAAAAAMhhAADkMAAA//8AABrPAAD//wAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6kpfi"]
+resource_name = "Icicle_Cylinder"
+_surfaces = [{
+"aabb": AABB(-0.365417, -0.444387, -0.384222, 0.730833, 2.08009, 0.695064),
+"attribute_data": PackedByteArray("////f8zM/3/MzAAAzMz/f5mZ/3+ZmQAAmZn/f2Zm/39mZgAAZmb/fzMz/38zMwAAMzP/fwAA/38AAAAAkIUCrW36Aq3/v46C4puz8Rzks/E="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADwAQABEAEAAPABIAEAASABMA"),
+"material": SubResource("StandardMaterial3D_45xm6"),
+"name": "Icicle_Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 20,
+"vertex_data": PackedByteArray("/38AAAAAeOb//wAAyGF45v9///+CjXjm//8AAMhhgbMazwAA//+Bs/9///+CjYGzGs8AAP//CobkMAAA//8Khv9///+CjQqG5DAAAP//gbMAAAAAyGGBs/9///+CjYGzAAAAAMhheOb/fwAAAAB45v9///+CjXjmAAAAAMhh/z///wAAyGH/P/9/AAAAAP8/5DAAAP///z8azwAA////P3iL0AJ4i9ACeIvQAjWTIAs1kyALNZMgC////3////9/////fx+Lyewfi8nsH4vJ7M+ChfTPgoX0z4KF9AAA/38AAP9/AAD/fwAA/38AAP9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_6xteo")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_avmjx"]
+size = Vector3(0.808892, 0.259506, 0.285095)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qmrdd"]
+shader = ExtResource("1_i8m3u")
+
+[sub_resource type="Gradient" id="Gradient_r73my"]
+colors = PackedColorArray(1, 1, 1, 0.492, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_48s8y"]
+gradient = SubResource("Gradient_r73my")
+
+[sub_resource type="Curve" id="Curve_y4e32"]
+_limits = [0.0, 0.184211, 0.0, 1.0]
+bake_resolution = 16
+_data = [Vector2(0, 0.0368781), 0.0, 0.0, 0, 0, Vector2(0.997389, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ievwc"]
+curve = SubResource("Curve_y4e32")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h547j"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_56mh3")
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_48s8y")
+shader_parameter/curve = SubResource("CurveTexture_ievwc")
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 44
+
+[sub_resource type="QuadMesh" id="QuadMesh_br0up"]
+material = SubResource("ShaderMaterial_h547j")
+
+[node name="ProjectileIcicle" type="Area3D"]
+
+[node name="Cylinder" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.355, 0, 0, 0, -1.55175e-08, 0.355, 0, -0.355, -1.55175e-08, 0, 0, 0)
+mesh = SubResource("ArrayMesh_6kpfi")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("1_dcbsv")
+script = ExtResource("2_o0iqw")
+rotation_speed_deg = Vector3(0, 0, 90)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.00265499, 0.00583652, -0.171406)
+shape = SubResource("BoxShape3D_avmjx")
+
+[node name="GPUTrail3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.448944)
+amount = 46
+lifetime = 46.0
+explosiveness = 1.0
+fixed_fps = 143
+process_material = SubResource("ShaderMaterial_qmrdd")
+draw_pass_1 = SubResource("QuadMesh_br0up")
+script = ExtResource("3_81qoj")
+length = 46
+length_seconds = 0.321678
+color_ramp = SubResource("GradientTexture1D_48s8y")
+curve = SubResource("CurveTexture_ievwc")
+billboard = true
+_defaults_have_been_set = true
+metadata/_custom_type_script = "uid://ciq3q6eqcmohj"

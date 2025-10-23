@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://xp1q7d3ntraf"]
+[gd_scene load_steps=14 format=4 uid="uid://xp1q7d3ntraf"]
 
 [ext_resource type="Material" uid="uid://dci003l7q6b7t" path="res://materials/mesh_aura_overlay.tres" id="1_st188"]
 
@@ -80,11 +80,52 @@ albedo_color = Color(0.824858, 0.664206, 0, 1)
 metallic = 0.3
 roughness = 0.8
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_st188"]
+transparency = 1
+albedo_color = Color(0.363113, 0.457069, 0.876156, 0.459)
 
-[node name="Sword" type="MeshInstance3D" parent="."]
+[sub_resource type="BoxMesh" id="BoxMesh_xhx7q"]
+material = SubResource("StandardMaterial3D_st188")
+size = Vector3(0.135, 0.495, 0.355)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwov0"]
+transparency = 1
+albedo_color = Color(0.363113, 0.457069, 0.876156, 0.459)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t8cjt"]
+material = SubResource("StandardMaterial3D_qwov0")
+size = Vector3(0.075, 0.27, 0.085)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5drpc"]
+transparency = 1
+albedo_color = Color(0.363113, 0.457069, 0.876156, 0.459)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cgshl"]
+material = SubResource("StandardMaterial3D_5drpc")
+radius = 0.1
+height = 0.2
+
+[node name="Sword" type="MeshInstance3D"]
 material_overlay = ExtResource("1_st188")
 mesh = SubResource("ArrayMesh_6w3od")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_6ayfo")
 surface_material_override/1 = SubResource("StandardMaterial3D_egd51")
+
+[node name="Grip" type="Node3D" parent="."]
+transform = Transform3D(-0.0327779, -0.998072, -0.0527066, 0.999435, -0.0331236, 0.00569828, -0.00743313, -0.05249, 0.998594, 0.2984, 0.121009, 0.0509238)
+
+[node name="Hand" type="MeshInstance3D" parent="Grip"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.306953, 0)
+visible = false
+mesh = SubResource("BoxMesh_xhx7q")
+
+[node name="Thumb" type="MeshInstance3D" parent="Grip"]
+transform = Transform3D(1, 0, 0, 0, 0.0868776, 0.996219, 0, -0.996219, 0.0868776, 0.0476384, 0.133099, 0.192062)
+visible = false
+mesh = SubResource("BoxMesh_t8cjt")
+
+[node name="Palm" type="MeshInstance3D" parent="Grip"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.110977, 0.33076, -4.07454e-10)
+visible = false
+mesh = SubResource("SphereMesh_cgshl")

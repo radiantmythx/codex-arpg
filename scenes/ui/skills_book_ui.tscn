@@ -1,0 +1,180 @@
+[gd_scene load_steps=8 format=3 uid="uid://ccfapvole8nrw"]
+
+[ext_resource type="Texture2D" uid="uid://d3qqq5bklstnt" path="res://images/items/UI/panel/panel_style_01.png" id="1_kvwau"]
+[ext_resource type="Script" uid="uid://drifk6rcqcnqj" path="res://scripts/ui/skill_book_ui.gd" id="1_xvqav"]
+[ext_resource type="FontFile" uid="uid://dcqsossrbmy6p" path="res://fonts/Bayone.ttf" id="2_8vaxq"]
+[ext_resource type="PackedScene" uid="uid://d1uohu8hxxgur" path="res://scenes/ui/components/known_skills_button.tscn" id="2_ydgxe"]
+[ext_resource type="PackedScene" uid="uid://cuaf4c562utg5" path="res://scenes/ui/components/skill_icon.tscn" id="3_kvwau"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vwfkw"]
+texture = ExtResource("1_kvwau")
+texture_margin_left = 30.0
+texture_margin_top = 30.0
+texture_margin_right = 30.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_kvwau"]
+font = ExtResource("2_8vaxq")
+font_size = 32
+
+[node name="SkillsBookUI" type="CanvasLayer" node_paths=PackedStringArray("KnownSkillsFlowContainer")]
+script = ExtResource("1_xvqav")
+KnownSkillsFlowContainer = NodePath("SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsPanel/ScrollContainer/MarginContainer/KnownSkillsFlowContainer")
+SkillButtonScene = ExtResource("2_ydgxe")
+
+[node name="SkillBook" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SkillBook"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="SkillBook/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SkillBook/HBoxContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(2, 2)
+render_target_update_mode = 4
+
+[node name="PanelContainer2" type="PanelContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_vwfkw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+text = "Skills"
+label_settings = SubResource("LabelSettings_kvwau")
+horizontal_alignment = 1
+
+[node name="KnownSkillsPanel" type="PanelContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="KnownSkillsFlowContainer" type="FlowContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsPanel/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+alignment = 1
+
+[node name="KnownSkillsContainer2" type="PanelContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer2"]
+layout_mode = 2
+text = "This is a rich text label that has a bunch of text in it that will be a skills description ultimately"
+
+[node name="KnownSkillsContainer3" type="PanelContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3"]
+layout_mode = 2
+
+[node name="spacer3" type="TextureRect" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Skill1" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+button_label = "R-Click"
+
+[node name="Skill2" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 1
+button_label = "Q"
+
+[node name="Skill3" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 2
+button_label = "E"
+
+[node name="Skill4" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 3
+button_label = "R"
+
+[node name="spacer2" type="TextureRect" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Skill5" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer2" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 4
+button_label = "(RClick)"
+
+[node name="Skill6" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer2" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 5
+button_label = "(Q)"
+
+[node name="Skill7" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer2" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 6
+button_label = "(E)"
+
+[node name="Skill8" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer/HBoxContainer2" instance=ExtResource("3_kvwau")]
+layout_mode = 2
+slot_index = 7
+button_label = "(R)"
+
+[node name="spacer" type="TextureRect" parent="SkillBook/HBoxContainer/SubViewportContainer/SubViewport/PanelContainer2/VBoxContainer/KnownSkillsContainer3/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="PanelContainer" type="Container" parent="SkillBook/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainer3" type="Container" parent="SkillBook/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

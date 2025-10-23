@@ -1,0 +1,39 @@
+[gd_scene load_steps=10 format=3 uid="uid://dh4y0b81l35vr"]
+
+[ext_resource type="Material" uid="uid://nl55uohaymhm" path="res://scenes/effects/prefabs/shaders/m_fire_explode_ball.tres" id="1_aixxt"]
+
+[sub_resource type="Curve" id="Curve_icohy"]
+_data = [Vector2(0.0914454, 1), 0.0, 0.0, 0, 0, Vector2(0.383481, 0.643108), 0.0, 0.0, 0, 0, Vector2(0.640118, 0), 0.0, 0.0, 0, 0, Vector2(0.79351, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_hm0p8"]
+curve = SubResource("Curve_icohy")
+
+[sub_resource type="Gradient" id="Gradient_jwvlj"]
+offsets = PackedFloat32Array(0, 0.214058)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kbowf"]
+gradient = SubResource("Gradient_jwvlj")
+
+[sub_resource type="Curve" id="Curve_fxulm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.654867, 0.744955), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_t3yl6"]
+curve = SubResource("Curve_fxulm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p7xa0"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+gravity = Vector3(0, 6, 0)
+scale_curve = SubResource("CurveTexture_t3yl6")
+color_ramp = SubResource("GradientTexture1D_kbowf")
+alpha_curve = SubResource("CurveTexture_hm0p8")
+
+[sub_resource type="SphereMesh" id="SphereMesh_ncyvi"]
+
+[node name="Node3D" type="GPUParticles3D"]
+material_override = ExtResource("1_aixxt")
+process_material = SubResource("ParticleProcessMaterial_p7xa0")
+draw_pass_1 = SubResource("SphereMesh_ncyvi")

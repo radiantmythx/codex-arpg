@@ -153,7 +153,6 @@ bind/40/bone = -1
 bind/40/pose = Transform3D(-0.918862, -0.194719, -0.343178, -0.349479, -0.00206743, 0.936934, -0.183149, 0.980857, -0.0661525, -0.199351, -0.454194, -0.0963939)
 
 [node name="GnomeHat" type="MeshInstance3D"]
-transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_o2ijg")
 skin = SubResource("Skin_jxcct")
 skeleton = NodePath("../..")

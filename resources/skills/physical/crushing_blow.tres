@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="MeleeSkill" load_steps=7 format=3 uid="uid://dsa4ul8hs6gse"]
+
+[ext_resource type="Texture2D" uid="uid://cg6j3jrb4h2bd" path="res://images/skills/default_attack.png" id="1_ynpkk"]
+[ext_resource type="Script" uid="uid://cikfgr3vo4xex" path="res://scripts/skills/melee_skill.gd" id="2_j6v7i"]
+[ext_resource type="Script" uid="uid://eo2onfcbf4wc" path="res://scripts/skills/damage_over_time_buff.gd" id="2_ynpkk"]
+[ext_resource type="PackedScene" uid="uid://cwn3jlbjuvc4e" path="res://scenes/effects/skills/melee_hit.tscn" id="3_phuom"]
+[ext_resource type="Material" uid="uid://cln2rfp6yghiq" path="res://materials/iron_metal.tres" id="3_sculc"]
+
+[sub_resource type="Resource" id="Resource_phuom"]
+script = ExtResource("2_ynpkk")
+base_damage_low = 0.0
+base_damage_high = 0.0
+damage_type = 0
+duration = 3.0
+main_stat_bonuses = {}
+stat_bonuses = {
+"move_speed_inc": -25.0
+}
+flags = Array[String]([])
+overlay_material = ExtResource("3_sculc")
+fx_attach_path = NodePath("")
+fx_local_offset = Vector3(0, 0, 0)
+metadata/_custom_type_script = "uid://eo2onfcbf4wc"
+
+[resource]
+script = ExtResource("2_j6v7i")
+range = 6.0
+angle = 45.0
+on_hit_effect = ExtResource("3_phuom")
+on_hit_buff = SubResource("Resource_phuom")
+name = "Crushing Blow"
+description = "Slows enemy movement by 25% for 3 seconds"
+icon = ExtResource("1_ynpkk")
+mana_cost = 4.0
+cooldown = 3.0
+duration = 1.2
+move_multiplier = 0.3
+damage_type = 0
+base_damage_low = 4.0
+base_damage_high = 5.0
+tags = Array[String]([])
+speed_multiplier = 1.5
+animation_name = &"StrikeOverhead"
+additional_animations = Array[StringName]([])
+attack_time = 0.8
+cancel_time = 1.4
+metadata/_custom_type_script = "uid://cikfgr3vo4xex"

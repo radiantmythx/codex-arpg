@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://bm8ncna3kl2kc"]
+
+[ext_resource type="ButtonGroup" uid="uid://c1dc8by1hrfoq" path="res://ui_groups/hair_button_group.tres" id="1_0ps5g"]
+[ext_resource type="Script" uid="uid://onkjra827drf" path="res://scripts/ui/components/hair_select_button.gd" id="2_drd8m"]
+[ext_resource type="FontFile" uid="uid://dcqsossrbmy6p" path="res://fonts/Bayone.ttf" id="3_drd8m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rmpno"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p230c"]
+bg_color = Color(0.6, 0.6, 0.6, 0.475)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lerrh"]
+bg_color = Color(0.404511, 0.404511, 0.404511, 0.685)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v431k"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jhf76"]
+font = ExtResource("3_drd8m")
+font_size = 24
+
+[node name="HairSelectButton" type="Button"]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rmpno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_p230c")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lerrh")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_v431k")
+toggle_mode = true
+button_group = ExtResource("1_0ps5g")
+script = ExtResource("2_drd8m")
+
+[node name="HairImage" type="TextureRect" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "HairText"
+label_settings = SubResource("LabelSettings_jhf76")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]
+[connection signal="mouse_entered" from="HairImage" to="." method="_on_gem_image_mouse_entered"]
+[connection signal="mouse_exited" from="HairImage" to="." method="_on_gem_image_mouse_exited"]

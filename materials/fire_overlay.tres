@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://c4i03yy0jeiaq"]
+
+[ext_resource type="Shader" uid="uid://5sldd5wik8sh" path="res://shaders/spatial/texture_overlay_and_pulse.gdshader" id="1_way55"]
+[ext_resource type="Texture2D" uid="uid://bwd3olie8o7hg" path="res://images/noise_vfx/Milky/Milky 5 - 128x128.png" id="2_fa6ii"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_way55")
+shader_parameter/overlay_tex = ExtResource("2_fa6ii")
+shader_parameter/use_luma_as_alpha = 1.0
+shader_parameter/use_texture_rgb = 0.0
+shader_parameter/uv_scale = Vector2(2, 2)
+shader_parameter/uv_scroll = Vector2(1, 1)
+shader_parameter/uv_rotate = 3.0
+shader_parameter/emission_color = Color(0.58, 0.253, 0.181, 1)
+shader_parameter/emission_intensity = 2.0
+shader_parameter/pulse_speed = 1.0
+shader_parameter/pulse_amount = 2.915
+shader_parameter/overlay_alpha = 1.0

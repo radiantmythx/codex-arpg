@@ -10,6 +10,7 @@ var _surface_index_by_name: Dictionary = {}
 @export var extra_visuals_node : Node3D
 
 @export var anim_player:AnimationPlayer
+@export var anim_speed_override : float = 1.0
 var _oneshot_gen: int = 0
 var _oneshot_timer: Timer
 
@@ -36,10 +37,12 @@ var _oneshot_timer: Timer
 var _skill_system_initialized := false
 @export var debug_known_skills:Array[Skill] = []
 
+@export var all_known_skills:Array[Skill]
+
 @export var inventory_ui_path: NodePath
 @export var inventory_camera_path: NodePath
 @export var inventory_camera_shift: float = 3.0
-@export var skills_ui_path: NodePath
+@export var skillbook_ui_path: NodePath
 @export var animation_tree_path: NodePath
 @export var death_animation_states: Array[StringName] = [] ## Optional list of AnimationTree state names to use when the player dies.
 
@@ -52,7 +55,6 @@ var _skill_system_initialized := false
 ## automatically hidden when equipped items request it (e.g. helmets with the
 ## `hide_hair` flag).
 @export var hair_scene: PackedScene
-@export var hair_bone: String = "mixamorig_Head"
 
 # UI control that displays the hovered enemy's health bar.
 @export var target_display_path: NodePath
@@ -111,7 +113,7 @@ var _active_skill_cancel_time: float = 0.0
 var _active_skill_performed: bool = false
 var inventory := Inventory.new()
 var _inventory_ui: InventoryUI
-var _skills_ui: SkillsUI
+var _skills_ui: SkillBookUI
 var _camera: Camera3D
 var _camera_offset: Vector3 = Vector3.ZERO ## Offset from player to camera.
 var _inventory_open := false
@@ -226,6 +228,8 @@ func _ready() -> void:
 	if animation_tree_path != NodePath():
 		_anim_tree = get_node_or_null(animation_tree_path)
 		if _anim_tree:
+			_anim_tree.process_callback = AnimationTree.ANIMATION_PROCESS_MANUAL
+	#_anim_tree.active = true
 			_anim_tree.active = true
 			playback = _anim_tree.get("parameters/playback")
 			_anim_state = _anim_tree.get("parameters/playback")
@@ -240,21 +244,18 @@ func _ready() -> void:
 			_camera = get_node(inventory_camera_path)
 			if _camera:
 				_camera_offset = _camera.global_position - global_position
-		if healthbar_node_path != NodePath():
-			_healthbar = get_node(healthbar_node_path)
-			max_health = int(stats.get_max_health())
-			health = max_health
-			#print("Set health to ", max_health)
-		max_mana = stats.get_max_mana()
-		mana = max_mana
-		max_energy_shield = stats.get_max_energy_shield()
-		energy_shield = max_energy_shield
-		if _healthbar:
-			_healthbar.set_health(health, max_health)
-			_healthbar.set_mana(mana, max_mana)
-		if skills_ui_path != NodePath():
-			_skills_ui = get_node(skills_ui_path)
-			_skills_ui.bind_player(self)
+	if healthbar_node_path != NodePath():
+		_healthbar = get_node(healthbar_node_path)
+		max_health = int(stats.get_max_health())
+		health = max_health
+		#print("Set health to ", max_health)
+	max_mana = stats.get_max_mana()
+	mana = max_mana
+	max_energy_shield = stats.get_max_energy_shield()
+	energy_shield = max_energy_shield
+	if _healthbar:
+		_healthbar.set_health(health, max_health)
+		_healthbar.set_mana(mana, max_mana)
 
 	if target_display_path != NodePath():
 		_target_display = get_node_or_null(target_display_path)
@@ -266,12 +267,14 @@ func _ready() -> void:
 		_mana_orb = get_node_or_null(mana_orb_node_path)
 	if experience_bar_node_path != NodePath():
 		_experience_bar = get_node_or_null(experience_bar_node_path)
+	if skillbook_ui_path != NodePath():
+		_skills_ui = get_node_or_null(skillbook_ui_path)
 	if not _dialogue_ui:
 		var canvas_layer := get_node_or_null("../CanvasLayer")
 		if canvas_layer:
 			_dialogue_ui = DialogueBox.new()
 			canvas_layer.add_child(_dialogue_ui)
-
+	
 	add_to_group("player")
 
 ## Prepare arrays and defaults for the new multi-slot skill system.  This is
@@ -340,8 +343,10 @@ func _get_click_position() -> Vector3:
 	return ray_origin + ray_dir * distance
 
 func _physics_process(delta: float) -> void:
+	_anim_tree.advance(delta * anim_speed_override)
 	if(!IS_FROZEN_AND_IGNORE):
 		_process_inventory_input()
+		_process_skillbook_input()
 		_process_attack(delta)
 		_process_movement(delta)
 		_update_animation()
@@ -480,7 +485,7 @@ func _is_skill_input_triggered(index: int) -> bool:
 	if index < LEGACY_SKILL_ACTIONS.size():
 		action_names.append(LEGACY_SKILL_ACTIONS[index])
 	for action_name in action_names:
-		if _is_action_triggered(action_name, allow_hold):
+		if _is_action_triggered(action_name, allow_hold) and not _inventory_open:
 			return true
 	return false
 
@@ -502,7 +507,7 @@ func _is_action_triggered(action_name: String, allow_hold: bool) -> bool:
 func _activate_skill(index: int, skill: Skill) -> void:
 	if skill == null:
 		return
-	var speed := get_attack_speed(skill.tags)
+	var speed := get_attack_speed(skill.tags) * skill.speed_multiplier
 	var scaled_speed = max(speed, 0.001)
 	if index < _skill_cooldowns.size():
 		_skill_cooldowns[index] = skill.cooldown / scaled_speed
@@ -521,8 +526,38 @@ func _activate_skill(index: int, skill: Skill) -> void:
 	rotation.y = target_rot
 
 	if _anim_state and skill.animation_name != &"":
-		_anim_tree.set("parameters/%s/TimeScale/scale" % str(skill.animation_name), speed)
-		_anim_state.start(String(skill.animation_name), true)
+		# Choose the state/animation
+		var chosen_state: StringName
+		if skill.additional_animations != null and skill.additional_animations.size() > 0:
+			var anims := [skill.animation_name] + skill.additional_animations
+			chosen_state = anims.pick_random()
+		else:
+			chosen_state = skill.animation_name
+
+		# Resolve the actual AnimationPlayer animation used by the chosen state
+		var anim_name: String = ""
+		var node_path := "parameters/StateMachine/%s/node" % str(chosen_state)
+		var node = _anim_tree.get(node_path)
+		if node is AnimationNodeAnimation:
+			anim_name = (node as AnimationNodeAnimation).animation
+		else:
+			# Fallback: assume state name == animation name
+			anim_name = str(chosen_state)
+
+		# Look up the animation length from the AnimationPlayer wired to this AnimationTree
+		var anim_player := _anim_tree.get_node(_anim_tree.anim_player) as AnimationPlayer
+		var anim_len := 1.0
+		if anim_player and anim_player.has_animation(anim_name):
+			anim_len = anim_player.get_animation(anim_name).length
+
+		# Desired real-time window for the animation to complete
+		var desired_time = max(0.0001, skill.duration / max(0.0001, scaled_speed))
+
+		# Compute speed override so anim finishes exactly in desired_time
+		anim_speed_override = anim_len / desired_time
+
+		# Start the state (reset = true)
+		_anim_state.start(chosen_state, true)
 	else:
 		skill.perform(self)
 		_active_skill_performed = true
@@ -538,6 +573,7 @@ func _end_active_skill() -> void:
 	_active_skill_cancel_time = 0.0
 	_active_skill_performed = false
 	_current_move_multiplier = 1.0
+	anim_speed_override = 1.0
 	if _anim_state:
 		_anim_state.travel("move")
 
@@ -584,7 +620,7 @@ func close_inventory() -> void:
 	if _inventory_ui:
 		_inventory_ui.close()
 	
-func _process_skills_input() -> void:
+func _process_skillbook_input() -> void:
 	if Input.is_action_just_pressed("toggle_skills_inv"):
 		if _skills_open:
 			close_skills()
@@ -603,14 +639,16 @@ func _update_camera() -> void:
 	_camera.global_position = _camera.global_position.lerp(target, 0.1)
 
 func close_skills() -> void:
+	print("closing!")
 	_skills_open = false
 	if _skills_ui:
 		_skills_ui.close()
 
 func open_skills() -> void:
+	print("opening!")
 	_skills_open = true
 	if _skills_ui:
-		_skills_ui.close()
+		_skills_ui.open()
 
 func add_buff(buff: Buff) -> void:
 	if buff_manager:
@@ -887,7 +925,7 @@ func start_movement_skill(skill: MovementSkill, direction: Vector3, distance: fl
 		var cast_eff = skill.on_cast_effect.instantiate()
 		cast_eff.global_transform.origin = global_transform.origin
 		cast_eff.position.y = player_height/2
-		get_parent().add_child(cast_eff)
+		get_tree().get_current_scene().add_child(cast_eff)
 	if skill.active_effect:
 		_movement_skill_active_effect = skill.active_effect.instantiate()
 		add_child(_movement_skill_active_effect)
@@ -907,7 +945,7 @@ func _end_movement_skill() -> void:
 		var eff = _movement_skill_on_arrival_effect.instantiate()
 		eff.global_transform.origin = global_transform.origin
 		eff.position.y = player_height/2
-		get_parent().add_child(eff)
+		get_tree().get_current_scene().add_child(eff)
 		_movement_skill_on_arrival_effect = null
 
 # Apply damage around the player while the movement skill is active.
@@ -1063,100 +1101,125 @@ func set_surface_albedo_and_propagate(
 		color: Color,
 		include_self: bool = true,
 		visual_root_names: Array[String] = ["RaceVisuals", "HairVisuals", "ExtraVisuals"]) -> void:
+
 	if body_mesh.mesh == null:
 		push_warning("MeshInstance3D has no mesh.")
 		return
 
-	var idx = _surface_index_by_name.get(surface_name, -1)
-	if idx == -1:
-		push_warning("No surface named '%s' on %s." % [surface_name, body_mesh.name])
-		return
-
-	# Find the source material on the chosen surface
-	var src_mat: Material = body_mesh.get_surface_override_material(idx)
-	if src_mat == null:
-		src_mat = body_mesh.mesh.surface_get_material(idx)
-	if src_mat == null:
-		push_warning("Surface '%s' has no material." % surface_name)
-		return
-
-	var target_mat_name := src_mat.resource_name
-	if target_mat_name == "":
-		push_warning("Material on '%s' has no resource_name; siblings cannot be matched." % surface_name)
-		# Still update this surface even if we can’t propagate reliably
-		var only := _tint_material(src_mat, color)
-		if only:
-			body_mesh.set_surface_override_material(idx, only)
-		#return
-
-	# 1) Update this mesh surface (optional via include_self)
-	if include_self:
-		var new_mat = _tint_material(src_mat, color)
-		if new_mat:
-			body_mesh.set_surface_override_material(idx, new_mat)
-
-	# 2) Propagate to siblings under the same parent,
-	#    including Node3D roots like RaceVisuals/HairVisuals/ExtraVisuals and all their descendants.
-	var parent = body_mesh.get_parent()
+	var parent := body_mesh.get_parent()
 	if parent == null:
 		return
 
-	var dup_cache := {}  # per-call cache so identical source materials get one duplicated tinted copy
+	# ---------- 0) Build candidate mesh list (self + siblings/descendants) ----------
+	var candidates: Array[MeshInstance3D] = []
+	if include_self and body_mesh is MeshInstance3D:
+		candidates.append(body_mesh)
 
 	for child in parent.get_children():
-		if child == body_mesh:
+		if child is MeshInstance3D and child != body_mesh:
+			candidates.append(child)
+		elif child is Node3D and (_name_in_list_ci(child.name, visual_root_names) or child.is_in_group("visuals_root")):
+			candidates.append_array(_collect_meshes(child))
+
+	# ---------- 1) Try to resolve a propagation key from *any* candidate ----------
+	# Prefer: find a surface named `surface_name` on any candidate; if found, take its material.
+	# Key is (resource_path OR resource_name) to be robust.
+	var key := {"path": "", "name": ""}  # material identity we propagate by
+	var src_mat: Material = null
+
+	# First pass: use the original body mesh surface if it exists
+	var idx = _surface_index_by_name.get(surface_name, -1)
+	if idx != -1:
+		src_mat = body_mesh.get_surface_override_material(idx)
+		if src_mat == null and body_mesh.mesh != null:
+			src_mat = body_mesh.mesh.surface_get_material(idx)
+
+	# If not found on self, discover on others
+	if src_mat == null:
+		for mi in candidates:
+			# try to find a surface with this name on this mesh
+			var sidx := _find_surface_index_by_name(mi, surface_name)
+			if sidx != -1:
+				src_mat = mi.get_surface_override_material(sidx)
+				if src_mat == null and mi.mesh != null:
+					src_mat = mi.mesh.surface_get_material(sidx)
+				if src_mat != null:
+					break
+
+	# If still no material, we cannot derive a propagation key—nothing to do
+	if src_mat == null:
+		push_warning("Could not locate material for surface '%s' on any candidate mesh." % surface_name)
+		return
+
+	# Build the key
+	if src_mat.resource_path != "":
+		key.path = src_mat.resource_path
+	if src_mat.resource_name != "":
+		key.name = src_mat.resource_name
+
+	# ---------- 2) Apply tint everywhere that matches this material key ----------
+	var dup_cache := {}  # Material -> duplicated tinted material per call
+
+	for mi in candidates:
+		_apply_tint_to_mesh_instance_by_matkey(mi, key, color, dup_cache)
+
+
+# --- Helpers ---
+
+func _find_surface_index_by_name(mi: MeshInstance3D, sname: String) -> int:
+	# If you maintain per-mesh maps, use those here.
+	# Generic fallback: linear scan comparing resource_name on each surface's material to sname.
+	if mi.mesh == null:
+		return -1
+	var surface_count := mi.mesh.get_surface_count()
+	for i in range(surface_count):
+		var m := mi.get_surface_override_material(i)
+		if m == null:
+			m = mi.mesh.surface_get_material(i)
+		if m != null and m.resource_name == sname:
+			return i
+	return -1
+
+func _apply_tint_to_mesh_instance_by_matkey(mi: MeshInstance3D, key: Dictionary, color: Color, dup_cache: Dictionary) -> void:
+	if mi.mesh == null:
+		return
+	var sc := mi.mesh.get_surface_count()
+	for i in range(sc):
+		var m: Material = mi.get_surface_override_material(i)
+		if m == null:
+			m = mi.mesh.surface_get_material(i)
+		if m == null:
 			continue
 
-		# Case A: direct MeshInstance3D sibling
-		if child is MeshInstance3D:
-			_apply_tint_to_mesh_instance_by_matname(child, target_mat_name, color, dup_cache)
-			continue
+		if _mat_matches_key(m, key):
+			var new_m = dup_cache.get(m)
+			if new_m == null:
+				new_m = _tint_material(m, color)
+				dup_cache[m] = new_m
+			if new_m:
+				mi.set_surface_override_material(i, new_m)
 
-		# Case B: named visual-root Node3D (search all descendants for MeshInstance3D)
-		if child is Node3D and (_name_in_list_ci(child.name, visual_root_names) or child.is_in_group("visuals_root")):
-			for mi in _collect_meshes(child):
-				_apply_tint_to_mesh_instance_by_matname(mi, target_mat_name, color, dup_cache)
+func _mat_matches_key(m: Material, key: Dictionary) -> bool:
+	# Prefer resource_path (stable across shared .tres), then fallback to resource_name.
+	if key.path != "" and m.resource_path == key.path:
+		return true
+	if key.name != "" and m.resource_name == key.name:
+		return true
+	return false
 
-func _name_in_list_ci(name: String, list: Array[String]) -> bool:
-	var ln := name.to_lower()
-	for s in list:
-		if ln == s.to_lower():
+func _name_in_list_ci(name: String, names: Array[String]) -> bool:
+	for n in names:
+		if name.to_lower() == n.to_lower():
 			return true
 	return false
 
 func _collect_meshes(root: Node) -> Array[MeshInstance3D]:
-	var arr: Array[MeshInstance3D] = []
-	_collect_meshes_rec(root, arr)
-	return arr
-
-func _collect_meshes_rec(n: Node, out: Array) -> void:
-	if n is MeshInstance3D:
-		out.append(n)
-	for c in n.get_children():
-		_collect_meshes_rec(c, out)
-
-func _apply_tint_to_mesh_instance_by_matname(mi: MeshInstance3D, target_name: String, color: Color, cache: Dictionary) -> void:
-	# material_override match
-	if mi.material_override and mi.material_override.resource_name == target_name:
-		var mo_new := _dup_tinted_cached(mi.material_override, color, cache)
-		if mo_new:
-			mi.material_override = mo_new
-
-	var mesh := mi.mesh
-	if mesh == null:
-		return
-
-	for i in range(mesh.get_surface_count()):
-		var mat: Material = mi.get_surface_override_material(i)
-		
-		if mat == null:
-			mat = mesh.surface_get_material(i)
-		print(mat.resource_name)
-		if mat and mat.resource_name == target_name:
-			
-			var dup := _dup_tinted_cached(mat, color, cache)
-			if dup:
-				mi.set_surface_override_material(i, dup)
+	var out: Array[MeshInstance3D] = []
+	if root is MeshInstance3D:
+		out.append(root)
+	for c in root.get_children():
+		out.append_array(_collect_meshes(c))
+	return out
 
 func _dup_tinted_cached(src: Material, color: Color, cache: Dictionary) -> Material:
 	if src == null:
@@ -1197,7 +1260,7 @@ func play_state_once_then_return(target_state: String, idle_after: bool = true) 
 	var node = _anim_tree.get(node_path)
 	if node is AnimationNodeAnimation:
 		anim_name = node.animation
-
+	
 	# Travel immediately (this also interrupts any prior state/oneshot)
 	playback.travel(target_state)
 
@@ -1231,8 +1294,74 @@ func _wait_for_animation_finished(anim_name: String) -> void:
 		finished = (done_anim == anim_name)
 	
 func set_bodymesh_blendshape(blendShape:String, amount:float):
-	var idx = body_mesh.find_blend_shape_by_name(blendShape)
-	if idx != -1:
-		body_mesh.set_blend_shape_value(idx, amount)
+	set_blendshape_on_self_siblings_and_children(blendShape, amount)
+		
+func set_blendshape_on_self_siblings_and_children(blend_shape: String, amount: float, include_self: bool = true) -> int:
+	var applied := 0
+	var parent := body_mesh.get_parent()
+	if parent == null:
+		push_warning("body_mesh has no parent; only updating itself/its children.")
+	
+	# 1) self + self's descendants
+	if include_self:
+		applied += _set_blendshape_on_mesh(body_mesh, blend_shape, amount)
+	for c in body_mesh.get_children():
+		applied += _set_blendshape_recursive(c, blend_shape, amount)
+	
+	# 2) siblings + siblings' descendants
+	if parent:
+		for sib in parent.get_children():
+			if sib == body_mesh:
+				continue
+			applied += _set_blendshape_recursive(sib, blend_shape, amount)
+	
+	if applied == 0:
+		push_warning("Blend shape '%s' not found on any target meshes." % blend_shape)
+	return applied
+
+
+# Recursively walk any subtree and try to apply the blend shape to MeshInstance3D nodes.
+func _set_blendshape_recursive(node: Node, blend_shape: String, amount: float) -> int:
+	var count := 0
+	if node is MeshInstance3D:
+		count += _set_blendshape_on_mesh(node as MeshInstance3D, blend_shape, amount)
+	for child in node.get_children():
+		count += _set_blendshape_recursive(child, blend_shape, amount)
+	return count
+
+
+# Safely set a blend shape by name on a single MeshInstance3D.
+# Returns 1 if applied, 0 otherwise.
+func _set_blendshape_on_mesh(mi: MeshInstance3D, blend_shape: String, amount: float) -> int:
+	if mi == null or mi.mesh == null:
+		return 0
+	
+	# Try to find the blend shape index by name (works in Godot 4.x).
+	var idx := -1
+	if mi.has_method("find_blend_shape_by_name"):
+		idx = mi.find_blend_shape_by_name(blend_shape)
 	else:
-		push_warning("Blend shape %s not found in mesh." % blendShape)
+		# Fallback: iterate by name if the helper isn't available for some reason.
+		var bs_count := mi.get_blend_shape_count()
+		for i in range(bs_count):
+			if mi.get_blend_shape_name(i) == blend_shape:
+				idx = i
+				break
+	
+	if idx == -1:
+		return 0
+	
+	mi.set_blend_shape_value(idx, clamp(amount, -1.0, 1.0))
+	return 1
+
+func reset_hair(new_hair_scene:PackedScene):
+	for c in hair_visuals_node.get_children():
+		c.queue_free()
+	_equip_visuals.hair_scene = new_hair_scene
+	if(new_hair_scene):
+		var new_hair = new_hair_scene.instantiate()
+		hair_visuals_node.add_child(new_hair)
+		_equip_visuals._hair_instance = new_hair
+		_equip_visuals._update_hair_visibility()
+		
+	

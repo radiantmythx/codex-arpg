@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="ProjectileSkill" load_steps=5 format=3 uid="uid://b0yke58e11r7m"]
+
+[ext_resource type="Texture2D" uid="uid://baaamabhlcjxy" path="res://images/skills/shoot_arrow.png" id="1_ytyrw"]
+[ext_resource type="PackedScene" uid="uid://ci18gqun3dxd5" path="res://scenes/projectiles/skills/projectile_arrow.tscn" id="2_81xgm"]
+[ext_resource type="Resource" uid="uid://c8djefvpe5r5f" path="res://resources/skills/default/shoot_arrow_multi_2.tres" id="2_mxpqo"]
+[ext_resource type="Script" uid="uid://g8f4qhb1fqur" path="res://scripts/skills/projectile_skill.gd" id="3_mxpqo"]
+
+[resource]
+script = ExtResource("3_mxpqo")
+speed = 30.0
+range = 20.0
+explosion_radius = 0.0
+projectile_scene = ExtResource("2_81xgm")
+explode_on_hit = true
+explode_on_finish = false
+on_explode_skill = ExtResource("2_mxpqo")
+fizzle_enabled = true
+chain_ignore_first_body_time = 0.08
+pattern = 2
+projectile_count = 10
+arc_spread_deg = 360.0
+shot_delay = 0.08
+yaw_jitter_deg = 2.5
+follow_user = false
+spawn_offset = 1.0
+spawn_height = 2.0
+keep_aim_live = false
+name = "Shoot Arrow"
+description = ""
+icon = ExtResource("1_ytyrw")
+mana_cost = 0.0
+cooldown = 0.0
+duration = 0.8
+move_multiplier = 0.5
+damage_type = 0
+base_damage_low = 1.0
+base_damage_high = 2.0
+tags = Array[String](["projectile"])
+speed_multiplier = 1.0
+animation_name = &"BowAttack"
+additional_animations = Array[StringName]([])
+attack_time = 0.4
+cancel_time = 0.5
+metadata/_custom_type_script = "uid://g8f4qhb1fqur"

@@ -6,8 +6,8 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_f78wk")
-shader_parameter/Auraintensity = 4.44
-shader_parameter/AuraColor = Color(0.329803, 0.590239, 0.687463, 0.431)
+shader_parameter/Auraintensity = 3.035
+shader_parameter/AuraColor = Color(0.611794, 0.544537, 0.362833, 0.431)
 shader_parameter/AuraScale = Vector2(0.1, 1)
 shader_parameter/AuraSpeed = Vector2(1, 0)
 shader_parameter/AuraShape = ExtResource("2_dv75j")
